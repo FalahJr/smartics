@@ -145,6 +145,7 @@
               <div class="collapse {{Request::is('data-master') || Request::is('data-master/*') ? 'show' : '' }}" id="data-master">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('petugas/')}}">Petugas<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('pemohon/')}}">Pemohon<span class="d-none">Setting</span></a></li>
                   <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('surat-jenis')}}">Jenis dan Syarat Surat<span class="d-none">Setting</span></a></li>
 
                 </ul>
