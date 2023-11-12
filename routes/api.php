@@ -21,5 +21,8 @@ Route::middleware('api')->group(function () {
 
     // User Petugas
     Route::get('/petugas', 'PetugasController@getData');
+    
+    // pemohon
+    Route::post('pemohon/register', 'PemohonController@simpan');
 
 });
