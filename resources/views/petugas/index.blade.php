@@ -62,7 +62,8 @@ var table = $('#table-data').DataTable({
         serverSide: true,
         searching: true,
         paging: true,
-        dom: 'Bfrtip',
+        
+        // dom: 'Bfrtip',
         title: '',
         buttons: [
             // 'pdf'
@@ -197,11 +198,12 @@ var table = $('#table-data').DataTable({
   }
 
   function reloadall() {
+    $('.table_modal :input').val("");
+
     $('#tambah').modal('hide');
     // $('#table_modal :input').val('');
     $('#role_id').val('');
     $('#role_id').select2();
-    $(".inputtext").val("");
     // var table1 = $('#table_modal').DataTable();
     // table1.ajax.reload();
     table.ajax.reload();

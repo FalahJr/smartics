@@ -109,6 +109,8 @@ var table = $('#table-data').DataTable({
         // console.log
         $('.id').val(data.id);
         $('.nama').val(data.nama);
+        $('#surat_jenis_id').val(data.surat_jenis_id);
+        $('#surat_jenis_id').select2();
       
         // $('.datepicker').val(data.created_at)
         $('#tambah').modal('show');
@@ -184,10 +186,13 @@ var table = $('#table-data').DataTable({
   }
 
   function reloadall() {
+    $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     // $('#table_modal :input').val('');
    
-    $(".inputtext").val("");
+    // $(".inputtext").val("");
+    $('#surat_jenis_id').val('');
+    $('#surat_jenis_id').select2();
     // var table1 = $('#table_modal').DataTable();
     // table1.ajax.reload();
     table.ajax.reload();
