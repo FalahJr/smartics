@@ -21,7 +21,7 @@
           <tr>
             <td>Surat Jenis</td>
             <td>
-              <select class="form-control form-control-sm surat_jenis_id" name="surat_jenis_id" id="surat_jenis_id" >
+              <select class="form-control form-control-sm surat_jenis_id inputtext" name="surat_jenis_id" id="surat_jenis_id" >
                 <option disabled selected value="">Pilih</option>
                 @foreach ($suratJenis as $key => $value)
                 <option value="{{$value->id}}">{{$value->nama}}</option>
