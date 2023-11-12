@@ -75,6 +75,12 @@ Route::get('editpetugas', 'PetugasController@edit');
 Route::get('simpanpetugas', 'PetugasController@simpan');
 Route::get('hapuspetugas', 'PetugasController@hapus');
 
+Route::get('pemohon', 'PemohonController@index');
+Route::get('pemohontable', 'PemohonController@datatable');
+Route::get('editpemohon', 'PemohonController@edit');
+Route::get('hapuspemohon', 'PemohonController@hapus');
+Route::get('approvepemohon', 'PemohonController@approve');
+
 Route::get('surat-jenis', 'SuratJenisController@index');
 Route::get('suratjenistable', 'SuratJenisController@datatable');
 Route::get('editsuratjenis', 'SuratJenisController@edit');
