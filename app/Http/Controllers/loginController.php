@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Account;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Session;
 use DB;
 use App\Http\Controllers\logController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class loginController extends Controller
