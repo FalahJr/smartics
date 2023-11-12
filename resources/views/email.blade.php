@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Email DompetQu</title>
+    <title>Email Smartics</title>
     <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -333,7 +333,7 @@
     </style>
   </head>
   <body class="">
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+    {{-- <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span> --}}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -349,7 +349,7 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <p>Hi, {{$nama}}</p>
+                        <p>Halo, {{$nama}}</p>
                         <p>{{ $deskripsi }}</p>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                           <tbody>
@@ -391,7 +391,7 @@
                 </tr> --}}
                 <tr>
                   <td class="content-block powered-by">
-                    Powered by <a href="{{url('/')}}">DompetQu</a>.
+                    Powered by <a href="{{url('/')}}">Smartics</a>.
                   </td>
                 </tr>
               </table>
