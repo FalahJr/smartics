@@ -93,6 +93,7 @@ Route::get('editsuratsyarat', 'SuratSyaratController@edit');
 Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
-
+Route::get('chatbot', 'ChatbotController@index');
+Route::post('chatbot/save', 'ChatbotController@save');
 
 }); // End Route Groub middleware auth

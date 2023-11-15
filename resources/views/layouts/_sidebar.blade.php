@@ -201,8 +201,8 @@
                 <i class="fa fa-bar-chart"></i>
               </a>
             </li>
-            <li class="nav-item {{Request::is('statistik') ? 'active' : ''}}">
-              <a class="nav-link" href="{{url('/statistik')}}">
+            <li class="nav-item {{Request::is('chatbot') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/chatbot')}}">
                 <span class="menu-title">Chatbot</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
                 <i class="fa fa-bar-chart"></i>

@@ -1,0 +1,143 @@
+@extends('main')
+@section('content')
+
+<style>
+    /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cacfcc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #ffb136;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #ffb136;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+<!-- partial -->
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb bg-warning">
+          <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Toko</li>
+        </ol>
+      </nav>
+    </div>
+  	<div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Chatbot</h4>
+
+                    @if (session('sukses'))
+                    <div class="alert alert-success" role="alert">
+                    Success, Chatbot
+                    </div>
+                    @endif
+
+                    @if (session('gagal'))
+                    <div class="alert alert-danger" role="alert">
+                    Failed, Chatbot
+                    </div>
+                    @endif
+
+                    <form method="POST" class="form-horizontal" action="{{ url('chatbot/save') }}" accept-charset="UTF-8" id="tambahpekerja" enctype="multipart/form-data">
+                      {{csrf_field()}}
+                      <div class="row">
+
+                             <div class="col-md-12 col-sm-12 col-xs-12" style="height: 1%;">
+                             <label class="switch">
+                                @if(isset($data))
+                                    @if($data->is_active == "Y")
+                                    <input type="checkbox" name="is_active" checked>
+                                    @else 
+                                    <input type="checkbox" name="is_active">
+                                    @endif
+                                @else
+                                <input type="checkbox" name="is_active">
+                                @endif
+                                <span class="slider round"></span>
+                            </label>
+
+                            <div class="col-md-4 col-sm-6 col-xs-12" style="padding:0px;">
+                                <label>Jam Aktif</label>
+                            </div>
+                            <div class="col-md-8 col-sm-6 col-xs-12" style="padding:0px;">
+                                <div class="form-group">
+                                @if(isset($data))
+                                <input type="text" class="form-control form-control-sm inputtext clockpicker" name="date" value="{{$data->jam_active}}">
+                                @else 
+                                <input type="text" class="form-control form-control-sm inputtext clockpicker" name="date" value="{{Carbon\Carbon::now()->format('H:i')}}">
+                                @endif
+                                </div>
+                            </div>
+                            </div>
+
+                      </div>
+
+                    <div class="text-left w-100">
+                      <button class="btn btn save" style="background: #ffb136; color:white; width: 150px;" type="submit">Simpan</button>
+                    </div>
+                  </div>
+                </div>
+                </form>
+    </div>
+  </div>
+</div>
+<!-- content-wrapper ends -->
+@endsection
+@section('extra_script')
+@endsection

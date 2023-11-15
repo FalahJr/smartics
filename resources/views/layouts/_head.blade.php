@@ -59,6 +59,8 @@
 
   <link rel="stylesheet" type="text/css" href="{{asset('assets/lightgallery/css/lightgallery.min.css')}}">
 
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
   {{-- modul keuangan --}}
   {{-- <link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/font-awesome_4_7_0/css/font-awesome.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/css/style.css') }}"> --}}
