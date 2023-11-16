@@ -53,6 +53,7 @@ class ChatbotController extends Controller
                     ->update([
                     'is_active' => $active,
                     'jam_active' => $req->date,
+                    'jam_selesai' => $req->enddate,
                     'created_at' => Carbon::now('Asia/Jakarta'),
                     'updated_at' => Carbon::now('Asia/Jakarta')
                   ]);
@@ -61,6 +62,7 @@ class ChatbotController extends Controller
                 ->insert([
                   'is_active' => $active,
                   'jam_active' => $req->date,
+                  'jam_selesai' => $req->enddate,
                   'created_at' => Carbon::now('Asia/Jakarta'),
                   'updated_at' => Carbon::now('Asia/Jakarta')
                 ]);

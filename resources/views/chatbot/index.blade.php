@@ -124,6 +124,19 @@ input:checked + .slider:before {
                                 @endif
                                 </div>
                             </div>
+
+                            <div class="col-md-4 col-sm-6 col-xs-12" style="padding:0px;">
+                                <label>Jam Selesai</label>
+                            </div>
+                            <div class="col-md-8 col-sm-6 col-xs-12" style="padding:0px;">
+                                <div class="form-group">
+                                @if(isset($data))
+                                <input type="text" class="form-control form-control-sm inputtext clockpicker" name="enddate" value="{{$data->jam_selesai}}">
+                                @else 
+                                <input type="text" class="form-control form-control-sm inputtext clockpicker" name="enddate" value="{{Carbon\Carbon::now()->format('H:i')}}">
+                                @endif
+                                </div>
+                            </div>
                             </div>
 
                       </div>
