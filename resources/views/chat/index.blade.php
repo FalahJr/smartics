@@ -67,6 +67,7 @@
       align-self: flex-end;
       }
       .message-wrap .message-list.me .msg {
+      text-align: center;
       background: #FFD18D;
       color: black;
       box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);

@@ -29,103 +29,10 @@ class ChatController extends Controller
     // }
 
     public function index() {
-      return view('chat.index');
-    }
-
-    public function newchat(Request $req) {
-      DB::beginTransaction();
-      try {
-
-          $cek = DB::table("roomchat")
-                  ->Orwhere("account", Auth::user()->id_account . "-" . $req->idtoko)
-                  ->Orwhere('account', $req->idtoko . "-" . Auth::user()->id_account)
-                  ->first();
-
-          if ($cek != null) {
-            DB::table('roomchat')
-             ->where("id_roomchat", $cek->id_roomchat)
-             ->update([
-               'last_message' => $req->message,
-               'counter2' => $cek->counter2 + 1,
-               'created_at' => Carbon::now('Asia/Jakarta'),
-             ]);
-
-            DB::table("listchat")
-               ->insert([
-                 'id_roomchat' => $cek->id_roomchat,
-                 'account' => Auth::user()->id_account . "-" . $req->idtoko,
-                 'message' => $req->message,
-                 'created_at' => Carbon::now('Asia/Jakarta'),
-               ]);
-          } else {
-              $id = DB::table('roomchat')
-                    ->insertGetId([
-                      'account' => Auth::user()->id_account . "-" . $req->idtoko,
-                      'last_message' => $req->message,
-                      'counter2' => 1,
-                      'created_at' => Carbon::now('Asia/Jakarta'),
-                    ]);
-
-              DB::table("listchat")
-                 ->insert([
-                   'id_roomchat' => $id,
-                   'account' => Auth::user()->id_account . "-" . $req->idtoko,
-                   'message' => $req->message,
-                   'created_at' => Carbon::now('Asia/Jakarta'),
-                 ]);
-          }
-          // dd($req);
-           DB::commit();
-      } catch (\Exception $e) {
-           DB::rollback();
-      }
-    }
-
-    public function apinewchat(Request $req) {
-      DB::beginTransaction();
-      try {
-
-          $cek = DB::table("roomchat")
-                  ->Orwhere("account", $req->id_account . "-" . $req->idtoko)
-                  ->Orwhere('account', $req->idtoko . "-" . $req->id_account)
-                  ->first();
-
-          if ($cek != null) {
-            DB::table('roomchat')
-             ->where("id_roomchat", $cek->id_roomchat)
-             ->update([
-               'last_message' => $req->message,
-               'counter2' => $cek->counter2 + 1,
-               'created_at' => Carbon::now('Asia/Jakarta'),
-             ]);
-
-            DB::table("listchat")
-               ->insert([
-                 'id_roomchat' => $cek->id_roomchat,
-                 'account' => $req->id_account . "-" . $req->idtoko,
-                 'message' => $req->message,
-                 'created_at' => Carbon::now('Asia/Jakarta'),
-               ]);
-          } else {
-              $id = DB::table('roomchat')
-                    ->insertGetId([
-                      'account' => $req->id_account . "-" . $req->idtoko,
-                      'last_message' => $req->message,
-                      'counter2' => 1,
-                      'created_at' => Carbon::now('Asia/Jakarta'),
-                    ]);
-
-              DB::table("listchat")
-                 ->insert([
-                   'id_roomchat' => $id,
-                   'account' => $req->id_account . "-" . $req->idtoko,
-                   'message' => $req->message,
-                   'created_at' => Carbon::now('Asia/Jakarta'),
-                 ]);
-          }
-           DB::commit();
-      } catch (\Exception $e) {
-           DB::rollback();
+      if (Auth::user()->role_id == "9") {
+       return view('chat.index');
+      } else if (Auth::user()->role_id == "2") {
+       return view('chatdinas.index');
       }
     }
 
@@ -171,20 +78,20 @@ class ChatController extends Controller
 
     public function listroom(Request $req) {
         $chat = DB::table('roomchat')
-                 ->where('account', 'like', '%' . Auth::user()->id_account . '%')
+                 ->where('account', 'like', '%admindinas%')
                  ->orderby("created_at", "DESC")
                  ->get();
 
         foreach ($chat as $key => $value) {
           $account = explode("-",$value->account);
 
-          if ($account[0] != Auth::user()->id_account) {
-            $value->account = DB::table("account")
-                                ->where("id_account", $account[0])
+          if ($account[0] != Auth::user()->id) {
+            $value->account = DB::table("user")
+                                ->where("id", $account[0])
                                 ->first();
-          } else if ($account[1] != Auth::user()->id_account) {
-            $value->account = DB::table("account")
-                                ->where("id_account", $account[1])
+          } else if ($account[1] != Auth::user()->id) {
+            $value->account = DB::table("user")
+                                ->where("id", $account[1])
                                 ->first();
           }
 
@@ -242,8 +149,7 @@ class ChatController extends Controller
           // foreach ($chat as $key => $value) {
           $account = explode("-",$room->account);
 
-          if ($account[0] == Auth::user()->id_account) {
-
+          if ($account[0] == Auth::user()->id) {
             DB::table('roomchat')
                  ->where("id", $chat[0]->roomchat_id)
                  ->update([
@@ -251,14 +157,43 @@ class ChatController extends Controller
                  ]);
 
           } else {
-
             DB::table('roomchat')
                  ->where("id", $chat[0]->roomchat_id)
                  ->update([
                    'counter_kedua' => 0,
                  ]);
           }
+        } else {
+          $allchat = DB::table('listchat')
+          ->where("roomchat_id", $req->id)
+          ->get();
 
+          DB::table('listchat')
+          ->where("roomchat_id", $req->id)
+          ->update([
+            'read' => 1,
+          ]);
+
+          $room = DB::table('roomchat')
+              ->where("id", $req->id)
+              ->first();
+          // foreach ($chat as $key => $value) {
+          $account = explode("-",$room->account);
+
+          if ($account[0] == Auth::user()->id) {
+            DB::table('roomchat')
+                  ->where("id", $req->id)
+                  ->update([
+                    'counter_satu' => 0,
+                  ]);
+
+          } else {
+            DB::table('roomchat')
+                  ->where("id", $req->id)
+                  ->update([
+                    'counter_kedua' => 0,
+                  ]);
+          }
         }
          
          foreach ($allchat as $key => $value) {
@@ -312,7 +247,6 @@ class ChatController extends Controller
     public function sendchat(Request $req) {
       DB::beginTransaction();
       try {
-
           if (Auth::user()->role_id == 9) {
             $getadmindinas = DB::table('user')
             ->where("role_id", 2)
@@ -388,6 +322,18 @@ class ChatController extends Controller
                     }
                   }
               }
+          } else {
+            $room = DB::table("roomchat")->where("id", $req->id)->first();
+
+            $account = explode("-",$room->account);
+            
+            DB::table("listchat")
+            ->insert([
+              'roomchat_id' => $req->id,
+              'account' => "admindinas-" . $account[0],
+              'message' => $req->message,
+              'created_at' => Carbon::now('Asia/Jakarta'),
+            ]);
           }
 
            DB::commit();
@@ -449,202 +395,4 @@ class ChatController extends Controller
            DB::rollback();
       }
     }
-
-    public function sendimgchat(Request $req) {
-
-        DB::beginTransaction();
-        try {
-
-            $room = DB::table('roomchat')
-                 ->where("id_roomchat", $req->id)
-                 ->first();
-              // dd($req);
-              $imgPath = null;
-              $tgl = Carbon::now('Asia/Jakarta');
-              $folder = $tgl->year . $tgl->month . $tgl->timestamp;
-              $dir = 'image/uploads/Chat/' . $req->id;
-              $childPath = $dir . '/';
-              $path = $childPath;
-
-              $file = $req->file('image');
-              $name = null;
-              if ($file != null) {
-                  $this->deleteDir($dir);
-                  $name = $folder . '.' . $file->getClientOriginalExtension();
-                  if (!File::exists($path)) {
-                      if (File::makeDirectory($path, 0777, true)) {
-                        if ($_FILES['image']['type'] == 'image/webp' || $_FILES['image']['type'] == 'image/jpeg') {
-
-                        } else if ($_FILES['image']['type'] == 'webp' || $_FILES['image']['type'] == 'jpeg') {
-
-                        } else {
-                          compressImage($_FILES['image']['type'],$_FILES['image']['tmp_name'],$_FILES['image']['tmp_name'],75);
-                        }
-                          $file->move($path, $name);
-                          $imgPath = $childPath . $name;
-                      } else
-                          $imgPath = null;
-                  } else {
-                      return 'already exist';
-                  }
-                }
-
-                  if ($imgPath != null) {
-                      $chat = DB::table('listchat')
-                              ->where("id_roomchat", $req->id)
-                              ->get();
-
-                       DB::table("listchat")
-                          ->insert([
-                            'id_roomchat' => $req->id,
-                            'account' => Auth::user()->id_account . "-" . $req->penerima,
-                            'photourl' => $imgPath,
-                            'created_at' => Carbon::now('Asia/Jakarta'),
-                          ]);
-
-                       $count = 0;
-                       foreach ($chat as $key => $value) {
-                         $account = explode("-",$value->account);
-
-                         if ($account[0] == $req->id_account) {
-
-                           $count = $room->counter1;
-
-                           DB::table('roomchat')
-                                ->where("id_roomchat", $req->id)
-                                ->update([
-                                  'last_message' => "Sending Photo",
-                                  'counter1' => $count + 1,
-                                  'created_at' => Carbon::now('Asia/Jakarta'),
-                                ]);
-                         } else {
-
-                           $count = $room->counter2;
-
-                           DB::table('roomchat')
-                                ->where("id_roomchat", $req->id)
-                                ->update([
-                                  'last_message' => "Sending Photo",
-                                  'counter2' => $count + 1,
-                                  'created_at' => Carbon::now('Asia/Jakarta'),
-                                ]);
-                         }
-                       }
-                  }
-
-              DB::commit();
-            } catch (\Exception $e) {
-              DB::rollback();
-            }
-
-    }
-
-    public function apisendimgchat(Request $req) {
-
-        DB::beginTransaction();
-        try {
-              // dd($req);
-
-              $room = DB::table('roomchat')
-                   ->where("id_roomchat", $req->id)
-                   ->first();
-
-              $imgPath = null;
-              $tgl = Carbon::now('Asia/Jakarta');
-              $folder = $tgl->year . $tgl->month . $tgl->timestamp;
-              $dir = 'image/uploads/Chat/' . $req->id;
-              $childPath = $dir . '/';
-              $path = $childPath;
-
-              $file = $req->file('image');
-              $name = null;
-              if ($file != null) {
-                  $this->deleteDir($dir);
-                  $name = $folder . '.' . $file->getClientOriginalExtension();
-                  if (!File::exists($path)) {
-                      if (File::makeDirectory($path, 0777, true)) {
-                        if ($_FILES['image']['type'] == 'image/webp' || $_FILES['image']['type'] == 'image/jpeg') {
-
-                        } else if ($_FILES['image']['type'] == 'webp' || $_FILES['image']['type'] == 'jpeg') {
-
-                        } else {
-                          compressImage($_FILES['image']['type'],$_FILES['image']['tmp_name'],$_FILES['image']['tmp_name'],75);
-                        }
-                          $file->move($path, $name);
-                          $imgPath = $childPath . $name;
-                      } else
-                          $imgPath = null;
-                  } else {
-                      return 'already exist';
-                  }
-                }
-
-                if ($imgPath != null) {
-                    $chat = DB::table('listchat')
-                            ->where("id_roomchat", $req->id)
-                            ->get();
-
-                     DB::table("listchat")
-                        ->insert([
-                          'id_roomchat' => $req->id,
-                          'account' => $req->id_account . "-" . $req->penerima,
-                          'photourl' => $imgPath,
-                          'created_at' => Carbon::now('Asia/Jakarta'),
-                        ]);
-
-                     $count = 0;
-                     foreach ($chat as $key => $value) {
-                       $account = explode("-",$value->account);
-
-                       if ($account[0] == $req->id_account) {
-
-                         $count = $room->counter1;
-
-                         DB::table('roomchat')
-                              ->where("id_roomchat", $req->id)
-                              ->update([
-                                'last_message' => "Sending Photo",
-                                'counter1' => $count + 1,
-                                'created_at' => Carbon::now('Asia/Jakarta'),
-                              ]);
-                       } else {
-
-                         $count = $room->counter2;
-
-                         DB::table('roomchat')
-                              ->where("id_roomchat", $req->id)
-                              ->update([
-                                'last_message' => "Sending Photo",
-                                'counter2' => $count + 1,
-                                'created_at' => Carbon::now('Asia/Jakarta'),
-                              ]);
-                       }
-                     }
-                }
-
-              DB::commit();
-            } catch (\Exception $e) {
-              DB::rollback();
-            }
-
-    }
-
-    public function deleteDir($dirPath)
-   {
-       if (!is_dir($dirPath)) {
-           return false;
-       }
-       if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-           $dirPath .= '/';
-       }
-       $files = glob($dirPath . '*', GLOB_MARK);
-       foreach ($files as $file) {
-           if (is_dir($file)) {
-               self::deleteDir($file);
-           } else {
-               unlink($file);
-           }
-       }
-       rmdir($dirPath);
-   }
 }

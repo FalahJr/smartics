@@ -101,7 +101,5 @@ Route::get('/listroom', 'ChatController@listroom');
 Route::get('/countchat', 'ChatController@countchat');
 Route::get('/listchat', 'ChatController@listchat');
 Route::get('/sendchat', 'ChatController@sendchat');
-Route::get('/newchat', 'ChatController@newchat');
-Route::post('/sendimgchat', 'ChatController@sendimgchat');
 
 }); // End Route Groub middleware auth
