@@ -8827,7 +8827,7 @@ body {
   line-height: 1.5;
   color: #000;
   text-align: left;
-  background-color: #3c4875;
+  background-color: #f39c12;
 }
 
 [tabindex="-1"]:focus {
@@ -21450,7 +21450,7 @@ address p {
 
 /* Miscellanoeous */
 body {
-  background: #3c4875;
+  background: #f39c12;
 }
 
 body,

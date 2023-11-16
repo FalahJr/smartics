@@ -27,7 +27,9 @@ class loginController extends Controller
         $username = $req->username;
         $password = $req->password;
         $user = Account::where("username", $username)->first();
+        // if ($user && Crypt::decryptString($user->password) ===  $req->password) {
         if ($user && Crypt::decryptString($user->password) ===  $req->password) {
+
 
             return response()->json([
                         'success' => 'succes',
@@ -72,7 +74,9 @@ class loginController extends Controller
 	            			        //   ->where('password',$encrypt)
 	            			          ->first();
 
+            	// if (Crypt::decryptString($user_pass->password) === $password) {
             	if (Crypt::decryptString($user_pass->password) === $password) {
+
            			Account::where('username',$username)->update([
                      'updated_at'=>Carbon::now(),
                      'is_login' => "Y"

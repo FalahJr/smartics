@@ -54,17 +54,16 @@ class PemohonController extends Controller
                             '<button type="button" onclick="approve('.$data->id.')" class="btn btn-success btn-lg" title="approve">'.
                             '<label class="fa fa-check"></label>'.
                         '</button>
+                        <button type="button" onclick="tolak('.$data->id.')" class="btn btn-danger btn-lg" title="tolak">'.
+                            '<label class="fa fa-times"></label>'.
+                        '</button>
                             ';
         
             if ($data->is_active == "N") {
                 // Tombol "Approve" hanya muncul jika is_active == 1
                 $buttons .=  '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
                 '<label class="fa fa-pencil-alt"></label>'.
-            '</button>
-            <button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
-                '<label class="fa fa-trash"></label>'.
-            '</button>
-            ';
+            '</button>';
             } else{
               $buttons = '<div class="btn-group"><button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
               '<label class="fa fa-pencil-alt"></label>'.
@@ -153,7 +152,19 @@ class PemohonController extends Controller
             ->update([
               "nama_lengkap" => $req->nama_lengkap,
               "username" => $req->username,
+              "email" => $req->email,
               "password" => Crypt::encryptString($req->password),
+              "alamat" => $req->alamat,
+              "provinsi" => $req->provinsi,
+              "kabupaten_kota" => $req->kabupaten_kota,
+              "kecamatan" => $req->kecamatan,
+              "kelurahan" => $req->kelurahan,
+              "jenis_kelamin" => $req->jenis_kelamin,
+              "jenis_identitas" => $req->jenis_identitas,
+              "nomor_identitas" => $req->nomor_identitas,
+              "tanggal_lahir" => $req->tanggal_lahir,
+              "tempat_lahir" => $req->tempat_lahir,
+              "pekerjaan" => $req->pekerjaan,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
@@ -181,6 +192,37 @@ class PemohonController extends Controller
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 4]);
+      }
+
+    }
+
+    public function tolak(Request $req) {
+      $data = DB::table("user")
+              ->where("id", $req->id)
+              ->first();
+
+      // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
+
+      return response()->json($data);
+    }
+
+    public function tolakprocess(Request $req) {
+      DB::beginTransaction();
+      try {
+        $data = DB::table("user")
+        ->where("id", $req->id)
+        ->first();
+        SendemailController::Send($data->nama_lengkap,"Alasan : ".$req->alasan_ditolak." . Silahkan lakukan Registrasi Kembali dengan data yang sesuai", "Akun Anda Gagal Diaktifkan",  $data->email);
+
+        DB::table("user")
+            ->where("id", $req->id)
+            ->delete();
+
+        DB::commit();
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, 'error' => $e->getMessage()]);
       }
 
     }

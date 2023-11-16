@@ -25,4 +25,7 @@ Route::middleware('api')->group(function () {
     // pemohon
     Route::post('pemohon/register', 'PemohonController@simpan');
 
+    // Surat
+    Route::post('surat/create', 'SuratController@simpan');
+
 });

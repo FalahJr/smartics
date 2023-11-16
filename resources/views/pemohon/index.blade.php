@@ -2,6 +2,7 @@
 @section('content')
 
 @include('pemohon.tambah')
+@include('pemohon.tolak')
 <style type="text/css">
 
 </style>
@@ -225,6 +226,73 @@ var table = $('#table-data').DataTable({
   	});
   }
 
+  function tolak(id) {
+    // body...
+    $.ajax({
+      url:baseUrl + '/tolakpemohon',
+      data:{id},
+      dataType:'json',
+      success:function(data){
+        // console.log
+        $('.id').val(data.id);
+        $('.alasan_ditolak').val("");
+      
+
+        
+        
+        // $('.datepicker').val(data.created_at)
+        $('#tolak').modal('show');
+      }
+    });
+
+  }
+  $('#tolakProcess').click(function(){
+    $.ajax({
+      url: baseUrl + '/tolakprocesspemohon',
+      data:$('.table_modal .inputtext').serialize(),
+      dataType:'json',
+      success:function(data){
+        if (data.status == 1) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Data Berhasil Disimpan!',
+          });
+          reloadTolak();
+        }else if(data.status == 2){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal disimpan!',
+          });
+        }else if (data.status == 3){
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Data Berhasil Diubah!',
+          });
+          reloadall();
+        }else if (data.status == 4){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal Diubah!',
+          });
+        }
+
+      }
+    });
+  })
+
+  function reloadTolak() {
+    // $('.table_modal :input').val("");
+    $('.table_modal .inputtext').val("");
+
+    $('#tolak').modal('hide');
+
+    // $("#inputtext").val("");
+   
+    // $(".inputtext").val("");
+    // var table1 = $('#table_modal').DataTable();
+    // table1.ajax.reload();
+    table.ajax.reload();
+  }
   function reloadall() {
     $('.table_modal :input').val("");
 

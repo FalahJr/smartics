@@ -12,25 +12,21 @@ use Auth;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
-
 use Illuminate\Support\Facades\DB;
 use Session;
 
 
 use Yajra\Datatables\Datatables;
 
-class PetugasController extends Controller
+class SuratController extends Controller
 {
     public function index() {
-    $roles = DB::table("role")->get();
 
-      return view('petugas.index', compact('roles'));
+      return view('surat.index');
     }
 
     public function datatable() {
-      $data = DB::table('user')
-        ->where("role_id",'not like', '9')
+      $data = DB::table('surat')
         ->get();
 
 
@@ -42,28 +38,13 @@ class PetugasController extends Controller
           // ->addColumn("nominal", function($data) {
           //   return FormatRupiah($data->uangkeluar_nominal);
           // })
-          ->addColumn("password", function($data) {
-           
-    try {
-      $encrypted = Crypt::encryptString('adminutama123');
-      $data2 = $data->password;
-$decrypted = Crypt::decryptString($data->password);
-return $decrypted;
-
-      // $decrypted = Crypt::decryptString($encryptedValue);
-  } catch (DecryptException $e) {
-    return $e;
-
-      //
-  }
-		// $decrypted = $data->getAttributes()['password'] ?? null;
-
-            // return $encrypted;
-          })
-          ->addColumn("role", function($data) {
-            $role = DB::table('role')->where('id', $data->role_id)->first();
-            return $role->nama;
-          })
+         
+        //   ->addColumn("surat_syarat", function($data) {
+        //    return '<div class="btn-group">'.
+        //     '<a href="surat-syarat" class="btn btn-success btn-lg px-4 py-2" title="edit">'.
+        //     'Lihat Syarat</a>
+        //  </div>';
+        //   })
           ->addColumn('aksi', function ($data) {
             return  '<div class="btn-group">'.
                      '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
@@ -74,44 +55,31 @@ return $decrypted;
           })
           ->rawColumns(['aksi'])
           ->addIndexColumn()
+          // ->setTotalRecords(2)
           ->make(true);
     }
 
-    public function getData(Request $req){
-      try{
-        if($req->id){
-          $data = DB::table('user')->where("id",$req->id)->first();
-        }else{
-          $data = DB::table('user')
-             ->where("role_id",'not like', '9')->get();
-        }
-  
-        return response()->json(["status" => 1, "data" => $data]);
-      }catch(\Exception $e){
-        return response()->json(["status" => 2, "message" => $e->getMessage()]);
-      }
-    }
-
     public function simpan(Request $req) {
-      $nominal = str_replace("Rp. ", "", $req->nominal);
-      $nominal = str_replace(".", "", $nominal);
+     
       if ($req->id == null) {
         DB::beginTransaction();
         try {
 
-        DB::table("user")
+        DB::table("surat")
               ->insertGetId([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "password" => Crypt::encryptString($req->password),
-              "role_id" => $req->role,
-              "is_active" => "Y",
+              "nama" => $req->nama,
+              "user_id" => $req->user_id,
+              "status" => 'Pengisian Dokumen',
+              "kategori" => $req->kategori,
+              "alamat_lokasi" => $req->alamat_lokasi,
+              "longitude" => $req->longitude,
+              "latitude" => $req->latitude,
               "created_at" => Carbon::now("Asia/Jakarta"),
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
           DB::commit();
-          return response()->json(["status" => 1]);
+          return response()->json(["status" => 1,'message' => 'success']);
         } catch (\Exception $e) {
           DB::rollback();
           return response()->json(["status" => 2, "message" =>$e->getMessage()]);
@@ -120,13 +88,10 @@ return $decrypted;
         DB::beginTransaction();
         try {
 
-          DB::table("user")
+          DB::table("surat_jenis")
             ->where("id", $req->id)
             ->update([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "password" => Crypt::encryptString($req->password),
-              "role_id" => $req->role,
+              "nama" => $req->nama,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
@@ -145,7 +110,7 @@ return $decrypted;
       DB::beginTransaction();
       try {
 
-        DB::table("user")
+        DB::table("surat_jenis")
             ->where("id", $req->id)
             ->delete();
 
@@ -159,19 +124,19 @@ return $decrypted;
     }
 
     public function edit(Request $req) {
-      $data = DB::table("user")
+      $data = DB::table("surat_jenis")
               ->where("id", $req->id)
               ->first();
 
-      $petugas = [
-        "id" => $data->id,
-        "nama_lengkap" => $data->nama_lengkap,
-        "username" => $data->username,
-        "password" => Crypt::decryptString($data->password),
-        "role_id" => $data->role_id,
-      ];
+      // $petugas = [
+      //   "id" => $data->id,
+      //   "nama_lengkap" => $data->nama_lengkap,
+      //   "username" => $data->username,
+      //   "password" => Crypt::decryptString($data->password),
+      //   "role_id" => $data->role_id,
+      // ];
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
-      return response()->json($petugas);
+      return response()->json($data);
     }
 }

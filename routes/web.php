@@ -78,8 +78,11 @@ Route::get('hapuspetugas', 'PetugasController@hapus');
 Route::get('pemohon', 'PemohonController@index');
 Route::get('pemohontable', 'PemohonController@datatable');
 Route::get('editpemohon', 'PemohonController@edit');
+Route::get('simpanpemohon', 'PemohonController@simpan');
 Route::get('hapuspemohon', 'PemohonController@hapus');
 Route::get('approvepemohon', 'PemohonController@approve');
+Route::get('tolakpemohon', 'PemohonController@tolak');
+Route::get('tolakprocesspemohon', 'PemohonController@tolakprocess');
 
 Route::get('surat-jenis', 'SuratJenisController@index');
 Route::get('suratjenistable', 'SuratJenisController@datatable');
@@ -95,6 +98,12 @@ Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
 Route::get('chatbot', 'ChatbotController@index');
 Route::post('chatbot/save', 'ChatbotController@save');
+Route::get('surat', 'SuratController@index');
+Route::get('surattable', 'SuratController@datatable');
+// Route::get('editsuratsyarat', 'SuratSyaratController@edit');
+// Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
+// Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
+
 
 Route::get('/chat', 'ChatController@index');
 Route::get('/listroom', 'ChatController@listroom');

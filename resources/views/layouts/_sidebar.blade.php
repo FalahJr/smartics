@@ -156,7 +156,7 @@
             
 
             <li class="nav-item {{Request::is('uangkeluar') ? 'active' : ''}}">
-              <a class="nav-link" href="{{url('/uangkeluar')}}">
+              <a class="nav-link" href="{{url('/surat')}}">
                 <span class="menu-title">Daftar Permohonan</span>
                 <span class="menu-sub-title">( 2 )</span>
                 <i class="fa fa-cloud-upload-alt"></i>
