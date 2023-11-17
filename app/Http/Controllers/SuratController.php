@@ -118,10 +118,12 @@ class SuratController extends Controller
           $cekDataSurat = DB::table("surat")->where("id", $req->surat_id)->first();
           $cekDataSuratDokumen = DB::table("surat_dokumen")->where("surat_syarat_id", $req->surat_syarat_id)->first();
           if ($cekDataSurat == null ) {
-            return 'Data Surat Tidak Ditemukan';
+          return response()->json(["status" => 2, "message" => 'Data Surat Tidak Ditemukan']);
+
           }
           else if($cekDataSuratDokumen != null){
-            return 'Data Dokumen Sudah Ada';
+          return response()->json(["status" => 2, "message" => 'Data Dokumen Sudah Ada']);
+
           }
           else{
           $file = $req->file('dokumen_syarat_pemohon');
@@ -148,11 +150,47 @@ class SuratController extends Controller
             DB::commit();
         }
   
-          return response()->json(["status" => 1]);
+          return response()->json(["status" => 1, "message" => "Sukses Upload Dokumen Syarat"]);
         } catch (\Exception $e) {
           DB::rollback();
-          return response()->json(["status" => 7, "message" => $e]);
+          return response()->json(["status" => 2, "message" => $e]);
         }
+    }
+
+    public function kirimSuratPengajuan(Request $req) {
+     $cekJumlahSuratSyarat = DB::table("surat_syarat")->where("surat_jenis_id", $req->surat_jenis_id)->count();
+     $cekJumlahSuratDokumen = DB::table("surat_dokumen")->where("surat_id", $req->surat_id)->count();
+     $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->surat_id)->first();
+
+    //  if($cekDataUser){
+    //   return $cekDataUser->nama_lengkap;
+    //  }
+
+     if($cekJumlahSuratDokumen < $cekJumlahSuratSyarat){
+      return response()->json(["status" => 2, "message" => "Dokumen Syarat Mohon Dilengkapi Terlebih Dahulu"]);
+
+     }else{
+        DB::beginTransaction();
+     try {
+
+        DB::table("surat")
+              ->where("id", $req->surat_id)
+              ->update([
+                "status" => 'Validasi Operator',
+                "updated_at" => Carbon::now("Asia/Jakarta")
+              ]);
+
+          DB::commit();
+          SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Validasi Operator, mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diajukan", $cekDataUser->email);
+
+          return response()->json(["status" => 1,'message' => 'Surat Berhasil Diajukan']);
+        } catch (\Exception $e) {
+          DB::rollback();
+          return response()->json(["status" => 2, "message" =>$e->getMessage()]);
+        }
+     }
+
     }
 
     public function hapus(Request $req) {

@@ -28,5 +28,6 @@ Route::middleware('api')->group(function () {
     // Surat
     Route::post('surat/create', 'SuratController@simpan');
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
+    Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
 
 });
