@@ -208,6 +208,8 @@
                 <i class="fa fa-bar-chart"></i>
               </a>
             </li>
+
+            @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 9)
             <li class="nav-item {{Request::is('chat') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/chat')}}">
                 <span class="menu-title">Live Chat</span>
@@ -215,6 +217,7 @@
                 <i class="fa fa-bar-chart"></i>
               </a>
             </li>
+            @endif
              
 
           </ul>
