@@ -35,25 +35,41 @@ class SuratController extends Controller
         // return $xyzab;
         // return $xyzab->i_price;
         return Datatables::of($data)
-          // ->addColumn("nominal", function($data) {
-          //   return FormatRupiah($data->uangkeluar_nominal);
-          // })
-         
-        //   ->addColumn("surat_syarat", function($data) {
-        //    return '<div class="btn-group">'.
-        //     '<a href="surat-syarat" class="btn btn-success btn-lg px-4 py-2" title="edit">'.
-        //     'Lihat Syarat</a>
-        //  </div>';
-        //   })
+        ->addColumn("surat_jenis", function($data) {
+          $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+          return $surat_jenis->nama;
+        })
+        ->addColumn('jadwal_survey', function ($data) {
+          if($data->jadwal_survey !== null){
+            return Carbon::CreateFromFormat('Y-m-d',$data->jadwal_survey)->format('d M Y');
+          }else{
+            return '<div><i>Belum Tersedia</i></div>';
+          }
+        })
+        ->addColumn('status', function ($data) {
+          $color = '<div><strong class="text-warning">' . $data->status . '</strong></div>';
+      
+          if ($data->status == "Selesai") {
+              // Tombol "Approve" hanya muncul jika is_active == 1
+              $color .=  '<div><strong class="text-success">' . $data->status . '</strong></div>';
+          } else if ($data->status == "Ditolak"){
+            $color = '<div><strong class="text-danger">' . $data->status . '</strong></div>';
+          }else{
+            $color;
+          }
+          return $color;
+      })
+      ->addColumn('tanggal_pengajuan', function ($data) {
+        return Carbon::parse($data->created_at)->format('d F Y');
+
+      })
           ->addColumn('aksi', function ($data) {
             return  '<div class="btn-group">'.
-                     '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
-                     '<label class="fa fa-pencil-alt"></label></button>'.
-                     '<button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
-                     '<label class="fa fa-trash"></label></button>'.
+                     '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+                     '<label class="fa fa-eye w-100"></label></button>'.
                   '</div>';
           })
-          ->rawColumns(['aksi'])
+          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan'])
           ->addIndexColumn()
           // ->setTotalRecords(2)
           ->make(true);

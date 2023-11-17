@@ -23,18 +23,18 @@
                     <h4 class="card-title">Daftar Permohonan</h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                    	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
                       {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Nama Pemohon</th>
-                                <th>Kategori</th>
+                                <th>No. Surat</th>
+                                <th>Jenis Surat</th>
+                                <th>Jadwal Survey</th>
                                 <th>Status</th>
+                                <th>Tanggal Pengajuan</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -86,20 +86,28 @@ var table = $('#table-data').DataTable({
               },
               {
                  targets: 2,
-                 className: 'type center'
+                 className: ' center'
               },
               {
                  targets: 3,
+                 className: ' center'
+              },
+              {
+                 targets: 4,
+                 className: ' center'
+              },
+              {
+                 targets: 5,
                  className: 'type center'
               },
              
             ],
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-          {data: 'nama', name: 'nama'},
-          {data:'user_id', name: 'user_id'},
-          {data:'kategori', name: 'kategori'},
+          {data: 'surat_jenis', name: 'surat_jenis'},
+          {data:'jadwal_survey', name: 'jadwal_survey'},
           {data:'status', name: 'status'},
+          {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
           {data: 'aksi', name: 'aksi'},
 
         ]
