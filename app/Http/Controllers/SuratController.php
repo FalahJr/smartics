@@ -69,6 +69,7 @@ class SuratController extends Controller
               ->insertGetId([
               "nama" => $req->nama,
               "user_id" => $req->user_id,
+              "surat_jenis_id" => $req->surat_jenis_id,
               "status" => 'Pengisian Dokumen',
               "kategori" => $req->kategori,
               "alamat_lokasi" => $req->alamat_lokasi,
@@ -104,6 +105,54 @@ class SuratController extends Controller
         }
       }
 
+    }
+
+    public function uploadDokumenSyarat(Request $req)
+    {
+        try {
+          $imgPath = null;
+          $tgl = Carbon::now('Asia/Jakarta');
+          $folder = $tgl->year . $tgl->month . $tgl->timestamp;
+          $childPath ='file/uploads/dokumen-syarat-pemohon/';
+          $path = $childPath;
+          $cekDataSurat = DB::table("surat")->where("id", $req->surat_id)->first();
+          $cekDataSuratDokumen = DB::table("surat_dokumen")->where("surat_syarat_id", $req->surat_syarat_id)->first();
+          if ($cekDataSurat == null ) {
+            return 'Data Surat Tidak Ditemukan';
+          }
+          else if($cekDataSuratDokumen != null){
+            return 'Data Dokumen Sudah Ada';
+          }
+          else{
+          $file = $req->file('dokumen_syarat_pemohon');
+          $name = null;
+          if ($file != null) {
+            $name = $folder . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $name);
+            $imgPath = $childPath . $name;
+          } else {
+              return 'error';
+          }
+  
+         
+          DB::table("surat_dokumen")
+          ->insertGetId([
+            // "id" => $max,
+            "surat_id" => $req->surat_id,
+            "surat_syarat_id" => $req->surat_syarat_id,
+            "dokumen_upload"=>$imgPath,
+            "created_at" => $tgl,
+            "updated_at" => $tgl
+          ]);
+            
+            DB::commit();
+        }
+  
+          return response()->json(["status" => 1]);
+        } catch (\Exception $e) {
+          DB::rollback();
+          return response()->json(["status" => 7, "message" => $e]);
+        }
     }
 
     public function hapus(Request $req) {
