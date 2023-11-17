@@ -134,6 +134,7 @@
       padding: 5px;
       height: 70px;
       cursor: pointer;
+      border-radius: 10px
       }
       sidebar .list-wrap .list:hover, sidebar .list-wrap .list.active {
       background: white;
@@ -212,7 +213,7 @@
     </div>
     <div class="container">
     <div class="row">
-    <div class="col-3 grid-margin stretch-card" style="padding-left:0px;">
+    <div class="col-3 grid-margin stretch-card" style="padding-left:0px; border-radius: 10px;">
             <div class="card">
                 <div class="card-body" style="padding: 0px;">
                 <sidebar>
