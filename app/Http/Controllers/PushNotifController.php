@@ -24,7 +24,11 @@ use Response;
 
 class PushNotifController extends Controller
 {
-    public static function sendMessage($message, $data) {
+    public static function sendMessage($userid, $title, $message) {
+        $heading = array(
+            "en" => $title
+         );
+
         $content = array(
             "en" => $message
         );
@@ -32,8 +36,9 @@ class PushNotifController extends Controller
         $fields = array(
             'app_id' => "78f36c43-942f-46e4-a155-aab7ecfdf1cc",
             'included_segments' => array('All'),
-            'data' => $data,
-            'contents' => $content
+            'data' => array("userid" => $userid),
+            'contents' => $content,
+            'headings' => $heading
         );
     
         $fields = json_encode($fields);
@@ -52,7 +57,21 @@ class PushNotifController extends Controller
     
         $response = curl_exec($ch);
         curl_close($ch);
+
+        DB::table("notifikasi")
+        ->insert([
+            "user_id" => $userid,
+            "judul" => $title,
+            "deskripsi" => $message,
+            "is_seen" => "N",
+            "created_at" => Carbon::now('Asia/Jakarta'),
+            "updated_at" => Carbon::now('Asia/Jakarta'),
+          ]);
     
         return $response;
+    }
+
+    function testSend() {
+        PushNotifController::sendMessage(1, "Test title", "Test Konten");
     }
 }

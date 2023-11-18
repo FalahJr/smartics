@@ -112,6 +112,6 @@ Route::get('/listroom', 'ChatController@listroom');
 Route::get('/listchat', 'ChatController@listchat');
 Route::get('/sendchat', 'ChatController@sendchat');
 
-Route::get('/sendnotif', 'PushNotifController@sendMessage');
+Route::get('/sendnotif', 'PushNotifController@testSend');
 
 }); // End Route Groub middleware auth
