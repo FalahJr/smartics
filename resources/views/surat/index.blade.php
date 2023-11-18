@@ -23,7 +23,16 @@
                     <h4 class="card-title">Daftar Permohonan</h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                    	<div class="btn-group">
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter Status
+                        </button>
+                        <div class="dropdown-menu">
+                             <a class="dropdown-item" href="#" onclick="handleFilter('Pilih Semua')">Pilih Semua</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Selesai')">Selesai</a>
+                        </div>
+                    </div>
                       {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
@@ -55,12 +64,15 @@
 @endsection
 @section('extra_script')
 <script>
+var selectedStatus = 'Pilih Semua'; 
+function handleFilter(status) {
+    selectedStatus = status ;  // update selectedStatus
 
+    // Update DataTable's Ajax URL
+    table.ajax.url("{{ url('/surattable') }}/" + selectedStatus).load();
+};
 var table = $('#table-data').DataTable({
         processing: true,
-        // responsive:true,
-        // pageLength : 2,
-        // lengthMenu: [ 2, 4 ],
         serverSide: true,
         searching: true,
         paging: true,
@@ -72,7 +84,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-            url:'{{ url('/surattable') }}',
+          url: "{{ url('/surattable') }}/" + selectedStatus ,
         },
         columnDefs: [
 

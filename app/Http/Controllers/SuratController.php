@@ -21,13 +21,25 @@ use Yajra\Datatables\Datatables;
 class SuratController extends Controller
 {
     public function index() {
+  //     $tes =  "<select class='custom-select float-right bg-warning' id='statusFilter' onchange='handleFilter()'>
+  //     <option value='' selected disabled>Select Status</option>
+  //     <option value='approved'>Approved</option>
+  //     <option value='rejected'>Rejected</option>
+  // </select>";
 
       return view('surat.index');
     }
 
-    public function datatable() {
-      $data = DB::table('surat')
-        ->get();
+    public function datatable($status) {
+      // $data = DB::table('surat')->get();
+
+      if($status !== 'Pilih Semua'){
+      $data = DB::table('surat')->where('status', $status)->get();
+    }else{
+      // $data;
+      $data = DB::table('surat')->get();
+
+    }
 
 
         // return $data;
@@ -41,7 +53,8 @@ class SuratController extends Controller
         })
         ->addColumn('jadwal_survey', function ($data) {
           if($data->jadwal_survey !== null){
-            return Carbon::CreateFromFormat('Y-m-d',$data->jadwal_survey)->format('d M Y');
+            return Carbon::parse($data->jadwal_survey)->format('d F Y');
+
           }else{
             return '<div><i>Belum Tersedia</i></div>';
           }

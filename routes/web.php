@@ -98,8 +98,10 @@ Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
 Route::get('chatbot', 'ChatbotController@index');
 Route::post('chatbot/save', 'ChatbotController@save');
+
+
 Route::get('surat', 'SuratController@index');
-Route::get('surattable', 'SuratController@datatable');
+Route::get('surattable/{status}', 'SuratController@datatable');
 // Route::get('editsuratsyarat', 'SuratSyaratController@edit');
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
