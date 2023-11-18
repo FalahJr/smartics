@@ -73,7 +73,7 @@ input:checked + .slider:before {
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb bg-warning">
           <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Toko</li>
+          <li class="breadcrumb-item active" aria-current="page">Chatbot</li>
         </ol>
       </nav>
     </div>
@@ -81,18 +81,6 @@ input:checked + .slider:before {
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Chatbot</h4>
-
-                    @if (session('sukses'))
-                    <div class="alert alert-success" role="alert">
-                    Success, Chatbot
-                    </div>
-                    @endif
-
-                    @if (session('gagal'))
-                    <div class="alert alert-danger" role="alert">
-                    Failed, Chatbot
-                    </div>
-                    @endif
 
                     <form method="POST" class="form-horizontal" action="{{ url('chatbot/save') }}" accept-charset="UTF-8" id="tambahpekerja" enctype="multipart/form-data">
                       {{csrf_field()}}
@@ -153,4 +141,19 @@ input:checked + .slider:before {
 <!-- content-wrapper ends -->
 @endsection
 @section('extra_script')
+<script>
+  @if (session('sukses'))
+  iziToast.success({
+      icon: 'fa fa-save',
+      message: 'Data Berhasil Disimpan!',
+  });
+  @endif
+
+  @if (session('gagal'))
+  iziToast.warning({
+      icon: 'fa fa-info',
+      message: 'Data Gagal disimpan!',
+  });
+  @endif
+</script>
 @endsection

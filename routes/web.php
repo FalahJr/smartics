@@ -109,8 +109,9 @@ Route::get('surattable/{status}', 'SuratController@datatable');
 
 Route::get('/chat', 'ChatController@index');
 Route::get('/listroom', 'ChatController@listroom');
-Route::get('/countchat', 'ChatController@countchat');
 Route::get('/listchat', 'ChatController@listchat');
 Route::get('/sendchat', 'ChatController@sendchat');
+
+Route::get('/sendnotif', 'PushNotifController@sendMessage');
 
 }); // End Route Groub middleware auth

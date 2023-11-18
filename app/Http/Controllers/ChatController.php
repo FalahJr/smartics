@@ -36,44 +36,48 @@ class ChatController extends Controller
       }
     }
 
-    public function countchat() {
-      $chat = DB::table('roomchat')
-               ->where('account', 'like', '%' . Auth::user()->id_account . '%')
-               ->get();
-
-       $count = 0;
-
-       foreach ($chat as $key => $value) {
-         $account = explode("-",$value->account);
-
-         if ($account[0] == Auth::user()->id_account) {
-             $count += $value->counter1;
-         } else {
-             $count += $value->counter2;
-         }
-       }
-
-       return Response()->json($count);
-    }
-
     public function apicountchat(Request $req) {
-      $chat = DB::table('roomchat')
-               ->where('account', 'like', '%' . $req->id_account . '%')
-               ->get();
+      $user = DB::table("user")->where("id", $req->id)->first();
 
-       $count = 0;
+      if ($user->role_id == 2) {
+        $chat = DB::table('roomchat')
+        ->where('account', 'like', '%admindinas%')
+        ->get();
 
-       foreach ($chat as $key => $value) {
-         $account = explode("-",$value->account);
+        $count = 0;
 
-         if ($account[0] == $req->id_account) {
-             $count += $value->counter1;
-         } else {
-             $count += $value->counter2;
-         }
-       }
+        foreach ($chat as $key => $value) {
+          $account = explode("-",$value->account);
 
-       return Response()->json($count);
+          if ($account[0] == "admindinas") {
+              $count += $value->counter_satu;
+          } else {
+              $count += $value->counter_kedua;
+          }
+        }
+
+        return Response()->json($count);
+      } else if ($user->role_id == 9) {
+        $chat = DB::table('roomchat')
+        ->where('account', 'like', '%'. $user->id .'%')
+        ->get();
+
+        $count = 0;
+
+        foreach ($chat as $key => $value) {
+          $account = explode("-",$value->account);
+
+          if ($account[0] == $user->id ) {
+              $count += $value->counter_satu;
+          } else {
+              $count += $value->counter_kedua;
+          }
+        }
+
+        return Response()->json($count);
+      } else {
+        return Response()->json("role user tidak sesuai");
+      }
     }
 
     public function listroom(Request $req) {
@@ -102,28 +106,28 @@ class ChatController extends Controller
     }
 
     public function apilistroom(Request $req) {
-        $chat = DB::table('roomchat')
-                 ->where('account', 'like', '%' . $req->id_account . '%')
-                 ->orderby("created_at", "DESC")
-                 ->get();
+      $chat = DB::table('roomchat')
+            ->where('account', 'like', '%admindinas%')
+            ->orderby("created_at", "DESC")
+            ->get();
 
-        foreach ($chat as $key => $value) {
-          $account = explode("-",$value->account);
+      foreach ($chat as $key => $value) {
+      $account = explode("-",$value->account);
 
-          if ($account[0] != $req->id_account) {
-            $value->account = DB::table("account")
-                                ->where("id_account", $account[0])
-                                ->first();
-          } else if ($account[1] != $req->id_account) {
-            $value->account = DB::table("account")
-                                ->where("id_account", $account[1])
-                                ->first();
-          }
+      if ($account[0] != $req->id) {
+      $value->account = DB::table("user")
+                          ->where("id", $account[0])
+                          ->first();
+      } else if ($account[1] != $req->id) {
+      $value->account = DB::table("user")
+                          ->where("id", $account[1])
+                          ->first();
+      }
 
-          $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
-        }
+      $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+      }
 
-         return Response()->json($chat);
+      return Response()->json($chat);
     }
 
     public function listchat(Request $req) {
@@ -204,44 +208,79 @@ class ChatController extends Controller
     }
 
     public function apilistchat(Request $req) {
-         $chat = DB::table('listchat')
-                 ->where("id_roomchat", $req->id)
-                 ->get();
+      if ($req->role_id == 9) {
+        $chat = DB::table('listchat')
+               ->where("account", $req->id . "-admindinas")
+               ->get();
 
-         DB::table('listchat')
-                 ->where("id_roomchat", $req->id)
-                 ->update([
-                   'read' => 1,
-                 ]);
+        $allchat = DB::table('listchat')
+        ->where("roomchat_id", $chat[0]->roomchat_id)
+        ->get();
 
-         $room = DB::table('roomchat')
-              ->where("id_roomchat", $req->id)
-              ->first();
-          // foreach ($chat as $key => $value) {
-          $account = explode("-",$room->account);
+        DB::table('listchat')
+        ->where("roomchat_id", $chat[0]->roomchat_id)
+        ->update([
+          'read' => 1,
+        ]);
 
-          if ($account[0] == $req->id_account) {
+        $room = DB::table('roomchat')
+            ->where("id", $chat[0]->roomchat_id)
+            ->first();
+        // foreach ($chat as $key => $value) {
+        $account = explode("-",$room->account);
 
-            DB::table('roomchat')
-                 ->where("id_roomchat", $req->id)
-                 ->update([
-                   'counter1' => 0,
-                 ]);
+        if ($account[0] == $req->id) {
+          DB::table('roomchat')
+               ->where("id", $chat[0]->roomchat_id)
+               ->update([
+                 'counter_satu' => 0,
+               ]);
 
-          } else {
+        } else {
+          DB::table('roomchat')
+               ->where("id", $chat[0]->roomchat_id)
+               ->update([
+                 'counter_kedua' => 0,
+               ]);
+        }
+      } else {
+        $allchat = DB::table('listchat')
+        ->where("roomchat_id", $req->id)
+        ->get();
 
-            DB::table('roomchat')
-                 ->where("id_roomchat", $req->id)
-                 ->update([
-                   'counter2' => 0,
-                 ]);
-          }
+        DB::table('listchat')
+        ->where("roomchat_id", $req->id)
+        ->update([
+          'read' => 1,
+        ]);
 
-         foreach ($chat as $key => $value) {
-           $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
-         }
+        $room = DB::table('roomchat')
+            ->where("id", $req->id)
+            ->first();
+        // foreach ($chat as $key => $value) {
+        $account = explode("-",$room->account);
 
-         return Response()->json($chat);
+        if ($account[0] == $req->id) {
+          DB::table('roomchat')
+                ->where("id", $req->id)
+                ->update([
+                  'counter_satu' => 0,
+                ]);
+
+        } else {
+          DB::table('roomchat')
+                ->where("id", $req->id)
+                ->update([
+                  'counter_kedua' => 0,
+                ]);
+        }
+      }
+       
+       foreach ($allchat as $key => $value) {
+         $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+       }
+
+       return Response()->json($allchat);
     }
 
     public function sendchat(Request $req) {
@@ -345,50 +384,94 @@ class ChatController extends Controller
     public function apisendchat(Request $req) {
       DB::beginTransaction();
       try {
+          if ($req->role_id == 9) {
+            $getadmindinas = DB::table('user')
+            ->where("role_id", 2)
+            ->get();
 
-          // $chat = DB::table('listchat')
-          //         ->where("id_roomchat", $req->id)
-          //         ->get();
+              $cek = DB::table("roomchat")
+              ->Orwhere("account", $req->id . "-admindinas")
+              ->Orwhere('account', "admindinas-" . $req->id)
+              ->first();
 
-           DB::table("listchat")
-              ->insert([
-                'id_roomchat' => $req->id,
-                'account' => $req->id_account . "-" . $req->penerima,
-                'message' => $req->message,
-                'created_at' => Carbon::now('Asia/Jakarta'),
-              ]);
+              if ($cek != null) {
+                DB::table('roomchat')
+                ->where("id", $cek->id)
+                ->update([
+                  'last_message' => $req->message,
+                  'counter_kedua' => $cek->counter_kedua + 1,
+                  'created_at' => Carbon::now('Asia/Jakarta'),
+                ]);
+   
+               DB::table("listchat")
+                  ->insert([
+                    'roomchat_id' => $cek->id,
+                    'account' => $req->id . "-admindinas",
+                    'message' => $req->message,
+                    'created_at' => Carbon::now('Asia/Jakarta'),
+                  ]);
 
-          $count = 0;
-          $room = DB::table('roomchat')
-               ->where("id_roomchat", $req->id)
-               ->first();
-           // foreach ($chat as $key => $value) {
-             $account = explode("-",$room->account);
+                  $botchat = DB::table("chatbot")->where("id", 1)->first();
+                  if ($botchat->is_active == "Y") {
+                    $now = Carbon::now('Asia/Jakarta');
+                    $time = $now->format('H:i'); 
 
-             if ($account[0] == $req->id_account) {
+                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                      DB::table("listchat")
+                        ->insert([
+                          'roomchat_id' => $cek->id,
+                          'account' => "admindinas-" . $req->id,
+                          'message' => "Mohon maaf saat ini kami sedang offline, akan kita balas dijam aktif kami, terima kasih",
+                          'created_at' => Carbon::now('Asia/Jakarta'),
+                        ]);
+                    }
+                  }
+              } else {
+                $id = DB::table('roomchat')
+                      ->insertGetId([
+                        'account' => $req->id . "-admindinas",
+                        'last_message' => $req->message,
+                        'counter_kedua' => 1,
+                        'created_at' => Carbon::now('Asia/Jakarta'),
+                      ]);
 
-               $count = $room->counter1;
+                DB::table("listchat")
+                  ->insert([
+                    'roomchat_id' => $id,
+                    'account' => $req->id . "-admindinas",
+                    'message' => $req->message,
+                    'created_at' => Carbon::now('Asia/Jakarta'),
+                  ]);
 
-               DB::table('roomchat')
-                    ->where("id_roomchat", $req->id)
-                    ->update([
-                      'last_message' => $req->message,
-                      'counter1' => $count + 1,
-                      'created_at' => Carbon::now('Asia/Jakarta'),
-                    ]);
-             } else {
+                  $botchat = DB::table("chatbot")->where("id", 1)->first();
+                  if ($botchat->is_active == "Y") {
+                    $now = Carbon::now('Asia/Jakarta');
+                    $time = $now->format('H:i');
+  
+                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                      DB::table("listchat")
+                        ->insert([
+                          'roomchat_id' => $id,
+                          'account' => "admindinas-" . $req->id,
+                          'message' => "Mohon maaf saat ini kami sedang offline, akan kita balas dijam aktif kami, terima kasih",
+                          'created_at' => Carbon::now('Asia/Jakarta'),
+                        ]);
+                    }
+                  }
+              }
+          } else {
+            $room = DB::table("roomchat")->where("id", $req->id)->first();
 
-               $count = $room->counter2;
-
-               DB::table('roomchat')
-                    ->where("id_roomchat", $req->id)
-                    ->update([
-                      'last_message' => $req->message,
-                      'counter2' => $count + 1,
-                      'created_at' => Carbon::now('Asia/Jakarta'),
-                    ]);
-             }
-           // }
+            $account = explode("-",$room->account);
+            
+            DB::table("listchat")
+            ->insert([
+              'roomchat_id' => $req->id,
+              'account' => "admindinas-" . $account[0],
+              'message' => $req->message,
+              'created_at' => Carbon::now('Asia/Jakarta'),
+            ]);
+          }
 
            DB::commit();
       } catch (\Exception $e) {

@@ -30,4 +30,9 @@ Route::middleware('api')->group(function () {
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
 
+    Route::any('/listroom', 'ChatController@apilistroom');
+    Route::any('/listchat', 'ChatController@apilistchat');
+    Route::any('/sendchat', 'ChatController@apisendchat');
+    Route::any('/countchat', 'ChatController@apicountchat');
+
 });
