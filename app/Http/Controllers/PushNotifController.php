@@ -70,8 +70,4 @@ class PushNotifController extends Controller
     
         return $response;
     }
-
-    function testSend() {
-        PushNotifController::sendMessage(1, "Test title", "Test Konten");
-    }
 }
