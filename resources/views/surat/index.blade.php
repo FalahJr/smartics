@@ -1,7 +1,10 @@
 @extends('main')
 @section('content')
 
-@include('surat-jenis.tambah')
+@include('surat.detail')
+@php
+ $testing = DB::table("surat")->where("id", "2")->first();
+@endphp
 <style type="text/css">
 
 </style>
@@ -21,6 +24,9 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Daftar Permohonan</h4>
+                    <h4 class="card-title">@php
+                      echo $testing->nama;
+                    @endphp</h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
                     	<div class="btn-group">
@@ -134,12 +140,56 @@ var table = $('#table-data').DataTable({
       data:{id},
       dataType:'json',
       success:function(data){
-        // console.log
-        $('.id').val(data.id);
-        $('.nama').val(data.nama);
+        console.log({data})
+        document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
+        document.getElementById("surat_id").innerHTML = data.surat.id;
+        document.getElementById("status_surat").innerHTML = data.surat.status;
+        data.surat.status === "Selesai" ? document.getElementById("status_surat").style.color = "green" : data.surat.status === "Ditolak" ? document.getElementById("status_surat").style.color = "red" : document.getElementById("status_surat").style.color = "#F3B137";
+        document.getElementById("nama_pemohon").innerHTML = data.user.nama_lengkap;
+        document.getElementById("email").innerHTML = data.user.email;
+        document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
+        document.getElementById("jadwal_survey").innerHTML = data.jadwal_survey;
+        document.getElementById("alamat_lokasi").innerHTML = data.surat.alamat_lokasi;
+        // data.surat_dokumen.forEach(function(surat_syarat) {
+        // document.getElementsByClassName("nama_surat_syarat").innerHTML = surat_syarat.nama;
+        // });
+
+        data.surat_dokumen.forEach(myFunction);
+
+        // document.getElementById("nama_surat_syarat").innerHTML = text;
+        function myFunction(item, index) {
+          const container = document.getElementById("nama_surat_syarat");
+
+    // Create paragraph element
+    const para = document.createElement("p");
+    const node = document.createTextNode((index + 1) + ".) " + item.nama);
+    para.appendChild(node);
+
+    // Create link element
+    const link = document.createElement("a");
+    link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
+    link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
+    const text = document.createTextNode("Lihat Dokumen");
+    link.appendChild(text);
+
+    // Apply CSS styles to reduce the margin between para and link
+    para.style.marginBottom = "1px";  // Adjust the value as needed
+    link.style.color = "#F3B137"
+    // Append paragraph and link to the container
+    container.appendChild(para);
+    container.appendChild(link);
+
+    // Add a line break for better separation
+    const lineBreak = document.createElement("br");
+    container.appendChild(lineBreak);
+    const lineBreak2 = document.createElement("br");
+    container.appendChild(lineBreak2);
+
+
+};
       
         // $('.datepicker').val(data.created_at)
-        $('#tambah').modal('show');
+        $('#detail').modal('show');
       }
     });
 

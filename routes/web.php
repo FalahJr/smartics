@@ -102,7 +102,7 @@ Route::post('chatbot/save', 'ChatbotController@save');
 
 Route::get('surat', 'SuratController@index');
 Route::get('surattable/{status}', 'SuratController@datatable');
-// Route::get('editsuratsyarat', 'SuratSyaratController@edit');
+Route::get('editsurat', 'SuratController@edit');
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 

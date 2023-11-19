@@ -64,7 +64,7 @@ class SuratController extends Controller
       
           if ($data->status == "Selesai") {
               // Tombol "Approve" hanya muncul jika is_active == 1
-              $color .=  '<div><strong class="text-success">' . $data->status . '</strong></div>';
+              $color =  '<div><strong class="text-success">' . $data->status . '</strong></div>';
           } else if ($data->status == "Ditolak"){
             $color = '<div><strong class="text-danger">' . $data->status . '</strong></div>';
           }else{
@@ -240,17 +240,30 @@ class SuratController extends Controller
     }
 
     public function edit(Request $req) {
-      $data = DB::table("surat_jenis")
+      $surat = DB::table("surat")
               ->where("id", $req->id)
               ->first();
 
-      // $petugas = [
-      //   "id" => $data->id,
-      //   "nama_lengkap" => $data->nama_lengkap,
-      //   "username" => $data->username,
-      //   "password" => Crypt::decryptString($data->password),
-      //   "role_id" => $data->role_id,
-      // ];
+      $user = DB::table("user")
+              ->where("id", $surat->user_id)
+              ->first();
+      $surat_jenis = DB::table("surat_jenis")
+              ->where("id", $surat->surat_jenis_id)
+              ->first();
+
+      $surat_dokumen = DB::table("surat_dokumen")->join('surat_syarat', 'surat_syarat.id', '=', 'surat_dokumen.surat_syarat_id')
+      ->where('surat_dokumen.surat_id', $surat->id)->get();
+
+      
+
+      $data = [
+       'surat' => $surat,
+       'user' => $user,
+       'surat_jenis' => $surat_jenis,
+       'tanggal_pengajuan' => Carbon::parse($surat->created_at)->format('d F Y'),
+       'jadwal_survey' => $surat->jadwal_survey ? Carbon::parse($surat->jadwal_survey)->format('d F Y') : 'Belum Tersedia',
+       'surat_dokumen' => $surat_dokumen
+      ];
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
       return response()->json($data);
