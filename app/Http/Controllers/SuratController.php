@@ -191,6 +191,7 @@ class SuratController extends Controller
      $cekJumlahSuratDokumen = DB::table("surat_dokumen")->where("surat_id", $req->surat_id)->count();
      $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
      ->where('surat.id', $req->surat_id)->first();
+     $operator = DB::table('user')->where('role_id', '5')->first(); 
 
     //  if($cekDataUser){
     //   return $cekDataUser->user_id;
@@ -213,6 +214,8 @@ class SuratController extends Controller
           DB::commit();
           SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Validasi Operator, mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diajukan", $cekDataUser->email);
           PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diajukan','Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Validasi Operator, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+          PushNotifController::sendMessage($operator->id,'Hai Operator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->surat_id.' !','Ada surat dari pemohon yang perlu segera divalidasi. Silakan akses tugas Anda sekarang dan lakukan validasi. Terima kasih!' );
           
           return response()->json(["status" => 1,'message' => 'Surat Berhasil Diajukan']);
         } catch (\Exception $e) {
