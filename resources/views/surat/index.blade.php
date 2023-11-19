@@ -23,10 +23,8 @@
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Daftar Permohonan</h4>
-                    <h4 class="card-title">@php
-                      echo $testing->nama;
-                    @endphp</h4>
+                    <h4 class="card-title">Daftar Permohonan ( <span id="filter_status">Pilih Semua</span> )</h4>
+                    
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
                     	<div class="btn-group">
@@ -35,7 +33,12 @@
                         </button>
                         <div class="dropdown-menu">
                              <a class="dropdown-item" href="#" onclick="handleFilter('Pilih Semua')">Pilih Semua</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Hasil Survey')">Verifikasi Hasil Survey</a>
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Selesai')">Selesai</a>
                         </div>
                     </div>
@@ -73,6 +76,7 @@
 var selectedStatus = 'Pilih Semua'; 
 function handleFilter(status) {
     selectedStatus = status ;  // update selectedStatus
+    document.getElementById("filter_status").innerHTML = status
 
     // Update DataTable's Ajax URL
     table.ajax.url("{{ url('/surattable') }}/" + selectedStatus).load();
