@@ -36,7 +36,7 @@
 
   <div class="limiter">
     <div class="container-login100" style="background-image: url('assets/login-v3/images/bg-01.jpg');">
-      <div class="wrap-login100">
+      <div class="wrap-login100 bg-warning">
         <form class="login100-form validate-form" autocomplete="off" method="GET" action="{{ url('login') }}">
           {{ csrf_field() }}
          <!--  <span class="login100-form-logo">
@@ -65,6 +65,12 @@
             <div class="red"  style="color: red"><b>Password Yang Anda Masukan Salah</b></div>
             @endif
           </div>
+          <div class="contact100-form-checkbox text-right">
+            {{-- <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember"> --}}
+            {{-- <label class="label-checkbox100" for="ckb1"> --}}
+             <a href="{{url('/forgotpassword')}}" style="color: white;">Lupa Kata Sandi</a>
+            </label>
+          </div>
 
           {{-- <div class="text-center p-t-90">
              <a class="txt1" href="#">
@@ -72,25 +78,20 @@
              </a>
            </div> --}}
 
-          <div class="contact100-form-checkbox text-center">
-            {{-- <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember">
-            <label class="label-checkbox100" for="ckb1"> --}}
-              Belom punya akun?, <a href="{{url('/register')}}" style="color: white;">Register now!</a>
-            </label>
-          </div>
-
-          <div class="contact100-form-checkbox text-center">
-            {{-- <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember"> --}}
-            {{-- <label class="label-checkbox100" for="ckb1"> --}}
-             <a href="{{url('/forgotpassword')}}" style="color: white;">Lupa password?</a>
-            </label>
-          </div>
+          
 
           <div class="container-login100-form-btn">
             <button type="submit" class="login100-form-btn">
               Login
             </button>
           </div>
+
+          <div class="contact100-form-checkbox text-center mt-4 text-light">
+              Belom punya akun?, <a href="{{url('/register')}}" style="color: white;">Register now!</a>
+            </label>
+          </div>
+
+          
 
 
         </form>
