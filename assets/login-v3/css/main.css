@@ -451,11 +451,11 @@ iframe {
   height: 50px;
   border-radius: 25px;
 
-  background: #9152f8;
-  background: -webkit-linear-gradient(bottom, #39dea1, #2485ef);
+  background: orange;
+  /* background: -webkit-linear-gradient(bottom, #39dea1, #2485ef);
   background: -o-linear-gradient(bottom, #39dea1, #2485ef);
   background: -moz-linear-gradient(bottom, #39dea1, #2485ef);
-  background: linear-gradient(bottom, #39dea1, #2485ef);
+  background: linear-gradient(bottom, #39dea1, #2485ef); */
   position: relative;
   z-index: 1;
 
@@ -486,6 +486,7 @@ iframe {
 
 .login100-form-btn:hover {
   color: #fff;
+  border: 1px solid white;
 }
 
 .login100-form-btn:hover:before {
