@@ -163,8 +163,8 @@
               </a>
             </li>
 
-            <li class="nav-item {{Request::is('uangmasuk') ? 'active' : ''}}">
-              <a class="nav-link" href="{{url('/uangmasuk')}}">
+            <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/arsip')}}">
                 <span class="menu-title">Arsip Perizinan</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
                 <i class="fa fa-cloud-download-alt"></i>

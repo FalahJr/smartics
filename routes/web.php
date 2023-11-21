@@ -107,6 +107,11 @@ Route::get('editsurat', 'SuratController@edit');
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
+// Arsip
+Route::get('arsip', 'ArsipController@index');
+Route::get('arsiptable/{jenis_surat}', 'ArsipController@datatable');
+Route::get('editarsip', 'ArsipController@edit');
+
 
 Route::get('/chat', 'ChatController@index');
 Route::get('/listroom', 'ChatController@listroom');
