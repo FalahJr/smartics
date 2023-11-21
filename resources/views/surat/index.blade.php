@@ -32,14 +32,13 @@
                             Filter Status
                         </button>
                         <div class="dropdown-menu">
-                             <a class="dropdown-item" href="#" onclick="handleFilter('Pilih Semua')">Pilih Semua</a>
+                             <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Hasil Survey')">Verifikasi Hasil Survey</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Selesai')">Selesai</a>
                         </div>
                     </div>
                       {{-- @endif --}}
@@ -73,7 +72,7 @@
 @endsection
 @section('extra_script')
 <script>
-var selectedStatus = 'Pilih Semua'; 
+var selectedStatus = 'Semua'; 
 function handleFilter(status) {
     selectedStatus = status ;  // update selectedStatus
     document.getElementById("filter_status").innerHTML = status
@@ -132,7 +131,24 @@ var table = $('#table-data').DataTable({
           {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
           {data: 'aksi', name: 'aksi'},
 
-        ]
+        ],
+        "language": {
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ data",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Cari:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Selanjutnya",
+                        "sLast": "Terakhir"
+                    }
+                }
   });
 
 
