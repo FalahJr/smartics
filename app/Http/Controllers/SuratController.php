@@ -8,9 +8,9 @@ use App\mMember;
 
 use App\Authentication;
 
-use Auth;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -32,7 +32,7 @@ class SuratController extends Controller
 
     public function datatable($status) {
       // $data = DB::table('surat')->get();
-
+      if(Auth::user()->role_id === 1){
       if($status !== 'Semua'){
       $data = DB::table('surat')->where('status', $status)->get();
     }else{
@@ -40,6 +40,10 @@ class SuratController extends Controller
       $data = DB::table('surat')->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
 
     }
+  }else if(Auth::user()->role_id === 5){
+      $data = DB::table('surat')->where('status', 'Validasi Operator')->get();
+    
+  }
 
 
         // return $data;
@@ -223,6 +227,39 @@ class SuratController extends Controller
           return response()->json(["status" => 2, "message" =>$e->getMessage()]);
         }
      }
+
+    }
+
+    public function validasi(Request $req) {
+      DB::beginTransaction();
+      // if(Auth::user()->role_id ===5){
+        $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->id)->first();
+     $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+
+    //  if($cekDataUser){
+    //   return $cekDataUser->nama_lengkap;
+    //  }
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Verifikasi Verifikator',
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diajukan", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diajukan','Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($verifikator->id,'Hai Verifikator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera divalidasi. Silakan akses tugas Anda sekarang dan lakukan validasi. Terima kasih!' );
+        return response()->json(["status" => 3]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 4, "message" => $e->getMessage()]);
+      }
+    // }
 
     }
 
