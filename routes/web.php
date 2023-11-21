@@ -91,7 +91,8 @@ Route::get('simpansuratjenis', 'SuratJenisController@simpan');
 Route::get('hapussuratjenis', 'SuratJenisController@hapus');
 
 Route::get('surat-syarat', 'SuratSyaratController@index');
-Route::get('suratsyarattable', 'SuratSyaratController@datatable');
+Route::get('suratsyarattable/{surat_jenis_id}', 'SuratSyaratController@datatable');
+Route::get('suratsyarattableall', 'SuratSyaratController@datatableNoFilter');
 Route::get('editsuratsyarat', 'SuratSyaratController@edit');
 Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');

@@ -20,15 +20,15 @@
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Syarat Perizinan</h4>
+                    <h4 class="card-title" id="filter_surat_jenis"></h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                      <button type="button" class="btn btn-warning shadow-none border-0" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
                       {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
-                            <thead class="bg-warning text-white">
+                          <thead class="bg-warning text-white" >
                               <tr>
                                 <th>No</th>
                                 <th>Syarat Perizinan</th>
@@ -54,6 +54,16 @@
 @section('extra_script')
 <script>
 
+const searchParams = new URLSearchParams(window.location.search);
+const surat_jenis_id = searchParams ? searchParams.get('id') : null;
+@php
+$getId = $_GET ? $_GET['id'] : null;
+  $surat_jenis = DB::table("surat_jenis")->where("id", $getId !== null ? $getId : '' )->first()
+@endphp
+var surat_jenis_nama = <?php echo json_encode($surat_jenis ? $surat_jenis->nama : '') ?>;
+document.getElementById("filter_surat_jenis").innerHTML = surat_jenis_id ? 'Syarat Perizinan ( ' + surat_jenis_nama + ' )' : 'Syarat Perizinan';
+
+// console.log({surat_jenis_id});
 var table = $('#table-data').DataTable({
         processing: true,
         // responsive:true,
@@ -62,7 +72,7 @@ var table = $('#table-data').DataTable({
         serverSide: true,
         searching: true,
         paging: true,
-        dom: 'Bfrtip',
+        // dom: 'Bfrtip',
         title: '',
         buttons: [
             // 'pdf'
@@ -70,17 +80,17 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-            url:'{{ url('/suratsyarattable') }}',
+            url:  surat_jenis_id !== null ? "{{ url('/suratsyarattable') }}/" + surat_jenis_id : "{{ url('/suratsyarattableall') }}" ,
         },
         columnDefs: [
 
               {
                  targets: 0 ,
-                 className: 'center id'
+                 className: 'center id '
               },
               {
                  targets: 1,
-                 className: 'nominal center'
+                 className: ' w-50'
               },
               {
                  targets: 2,
@@ -94,7 +104,25 @@ var table = $('#table-data').DataTable({
           {data: 'surat_jenis', name: 'surat_jenis'},
           {data: 'aksi', name: 'aksi'},
 
-        ]
+        ],
+        "language": {
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ data",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Cari:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Selanjutnya",
+                        "sLast": "Terakhir"
+                    }
+                }
+        
   });
 
 

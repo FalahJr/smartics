@@ -27,9 +27,13 @@ class SuratSyaratController extends Controller
       return view('surat-syarat.index', compact('suratJenis'));
     }
 
-    public function datatable() {
-      $data = DB::table('surat_syarat')
-        ->get();
+    public function datatable($surat_jenis_id) {
+      // $data = DB::table('surat_syarat')
+      //   ->get();
+
+      if($surat_jenis_id){
+        $data = DB::table('surat_syarat')->where('surat_jenis_id', $surat_jenis_id)->get();
+      }
 
 
         // return $data;
@@ -58,6 +62,47 @@ class SuratSyaratController extends Controller
           // ->setTotalRecords(2)
           ->make(true);
     }
+
+    public function datatableNoFilter() {
+      $data = DB::table('surat_syarat')
+        ->get();
+
+      // if($surat_jenis_id !== null){
+      //   $data = DB::table('surat_syarat')->where('surat_jenis_id', $surat_jenis_id)->get();
+      // }else{
+      //   // $data;
+      //   $data = DB::table('surat_syarat')->get();
+  
+      // }
+
+
+        // return $data;
+        // $xyzab = collect($data);
+        // return $xyzab;
+        // return $xyzab->i_price;
+        return Datatables::of($data)
+          // ->addColumn("nominal", function($data) {
+          //   return FormatRupiah($data->uangkeluar_nominal);
+          // })
+         
+          ->addColumn("surat_jenis", function($data) {
+            $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+            return $surat_jenis->nama;
+          })
+          ->addColumn('aksi', function ($data) {
+            return  '<div class="btn-group">'.
+                     '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
+                     '<label class="fa fa-pencil-alt"></label></button>'.
+                     '<button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
+                     '<label class="fa fa-trash"></label></button>'.
+                  '</div>';
+          })
+          ->rawColumns(['aksi'])
+          ->addIndexColumn()
+          // ->setTotalRecords(2)
+          ->make(true);
+    }
+
 
     public function simpan(Request $req) {
      

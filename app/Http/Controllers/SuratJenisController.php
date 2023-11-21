@@ -41,7 +41,7 @@ class SuratJenisController extends Controller
          
           ->addColumn("surat_syarat", function($data) {
            return '<div class="btn-group">'.
-            '<a href="surat-syarat" class="btn btn-success btn-lg px-4 py-2" title="edit">'.
+            '<a href="surat-syarat?id='.$data->id.'" class="btn btn-success btn-lg px-4 py-2" title="edit">'.
             'Lihat Syarat</a>
          </div>';
           })
