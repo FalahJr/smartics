@@ -33,11 +33,11 @@ class SuratController extends Controller
     public function datatable($status) {
       // $data = DB::table('surat')->get();
 
-      if($status !== 'Pilih Semua'){
+      if($status !== 'Semua'){
       $data = DB::table('surat')->where('status', $status)->get();
     }else{
       // $data;
-      $data = DB::table('surat')->get();
+      $data = DB::table('surat')->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
 
     }
 
