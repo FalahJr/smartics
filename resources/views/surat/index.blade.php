@@ -27,6 +27,8 @@
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
+                        @if(Auth::user()->role_id === 1)
+                      
                     	<div class="btn-group">
                         <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter Status
@@ -41,7 +43,8 @@
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
                         </div>
                     </div>
-                      {{-- @endif --}}
+                   
+                      @endif
                     </div>
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
@@ -161,6 +164,7 @@ var table = $('#table-data').DataTable({
       dataType:'json',
       success:function(data){
         console.log({data})
+        $('.id').val(data.surat.id);
         document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
         document.getElementById("surat_id").innerHTML = data.surat.id;
         document.getElementById("status_surat").innerHTML = data.surat.status;
@@ -249,6 +253,45 @@ var table = $('#table-data').DataTable({
     });
   })
 
+  $('#validasi').click(function(){
+    iziToast.question({
+      close: false,
+  		overlay: true,
+  		displayMode: 'once',
+  		title: 'Validasi Surat',
+  		message: 'Apakah anda yakin ?',
+  		position: 'center',
+  		buttons: [
+  			['<button><b>Ya</b></button>', function (instance, toast) {
+          $.ajax({
+            url:baseUrl + '/validasisurat',
+            data:$('.table_modal :input').serialize(),
+            dataType:'json',
+            success:function(data){
+              if (data.status == 1) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Data Berhasil Divalidasi!',
+          });
+          reloadall();
+        }else if(data.status == 2){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal Divalidasi!',
+          });
+        }
+
+              reloadall();
+            }
+          });
+  			}, true],
+  			['<button>Tidak</button>', function (instance, toast) {
+  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+  			}],
+  		]
+  	});
+  })
+
 
   function hapus(id) {
     iziToast.question({
@@ -284,6 +327,7 @@ var table = $('#table-data').DataTable({
   function reloadall() {
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
+    $('#detail').modal('hide');
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");
