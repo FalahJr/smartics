@@ -1,8 +1,14 @@
 @extends('main')
 
 @section('content')
+
+
 <!-- partial -->
 <div class="content-wrapper">
+  @php
+  echo 'Role : '. Auth::user()->role_id;
+  
+@endphp
     {{-- <div class="col-lg-12">
            <div class="row">
             <div class="col-md-12 stretch-card grid-margin">

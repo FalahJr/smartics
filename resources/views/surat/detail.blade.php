@@ -49,11 +49,11 @@
          </div>
          @if (Auth::user()->role_id === 5)
          <div class="col-12">
-          <input type="hidden" class="form-control form-control-sm id" name="id">
+          <input type="hidden" class="form-control form-control-sm id" name="id" id="id">
           <button class="btn btn-warning btn-md w-100 mb-3" id="validasi" type="button">
             Validasi
           </button>
-          <button class="btn btn-light btn-md w-100 text-warning border border-warning">
+          <button class="btn btn-light btn-md w-100 text-warning border border-warning" id="showModalTolak" type="button">
             Tolak
           </button>
         </div>

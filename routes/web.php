@@ -105,6 +105,8 @@ Route::get('surat', 'SuratController@index');
 Route::get('surattable/{status}', 'SuratController@datatable');
 Route::get('editsurat', 'SuratController@edit');
 Route::get('validasisurat', 'SuratController@validasi');
+Route::get('kembalikansurat', 'SuratController@kembalikan');
+
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 

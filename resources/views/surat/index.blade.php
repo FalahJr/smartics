@@ -2,6 +2,7 @@
 @section('content')
 
 @include('surat.detail')
+@include('surat.tolak')
 @php
  $testing = DB::table("surat")->where("id", "2")->first();
 @endphp
@@ -268,16 +269,76 @@ var table = $('#table-data').DataTable({
             data:$('.table_modal :input').serialize(),
             dataType:'json',
             success:function(data){
-              if (data.status == 1) {
+              if (data.status == 3) {
           iziToast.success({
               icon: 'fa fa-save',
               message: 'Data Berhasil Divalidasi!',
           });
           reloadall();
-        }else if(data.status == 2){
+        }else if(data.status == 4){
           iziToast.warning({
               icon: 'fa fa-info',
               message: 'Data Gagal Divalidasi!',
+          });
+        }
+
+              reloadall();
+            }
+          });
+  			}, true],
+  			['<button>Tidak</button>', function (instance, toast) {
+  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+  			}],
+  		]
+  	});
+  })
+
+  $('#showModalTolak').click(function(){
+   var tes = document.getElementById("id").value ;
+   $('.id').val(tes);
+   $('.alasan_dikembalikan').val("");
+
+
+  //  console.log({tes})
+
+   
+       
+      
+
+        
+        $('#detail').modal('hide');
+        
+        $('#showTolak').modal('show');
+      // }
+    // });
+    
+  })
+
+  $('#dikembalikanProcess').click(function(){
+    iziToast.question({
+      close: false,
+  		overlay: true,
+  		displayMode: 'once',
+  		title: 'Kembalikan Surat',
+  		message: 'Apakah anda yakin ?',
+  		position: 'center',
+  		buttons: [
+  			['<button><b>Ya</b></button>', function (instance, toast) {
+          $.ajax({
+            url:baseUrl + '/kembalikansurat',
+            data:$('.table_modal :input').serialize(),
+            dataType:'json',
+            success:function(data){
+              if (data.status == 3) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Surat Berhasil Dikembalikan!',
+          });
+          reloadall();
+        }else if(data.status == 4){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Surat Gagal Dikembalikan!',
           });
         }
 
@@ -328,6 +389,7 @@ var table = $('#table-data').DataTable({
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     $('#detail').modal('hide');
+    $('#showTolak').modal('hide');
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");

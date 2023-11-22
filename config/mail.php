@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'solitsosmed@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Javasolit (DompetQu)'),
+        'address' => env('MAIL_FROM_ADDRESS', 'mrcr4zysm1le@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Smartics'),
     ],
 
     /*
