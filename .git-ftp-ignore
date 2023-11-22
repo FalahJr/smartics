@@ -1,0 +1,14 @@
+
+vendor*
+node_modules*
+file*
+assets*
+
+.env.*.php
+.env.php
+.env
+Homestead.yaml
+Homestead.json
+composer.lock
+
+
