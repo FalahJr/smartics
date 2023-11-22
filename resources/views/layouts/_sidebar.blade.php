@@ -134,7 +134,7 @@
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
-            @if (Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 1 )
 
             <li class="nav-item {{Request::is('data-master') || Request::is('data-master/*') ? 'active' : ''   }}">
               <a class="nav-link" data-toggle="collapse" href="#data-master" aria-expanded="false" aria-controls="ui-basic">
@@ -174,7 +174,7 @@
               </a>
             </li>
 
-            @if (Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2)
             
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/arsip')}}">
@@ -184,7 +184,7 @@
               </a>
             </li>
             @endif
-            @if (Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2)
 
             <li class="nav-item {{Request::is('setting') || Request::is('setting/*') ? 'active' : ''  }}">
               <a class="nav-link" data-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="ui-basic">
@@ -210,7 +210,7 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-            @if (Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2)
             <li class="nav-item {{Request::is('statistik') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/statistik')}}">
                 <span class="menu-title">Ulasan</span>

@@ -16,20 +16,20 @@
         <ol class="breadcrumb bg-warning">
           <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
           {{-- <li class="breadcrumb-item">Setup Master Tagihan</li> --}}
-          <li class="breadcrumb-item active" aria-current="page">Daftar Surat Perizinan Selesai</li>
+          <li class="breadcrumb-item active" aria-current="page">Daftar Arsip Perizinan</li>
         </ol>
       </nav>
     </div>
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Daftar Surat Perizinan Selesai ( <span id="filter_jenis_surat">Semua</span> )</h4>
+                    <h4 class="card-title">Daftar Arsip Perizinan ( <span id="filter_jenis_surat">Semua</span> )</h4>
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
                     	<div class="btn-group">
                         <button type="button" class="btn btn-warning dropdown-toggle border-0 shadown-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Filter Status
+                            Filter Jenis Perizinan
                         </button>
                         <div class="dropdown-menu">
                              <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>

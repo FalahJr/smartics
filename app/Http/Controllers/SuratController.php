@@ -32,7 +32,7 @@ class SuratController extends Controller
 
     public function datatable($status) {
       // $data = DB::table('surat')->get();
-      if(Auth::user()->role_id === 1){
+      if(Auth::user()->role_id === 1 || Auth::user()->role_id === 2){
       if($status !== 'Semua'){
       $data = DB::table('surat')->where('status', $status)->get();
     }else{
