@@ -53,7 +53,11 @@
                               <tr>
                                 <th>No. Surat</th>
                                 <th>Jenis Surat</th>
+                                @if (Auth::user()->role_id === 1)
                                 <th>Jadwal Survey</th>
+                                @else
+                                <th>Nama Pemohon</th>
+                                @endif
                                 <th>Status</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th>Action</th>
@@ -107,19 +111,19 @@ var table = $('#table-data').DataTable({
               },
               {
                  targets: 1,
-                 className: 'nominal center'
+                 className: 'center'
               },
               {
                  targets: 2,
-                 className: ' center'
+                 className: 'type center'
               },
               {
                  targets: 3,
-                 className: ' center'
+                 className: 'type center'
               },
               {
                  targets: 4,
-                 className: ' center'
+                 className: 'type center'
               },
               {
                  targets: 5,
@@ -130,7 +134,11 @@ var table = $('#table-data').DataTable({
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'surat_jenis', name: 'surat_jenis'},
+          @if (Auth::user()->role_id === 1)
           {data:'jadwal_survey', name: 'jadwal_survey'},
+          @else
+          {data:'nama_pemohon', name: 'nama_pemohon'},
+          @endif
           {data:'status', name: 'status'},
           {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
           {data: 'aksi', name: 'aksi'},
@@ -259,7 +267,11 @@ var table = $('#table-data').DataTable({
       close: false,
   		overlay: true,
   		displayMode: 'once',
-  		title: 'Validasi Surat',
+  		title: @if (Auth::user()->role_id === 5)
+      'Validasi Surat',
+      @else
+      'Verifikasi Surat',
+      @endif 
   		message: 'Apakah anda yakin ?',
   		position: 'center',
   		buttons: [
@@ -272,7 +284,12 @@ var table = $('#table-data').DataTable({
               if (data.status == 3) {
           iziToast.success({
               icon: 'fa fa-save',
-              message: 'Data Berhasil Divalidasi!',
+              message:
+              @if (Auth::user()->role_id === 5)
+              'Data Berhasil Divalidasi!',
+              @else
+              'Data Berhasil Diverifikasi!',
+              @endif
           });
           reloadall();
         }else if(data.status == 4){

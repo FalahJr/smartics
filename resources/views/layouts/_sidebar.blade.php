@@ -134,8 +134,9 @@
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
+            @if (Auth::user()->role_id == 1)
 
-            <li class="nav-item {{Request::is('data-master') || Request::is('data-master/*') ? 'active' : ''  }}">
+            <li class="nav-item {{Request::is('data-master') || Request::is('data-master/*') ? 'active' : ''   }}">
               <a class="nav-link" data-toggle="collapse" href="#data-master" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Data Master</span>
                 
@@ -151,6 +152,7 @@
                 </ul>
                 </div>
             </li>
+            @endif
             
 
             
@@ -158,11 +160,22 @@
             <li class="nav-item {{Request::is('uangkeluar') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/surat')}}">
                 <span class="menu-title">Daftar Permohonan</span>
-                <span class="menu-sub-title">( 2 )</span>
+                <span class="menu-sub-title">@php 
+                  if(Auth::user()->role_id == 5){
+                    $total = DB::table('surat')->where('status', 'Validasi Operator')->count();
+                  echo "(".$total.")";
+                  }
+                  if(Auth::user()->role_id == 6){
+                    $total = DB::table('surat')->where('status', 'Verifikasi Verifikator')->count();
+                  echo "(".$total.")";
+                  }
+                @endphp</span>
                 <i class="fa fa-cloud-upload-alt"></i>
               </a>
             </li>
 
+            @if (Auth::user()->role_id == 1)
+            
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/arsip')}}">
                 <span class="menu-title">Arsip Perizinan</span>
@@ -170,6 +183,9 @@
                 <i class="fa fa-cloud-download-alt"></i>
               </a>
             </li>
+            @endif
+            @if (Auth::user()->role_id == 1)
+
             <li class="nav-item {{Request::is('setting') || Request::is('setting/*') ? 'active' : ''  }}">
               <a class="nav-link" data-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Survey</span>
@@ -185,6 +201,7 @@
                 </ul>
                 </div>
             </li>
+            @endif
 
             {{-- <li class="nav-item {{Request::is('mutasi') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/mutasi')}}">
@@ -193,7 +210,7 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-
+            @if (Auth::user()->role_id == 1)
             <li class="nav-item {{Request::is('statistik') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/statistik')}}">
                 <span class="menu-title">Ulasan</span>
@@ -201,6 +218,9 @@
                 <i class="fa fa-bar-chart"></i>
               </a>
             </li>
+            @endif
+
+            @if (Auth::user()->role_id == 1)
             <li class="nav-item {{Request::is('chatbot') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/chatbot')}}">
                 <span class="menu-title">Chatbot</span>
@@ -208,6 +228,7 @@
                 <i class="fa fa-bar-chart"></i>
               </a>
             </li>
+            @endif
 
             @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 9)
             <li class="nav-item {{Request::is('chat') ? 'active' : ''}}">

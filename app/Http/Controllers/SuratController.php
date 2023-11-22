@@ -44,6 +44,10 @@ class SuratController extends Controller
       $data = DB::table('surat')->where('status', 'Validasi Operator')->get();
     
   }
+  else if(Auth::user()->role_id === 6){
+    $data = DB::table('surat')->where('status', 'Verifikasi Verifikator')->get();
+  
+}
 
 
         // return $data;
@@ -56,13 +60,27 @@ class SuratController extends Controller
           return $surat_jenis->nama;
         })
         ->addColumn('jadwal_survey', function ($data) {
+        // if(Auth::user()->role_id === 1){
+
           if($data->jadwal_survey !== null){
             return Carbon::parse($data->jadwal_survey)->format('d F Y');
 
           }else{
             return '<div><i>Belum Tersedia</i></div>';
           }
+        // }else{
+        //   return null;
+        // }
         })
+        ->addColumn('nama_pemohon', function ($data) {
+          // if(Auth::user()->role_id === 1){
+  
+            $pemohon = DB::table('user')->where('id', $data->user_id)->first();
+            return $pemohon->nama_lengkap;
+          // }else{
+          //   return null;
+          // }
+          })
         ->addColumn('status', function ($data) {
           $color = '<div><strong class="text-warning">' . $data->status . '</strong></div>';
       
@@ -86,7 +104,7 @@ class SuratController extends Controller
                      '<label class="fa fa-eye w-100"></label></button>'.
                   '</div>';
           })
-          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan'])
+          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_pemohon'])
           ->addIndexColumn()
           // ->setTotalRecords(2)
           ->make(true);
@@ -236,10 +254,12 @@ class SuratController extends Controller
         $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
      ->where('surat.id', $req->id)->first();
      $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+     $admin_dinas = DB::table('user')->where('role_id', '3')->first(); 
 
     //  if($cekDataUser){
     //   return $cekDataUser->nama_lengkap;
     //  }
+    if(Auth::user()->role_id === 5){
       try {
 
         DB::table("surat")
@@ -250,8 +270,8 @@ class SuratController extends Controller
             ]);
 
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diajukan", $cekDataUser->email);
-        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Divalidasi','Selamat! Pengajuan surat Anda telah sukses diajukan. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Divalidasi", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Divalidasi','Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
 
         PushNotifController::sendMessage($verifikator->id,'Hai Verifikator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera diverifikasi. Silakan akses tugas Anda sekarang dan lakukan verifikasi. Terima kasih!' );
         return response()->json(["status" => 3]);
@@ -259,6 +279,28 @@ class SuratController extends Controller
         DB::rollback();
         return response()->json(["status" => 4, "message" => $e->getMessage()]);
       }
+    }else if(Auth::user()->role_id === 6)
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Penjadwalan Survey',
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diverifikasi. Kami akan melakukan Penjadwalan Survey,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diverifikasi", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diverifikasi','Selamat! Pengajuan surat Anda telah sukses diverifikasi. Kami akan melakukan Penjadwalan Survey, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($admin_dinas->id,'Hai Admin Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Penjadwalan Survey. Silakan akses tugas Anda sekarang dan lakukan Penjadwalan Survey. Terima kasih!' );
+        return response()->json(["status" => 3]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 4, "message" => $e->getMessage()]);
+      }
+    }
     // }
 
     }
@@ -273,6 +315,8 @@ class SuratController extends Controller
     //  if($cekDataUser){
     //   return $cekDataUser->nama_lengkap;
     //  }
+    if(Auth::user()->role_id === 5){
+
       try {
 
         DB::table("surat")
@@ -285,7 +329,7 @@ class SuratController extends Controller
             ]);
 
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa pesan alasan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali.<br><br> Alasan Dikembalikan : ".$req->alasan_dikembalikan."<br><br> Terima kasih atas pemahaman Anda.","Mohon Maaf, Surat No. ".$req->id." Dikembalikan !", $cekDataUser->email);
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa pesan alasan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali.<br><br> Alasan Dikembalikan :<br>".$req->alasan_dikembalikan."<br><br> Terima kasih atas pemahaman Anda.","Mohon Maaf, Surat No. ".$req->id." Dikembalikan !", $cekDataUser->email);
         PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
 
        
@@ -294,7 +338,30 @@ class SuratController extends Controller
         DB::rollback();
         return response()->json(["status" => 4, "message" => $e->getMessage()]);
       }
-    // }
+    }else if(Auth::user()->role_id === 6)
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Pengisian Dokumen',
+              "is_dikembalikan" => 'Y',
+              "alasan_dikembalikan" => $req->alasan_dikembalikan,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh verifikator. Silakan periksa pesan alasan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali.<br><br> Alasan Dikembalikan :<br>".$req->alasan_dikembalikan."<br><br> Terima kasih atas pemahaman Anda.","Mohon Maaf, Surat No. ".$req->id." Dikembalikan !", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh verifikator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
+
+       
+        return response()->json(["status" => 3, 'message' => 'dikembalikan']);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 4, "message" => $e->getMessage()]);
+      }
+    }
 
     }
 
