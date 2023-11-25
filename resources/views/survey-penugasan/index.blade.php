@@ -1,10 +1,9 @@
 @extends('main')
 @section('content')
 
-@include('surat.detail')
-@include('surat.tolak')
+@include('survey-penugasan.detail')
 @php
- $testing = DB::table("surat")->where("id", "2")->first();
+ $jenis = DB::table("surat_jenis")->get();
 @endphp
 <style type="text/css">
 
@@ -17,47 +16,45 @@
         <ol class="breadcrumb bg-warning">
           <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
           {{-- <li class="breadcrumb-item">Setup Master Tagihan</li> --}}
-          <li class="breadcrumb-item active" aria-current="page">Daftar Permohonan</li>
+          <li class="breadcrumb-item active" aria-current="page">List Penugasan Survey</li>
         </ol>
       </nav>
     </div>
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Daftar Permohonan ( <span id="filter_status">Semua</span> )</h4>
+                    <h4 class="card-title">List Penugasan Survey</h4>
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                        @if(Auth::user()->role_id === 1)
-                      
-                    	<div class="btn-group">
-                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Filter Status
+                    	{{-- <div class="btn-group">
+                        <button type="button" class="btn btn-warning dropdown-toggle border-0 shadown-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter Jenis Perizinan
                         </button>
                         <div class="dropdown-menu">
                              <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
+                             @foreach ($jenis as $list)
+                                <a class="dropdown-item" href="#" onclick="handleFilter('@php echo $list->nama; @endphp')">@php echo $list->nama; @endphp</a>
+                             @endforeach --}}
+                            {{-- <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Hasil Survey')">Verifikasi Hasil Survey</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
-                        </div>
-                    </div>
-                   
-                      @endif
+                            <a class="dropdown-item" href="#" onclick="handleFilter('Selesai')">Selesai</a> --}}
+                        {{-- </div>
+                    </div> --}}
+                      {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
-                            <thead class="bg-warning text-white">
+                          <thead class="bg-warning text-white">
                               <tr>
                                 <th>No. Surat</th>
-                                <th>Jenis Surat</th>
-                                @if (Auth::user()->role_id === 1)
-                                <th>Jadwal Survey</th>
-                                @else
-                                <th>Nama Pemohon</th>
-                                @endif
+                                 <th>Jenis Surat</th>
+                               {{-- <th>Nama Pemohon</th>--}}
+                                <th>Jadwal Survey</th> 
                                 <th>Status</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th>Action</th>
@@ -80,14 +77,15 @@
 @endsection
 @section('extra_script')
 <script>
-var selectedStatus = 'Semua'; 
-function handleFilter(status) {
-    selectedStatus = status ;  // update selectedStatus
-    document.getElementById("filter_status").innerHTML = status
+// var selectedStatus = 'Semua'; 
+// function handleFilter(status) {
+//   console.log({status});
+//     selectedStatus = status ;  // update selectedStatus
+//     document.getElementById("filter_jenis_surat").innerHTML = status
 
-    // Update DataTable's Ajax URL
-    table.ajax.url("{{ url('/surattable') }}/" + selectedStatus).load();
-};
+//     // Update DataTable's Ajax URL
+//     table.ajax.url("{{ url('/arsiptable') }}/" + selectedStatus).load();
+// };
 var table = $('#table-data').DataTable({
         processing: true,
         serverSide: true,
@@ -101,7 +99,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-          url: "{{ url('/surattable') }}/" + selectedStatus ,
+          url: "{{ url('/surveypenugasantable') }}"  ,
         },
         columnDefs: [
 
@@ -115,30 +113,24 @@ var table = $('#table-data').DataTable({
               },
               {
                  targets: 2,
-                 className: 'type center'
+                 className: 'center'
               },
               {
                  targets: 3,
-                 className: 'type center'
+                 className: 'center'
               },
               {
                  targets: 4,
-                 className: 'type center'
+                 className: 'center'
               },
-              {
-                 targets: 5,
-                 className: 'type center'
-              },
+             
              
             ],
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'surat_jenis', name: 'surat_jenis'},
-          @if (Auth::user()->role_id === 1)
+          // {data: 'user', name: 'user'},
           {data:'jadwal_survey', name: 'jadwal_survey'},
-          @else
-          {data:'nama_pemohon', name: 'nama_pemohon'},
-          @endif
           {data:'status', name: 'status'},
           {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
           {data: 'aksi', name: 'aksi'},
@@ -168,12 +160,11 @@ var table = $('#table-data').DataTable({
   function edit(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editsurat',
+      url:baseUrl + '/editarsip',
       data:{id},
       dataType:'json',
       success:function(data){
         console.log({data})
-        $('.id').val(data.surat.id);
         document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
         document.getElementById("surat_id").innerHTML = data.surat.id;
         document.getElementById("status_surat").innerHTML = data.surat.status;
@@ -207,7 +198,7 @@ var table = $('#table-data').DataTable({
 
     // Apply CSS styles to reduce the margin between para and link
     para.style.marginBottom = "1px";  // Adjust the value as needed
-    link.style.color = "#F3B137"
+    link.style.color = "#499DB1"
     // Append paragraph and link to the container
     container.appendChild(para);
     container.appendChild(link);
@@ -230,7 +221,7 @@ var table = $('#table-data').DataTable({
 
   $('#simpan').click(function(){
     $.ajax({
-      url: baseUrl + '/simpansurat',
+      url: baseUrl + '/arsipsurat',
       data:$('.table_modal :input').serialize(),
       dataType:'json',
       success:function(data){
@@ -262,104 +253,6 @@ var table = $('#table-data').DataTable({
     });
   })
 
-  $('#validasi').click(function(){
-    iziToast.question({
-      close: false,
-  		overlay: true,
-  		displayMode: 'once',
-  		title: @if (Auth::user()->role_id === 5)
-      'Validasi Surat',
-      @else
-      'Verifikasi Surat',
-      @endif 
-  		message: 'Apakah anda yakin ?',
-  		position: 'center',
-  		buttons: [
-  			['<button><b>Ya</b></button>', function (instance, toast) {
-          $.ajax({
-            url:baseUrl + '/validasisurat',
-            data:$('.table_modal :input').serialize(),
-            dataType:'json',
-            success:function(data){
-              if (data.status == 3) {
-          iziToast.success({
-              icon: 'fa fa-save',
-              message:
-              @if (Auth::user()->role_id === 5)
-              'Data Berhasil Divalidasi!',
-              @else
-              'Data Berhasil Diverifikasi!',
-              @endif
-          });
-          reloadall();
-        }else if(data.status == 4){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Data Gagal Divalidasi!',
-          });
-        }
-
-              reloadall();
-            }
-          });
-  			}, true],
-  			['<button>Tidak</button>', function (instance, toast) {
-  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-  			}],
-  		]
-  	});
-  })
-
-  $('#showModalTolak').click(function(){
-   var tes = document.getElementById("id").value ;
-   $('.id').val(tes);
-   $('.alasan_dikembalikan').val("");
-   $('#detail').modal('hide'); 
-   $('#showTolak').modal('show');
-      // }
-    // });
-    
-  })
-
-  $('#dikembalikanProcess').click(function(){
-    iziToast.question({
-      close: false,
-  		overlay: true,
-  		displayMode: 'once',
-  		title: 'Kembalikan Surat',
-  		message: 'Apakah anda yakin ?',
-  		position: 'center',
-  		buttons: [
-  			['<button><b>Ya</b></button>', function (instance, toast) {
-          $.ajax({
-            url:baseUrl + '/kembalikansurat',
-            data:$('.table_modal :input').serialize(),
-            dataType:'json',
-            success:function(data){
-              if (data.status == 3) {
-          iziToast.success({
-              icon: 'fa fa-save',
-              message: 'Surat Berhasil Dikembalikan!',
-          });
-          reloadall();
-        }else if(data.status == 4){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Surat Gagal Dikembalikan!',
-          });
-        }
-
-              reloadall();
-            }
-          });
-  			}, true],
-  			['<button>Tidak</button>', function (instance, toast) {
-  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-  			}],
-  		]
-  	});
-  })
-
 
   function hapus(id) {
     iziToast.question({
@@ -372,7 +265,7 @@ var table = $('#table-data').DataTable({
   		buttons: [
   			['<button><b>Ya</b></button>', function (instance, toast) {
           $.ajax({
-            url:baseUrl + '/hapussurat',
+            url:baseUrl + '/arsipsurat',
             data:{id},
             dataType:'json',
             success:function(data){
@@ -395,8 +288,6 @@ var table = $('#table-data').DataTable({
   function reloadall() {
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
-    $('#detail').modal('hide');
-    $('#showTolak').modal('hide');
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");

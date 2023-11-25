@@ -110,6 +110,10 @@ Route::get('kembalikansurat', 'SuratController@kembalikan');
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
+// Survey
+Route::get('survey/penugasan', 'SurveyController@index');
+Route::get('surveypenugasantable', 'SurveyController@datatable');
+
 // Arsip
 Route::get('arsip', 'ArsipController@index');
 Route::get('arsiptable/{jenis_surat}', 'ArsipController@datatable');
