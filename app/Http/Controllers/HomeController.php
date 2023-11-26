@@ -49,7 +49,8 @@ class HomeController extends Controller
        return view("home");
      }
 
-    public function logout(){
+     public function logout(){
+        $role = Auth::user()->role_id;
         Session::flush();
         Account::where('id', Auth::user()->id)->update([
              'updated_at' => Carbon::now('Asia/Jakarta'),
@@ -65,6 +66,11 @@ class HomeController extends Controller
         Auth::logout();
 
         Session::forget('key');
-        return Redirect('/login');
+        
+        if($role == "9") {
+            return Redirect('/loginpemohon');
+        } else {
+            return Redirect('/login');
+        }
     }
 }

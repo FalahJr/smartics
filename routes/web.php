@@ -34,6 +34,12 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get("tesemail", 'VerificationController@tesemail');
     // Route::post('login', 'loginController@authenticate')->name('login');
+
+    Route::get('loginpemohon', 'LoginPemohonController@index');
+    Route::get('loginpemohon/auth', 'LoginPemohonController@authenticate');
+    Route::get('registerpemohon', 'RegisterPemohonController@index');
+    Route::post('registerpemohon/register', 'RegisterPemohonController@register');
+    Route::get('loginGoogle', 'LoginPemohonController@google');
 });
 
 
