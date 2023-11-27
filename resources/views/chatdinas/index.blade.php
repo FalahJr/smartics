@@ -125,6 +125,7 @@
        sidebar .list-wrap {
       width: 100%;
       overflow: auto;
+      height: 100%;
       }
       sidebar .list-wrap .list {
       border-bottom: 1px solid #ccc;
