@@ -135,10 +135,10 @@
       padding: 5px;
       height: 70px;
       cursor: pointer;
-      border-radius: 10px
+      /* border-radius: 10px */
       }
       sidebar .list-wrap .list:hover, sidebar .list-wrap .list.active {
-      background: white;
+      background: #FFF6E8;
       }
       sidebar .list-wrap .list img {
       border-radius: 50%;
