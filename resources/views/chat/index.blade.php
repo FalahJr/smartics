@@ -85,7 +85,7 @@
       border-radius: 10px;
       }
       .message-wrap .message-list .time {
-      text-align: right;
+      text-align: left;
       color: #999;
       font-size: 0.75em;
       }
