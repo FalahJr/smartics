@@ -119,6 +119,9 @@ Route::get('kembalikansurat', 'SuratController@kembalikan');
 // Survey
 Route::get('survey/penugasan', 'SurveyController@index');
 Route::get('surveypenugasantable', 'SurveyController@datatable');
+Route::get('simpansurveypenugasan', 'SurveyController@simpan');
+Route::get('editsurveypenugasan', 'SurveyController@edit');
+
 
 // Arsip
 Route::get('arsip', 'ArsipController@index');

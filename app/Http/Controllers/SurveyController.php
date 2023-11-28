@@ -21,9 +21,9 @@ use Yajra\Datatables\Datatables;
 class SurveyController extends Controller
 {
     public function index() {
-    // $roles = DB::table("role")->get();
+    $surveyors = DB::table("user")->where('role_id', '7')->get();
 
-      return view('survey-penugasan.index');
+      return view('survey-penugasan.index', compact('surveyors'));
     }
 
     public function datatable() {
@@ -60,7 +60,11 @@ class SurveyController extends Controller
           if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
               // Tombol "Approve" hanya muncul jika is_active == 1
               $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
-          } else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
+          }else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+            // Tombol "Approve" hanya muncul jika is_active == 1
+            $color =  '<div><strong class="text-warning"> Menunggu Konfirmasi Pemohon</strong></div>';
+        }  
+          else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
             $color = '<div><strong class="text-danger">Penjadwalan Ulang</strong></div>';
           }else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL){
             $color;
@@ -73,18 +77,24 @@ class SurveyController extends Controller
       })
           ->addColumn('aksi', function ($data) {
             $aksi = '<div class="btn-group">'.
-            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg pt-2" title="lihat detail penugasan">'.
+            '<button type="button" onclick="detail('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="penjadwalan survey">'.
             '<label class="fa fa-calendar-check-o w-100" style="padding:0 2px"></label></button>'.
          '</div>';
-         if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+         if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
           $aksi = '<div class="btn-group">'.
-            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="penjadwalan survey">'.
+          '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="penjadwalan survey">'.
+          '<label class="fa fa-calendar-plus-o w-100" style="padding:0 2px"></label></button>'.
+       '</div>';
+                 } else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
+
+                 $aksi;
+                 } else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+          $aksi = '<div class="btn-group">'.
+            '<button type="button" onclick="detail('.$data->id.')" class="btn btn-info btn-lg pt-2" title="lihat detail penugasan">'.
             '<label class="fa fa-eye w-100" ></label></button>'.
          '</div>';
          }
-         else{
-          $aksi;
-         }
+         
             return $aksi;
           })
           ->rawColumns(['aksi','status','surat_jenis','jadwal_survey','tanggal_pengajuan'])
@@ -109,82 +119,85 @@ class SurveyController extends Controller
 
     public function simpan(Request $req) {
      
-      if ($req->id == null) {
+      if ($req->is_acc_penjadwalan == "N" && $req->is_reschedule == "N") {
         DB::beginTransaction();
         try {
-          $cekusername= DB::table("user")->where("username",$req->username)->first();
-          $cekemail= DB::table("user")->where("email",$req->email)->first();
 
-          if($cekemail !== null){
-            return response()->json(["status" => 2, "message" => "Email Sudah Terdaftar"]);
-          }else if($cekusername !== null){
-            return response()->json(["status" => 2, "message" => "Username Sudah Digunakan"]);
-          }
-          else{
-        DB::table("user")
-              ->insertGetId([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "email" => $req->email,
-              "password" => Crypt::encryptString($req->password),
-              "role_id" => "9",
-              "alamat" => $req->alamat,
-              "provinsi" => $req->provinsi,
-              "kabupaten_kota" => $req->kabupaten_kota,
-              "kecamatan" => $req->kecamatan,
-              "kelurahan" => $req->kelurahan,
-              "jenis_kelamin" => $req->jenis_kelamin,
-              "jenis_identitas" => $req->jenis_identitas,
-              "nomor_identitas" => $req->nomor_identitas,
-              "tanggal_lahir" => $req->tanggal_lahir,
-              "tempat_lahir" => $req->tempat_lahir,
-              "pekerjaan" => $req->pekerjaan,
-              "is_active" => "N",
-              "created_at" => Carbon::now("Asia/Jakarta"),
+        DB::table("surat")
+        ->where("id", $req->id)
+              ->update([
+              "jadwal_survey" => $req->jadwal_survey,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
+        DB::table("survey")
+        ->insertGetId([
+          'surat_id' => $req->id,
+          'user_id' => $req->user_id,
+          'status' => NULL,
+          "created_at" => Carbon::now("Asia/Jakarta"),
+          "updated_at" => Carbon::now("Asia/Jakarta")
+        ]);
+
           DB::commit();
-          return response()->json(["status" => 1,'message' => 'Berhasil Registrasi Tunggu Admin Mengaktivasi Akun Anda dan Mengirimkan Email'  ]);
-          }
+          return response()->json(["status" => 1]);
         } catch (\Exception $e) {
           DB::rollback();
           return response()->json(["status" => 2, "message" =>$e->getMessage()]);
         }
-        
-      } else {
+      } 
+      else if ($req->is_acc_penjadwalan == "N" && $req->is_reschedule == "Y") {
         DB::beginTransaction();
         try {
 
-          DB::table("user")
-            ->where("id", $req->id)
-            ->update([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "email" => $req->email,
-              "password" => Crypt::encryptString($req->password),
-              "alamat" => $req->alamat,
-              "provinsi" => $req->provinsi,
-              "kabupaten_kota" => $req->kabupaten_kota,
-              "kecamatan" => $req->kecamatan,
-              "kelurahan" => $req->kelurahan,
-              "jenis_kelamin" => $req->jenis_kelamin,
-              "jenis_identitas" => $req->jenis_identitas,
-              "nomor_identitas" => $req->nomor_identitas,
-              "tanggal_lahir" => $req->tanggal_lahir,
-              "tempat_lahir" => $req->tempat_lahir,
-              "pekerjaan" => $req->pekerjaan,
+        DB::table("surat")
+        ->where("id", $req->id)
+              ->update([
+              "jadwal_survey" => $req->jadwal_survey,
+              "updated_at" => Carbon::now("Asia/Jakarta"),
+              "is_acc_penjadwalan" => "Y",
+              "is_reschedule" => "N",
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
-         
+        DB::table("survey")
+        ->where("surat_id", $req->id)
+        ->update([
+          'user_id' => $req->user_id,
+          'status' => 'Belum Disurvey',
+          "updated_at" => Carbon::now("Asia/Jakarta")
+        ]);
+
           DB::commit();
-          return response()->json(["status" => 3]);
+          return response()->json(["status" => 1]);
         } catch (\Exception $e) {
           DB::rollback();
-          return response()->json(["status" => 4, "message" =>$e->getMessage()]);
+          return response()->json(["status" => 2, "message" =>$e->getMessage()]);
         }
       }
+
+      //  else {
+      //   DB::beginTransaction();
+      //   try {
+
+      //     DB::table("user")
+      //       ->where("id", $req->id)
+      //       ->update([
+      //         "nama_lengkap" => $req->nama_lengkap,
+      //         "username" => $req->username,
+      //         "password" => Crypt::encryptString($req->password),
+      //         "role_id" => $req->role,
+      //         "updated_at" => Carbon::now("Asia/Jakarta")
+      //       ]);
+
+         
+      //     DB::commit();
+      //     return response()->json(["status" => 3]);
+      //   } catch (\Exception $e) {
+      //     DB::rollback();
+      //     return response()->json(["status" => 4, "message" =>$e->getMessage()]);
+      //   }
+      // }
 
     }
 
@@ -260,18 +273,19 @@ class SurveyController extends Controller
     }
 
     public function edit(Request $req) {
-      $data = DB::table("user")
+      $surat = DB::table("surat")
               ->where("id", $req->id)
               ->first();
+      
+      $survey = DB::table("survey")->where('surat_id', $req->id)->first();
 
-      $petugas = [
-        "id" => $data->id,
-        "nama_lengkap" => $data->nama_lengkap,
-        "username" => $data->username,
-        "password" => Crypt::decryptString($data->password),
+
+      $data = [
+        "surat" => $surat,
+        "survey" => $survey,
       ];
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
-      return response()->json($petugas);
+      return response()->json($data);
     }
 }

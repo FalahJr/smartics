@@ -2,6 +2,7 @@
 @section('content')
 
 @include('survey-penugasan.detail')
+@include('survey-penugasan.tambah')
 @php
  $jenis = DB::table("surat_jenis")->get();
 @endphp
@@ -155,62 +156,51 @@ var table = $('#table-data').DataTable({
                 }
   });
 
+  function tambah() {
+    // $('#user_id').val('');
+    // $('#user_id').select2();
+    // $('#tambah').modal('show');
 
+  }
 
   function edit(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editarsip',
+      url:baseUrl + '/editsurveypenugasan',
       data:{id},
       dataType:'json',
       success:function(data){
-        console.log({data})
-        document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
-        document.getElementById("surat_id").innerHTML = data.surat.id;
-        document.getElementById("status_surat").innerHTML = data.surat.status;
-        data.surat.status === "Selesai" ? document.getElementById("status_surat").style.color = "green" : data.surat.status === "Ditolak" ? document.getElementById("status_surat").style.color = "red" : document.getElementById("status_surat").style.color = "#F3B137";
-        document.getElementById("nama_pemohon").innerHTML = data.user.nama_lengkap;
-        document.getElementById("email").innerHTML = data.user.email;
-        document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
-        document.getElementById("jadwal_survey").innerHTML = data.jadwal_survey;
-        document.getElementById("alamat_lokasi").innerHTML = data.surat.alamat_lokasi;
-        // data.surat_dokumen.forEach(function(surat_syarat) {
-        // document.getElementsByClassName("nama_surat_syarat").innerHTML = surat_syarat.nama;
-        // });
+        console.log({data});
+        $('.is_acc_penjadwalan').val(data.surat.is_acc_penjadwalan);
+        $('.is_reschedule').val(data.surat.is_reschedule);
+        $('.id').val(data.surat.id);
+        $('.jadwal_survey').val(data.surat.jadwal_survey);
+        $('#user_id').val(data.survey ? data.survey.user_id : '');
+        $('#user_id').select2();
+       
+      
+        // $('.datepicker').val(data.created_at)
+        $('#tambah').modal('show');
+      }
+    });
 
-        data.surat_dokumen.forEach(myFunction);
+  }
 
-        // document.getElementById("nama_surat_syarat").innerHTML = text;
-        function myFunction(item, index) {
-          const container = document.getElementById("nama_surat_syarat");
-
-    // Create paragraph element
-    const para = document.createElement("p");
-    const node = document.createTextNode((index + 1) + ".) " + item.nama);
-    para.appendChild(node);
-
-    // Create link element
-    const link = document.createElement("a");
-    link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
-    link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
-    const text = document.createTextNode("Lihat Dokumen");
-    link.appendChild(text);
-
-    // Apply CSS styles to reduce the margin between para and link
-    para.style.marginBottom = "1px";  // Adjust the value as needed
-    link.style.color = "#499DB1"
-    // Append paragraph and link to the container
-    container.appendChild(para);
-    container.appendChild(link);
-
-    // Add a line break for better separation
-    const lineBreak = document.createElement("br");
-    container.appendChild(lineBreak);
-    const lineBreak2 = document.createElement("br");
-    container.appendChild(lineBreak2);
-
-
-};
+  function detail(id) {
+    // body...
+    $.ajax({
+      url:baseUrl + '/editsurveypenugasan',
+      data:{id},
+      dataType:'json',
+      success:function(data){
+        console.log({data});
+        $('.is_acc_penjadwalan').val(data.surat.is_acc_penjadwalan);
+        $('.is_reschedule').val(data.surat.is_reschedule);
+        $('.id').val(data.surat.id);
+        $('.jadwal_survey').val(data.surat.jadwal_survey);
+        $('#user_id').val(data.survey ? data.survey.user_id : '');
+        $('#user_id').select2();
+       
       
         // $('.datepicker').val(data.created_at)
         $('#detail').modal('show');
@@ -221,7 +211,7 @@ var table = $('#table-data').DataTable({
 
   $('#simpan').click(function(){
     $.ajax({
-      url: baseUrl + '/arsipsurat',
+      url: baseUrl + '/simpansurveypenugasan',
       data:$('.table_modal :input').serialize(),
       dataType:'json',
       success:function(data){
@@ -288,6 +278,8 @@ var table = $('#table-data').DataTable({
   function reloadall() {
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
+    $('#user_id').val('');
+    $('#user_id').select2();
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");
