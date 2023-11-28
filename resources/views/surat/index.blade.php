@@ -28,7 +28,7 @@
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                        @if(Auth::user()->role_id === 1)
+                        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 9)
                       
                     	<div class="btn-group">
                         <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
