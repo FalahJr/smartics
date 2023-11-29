@@ -434,14 +434,19 @@ class SuratController extends Controller
     public function getData(Request $req){
       try{
         if($req->user_id){
-          $data = DB::table('surat')->where('user_id',$req->user_id)->get();
+          $data = DB::table('surat')->where('user_id',$req->user_id)->where(function ($query) {
+            $query->where('status','not like', 'Ditolak')
+                  ->orWhere('status','not like', 'Selesai');
+        })->get();
         }else{
-          $data = DB::table('surat')->get();
+          $data = DB::table('surat')->get()->where(function ($query) {
+            $query->where('status','not like', 'Ditolak')
+                  ->orWhere('status','not like', 'Selesai');
+        });
         }
         return response()->json(['status' => 1, 'data' => $data]);
       }catch(\Exception $e){
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
-
       }
     }
 }
