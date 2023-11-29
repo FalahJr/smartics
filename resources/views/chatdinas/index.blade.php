@@ -167,7 +167,7 @@
       }
       sidebar .list-wrap .list .count {
       font-size: 0.75em;
-      background: #bde2f7;
+      background: #ffb136;
       box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.7);
       padding: 3px;
       width: 20px;
@@ -292,7 +292,7 @@ var idselect = 0;
                           '<span class="user">'+res.account.nama_lengkap+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
-                        '<span class="count">'+res.counter+'</span>'+
+                        '<span class="count">'+res.counter_kedua+'</span>'+
                         '<span class="time">'+res.created_at+'</span>'+
                         '<input type="hidden" class="iduser" name="id" value="'+res.id+'">'+
                         '</div>';
@@ -303,7 +303,7 @@ var idselect = 0;
                           '<span class="user">'+res.account.nama_lengkap+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
-                        '<span class="count">'+res.counter+'</span>'+
+                        '<span class="count">'+res.counter_kedua+'</span>'+
                         '<span class="time">'+res.created_at+'</span>'+
                         '<input type="hidden" class="iduser" name="id" value="'+res.id+'">'+
                         '</div>';
