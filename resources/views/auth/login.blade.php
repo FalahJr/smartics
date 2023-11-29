@@ -87,7 +87,7 @@
           </div>
 
           <div class="contact100-form-checkbox text-center mt-4 text-light">
-              Belom punya akun?, <a href="{{url('/register')}}" style="color: white;">Register now!</a>
+              Belum punya akun?, <a href="{{url('/register')}}" style="color: white;">Register now!</a>
             </label>
           </div>
 

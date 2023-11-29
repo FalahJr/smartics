@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,12 +12,22 @@
 |
 */
 
-// Route::get('/', 'HomefrontController@index')->name('/');
 
-use Illuminate\Support\Facades\Route;
+Route::get('/', 'PublicController@index')->name('homepage');
+
+Route::get('/buat-permohonan', 'PublicController@buatPermohonan')->name('buat-perizinan');
+Route::get('/ajukan-perizinan', 'PublicController@ajukanPerizinan')->name('ajukan-perizinan');
+Route::get('/ajukan-syarat-perizinan', 'PublicController@ajukanSyaratPerizinan')->name('ajukan-syarat-perizinan');
+Route::get('/perizinan-berhasil-diajukan', 'PublicController@success')->name('pengajuan-berhasil');
+
+Route::get('/lacak-perizinan', 'PublicController@lacakPerizinan')->name('lacak-perizinan');
+Route::get('/detail-perizinan', 'PublicController@detailPerizinan')->name('detail-perizinan');
+
+Route::get('/permohonan-saya', 'PublicController@permohonanSaya')->name('list-perizinan');
+
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', 'loginController@admin')->name('admin');
+    Route::get('/admin', 'loginController@admin')->name('admin');
 
     Route::get('login', 'loginController@authenticate')->name('login');
     Route::get('register', 'RegisterController@index')->name('register');

@@ -72,10 +72,10 @@
              </a>
            </div> --}}
 
-          <div class="contact100-form-checkbox text-center">
+          <div class="contact100-form-checkbox text-center text-white">
             {{-- <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember">
             <label class="label-checkbox100" for="ckb1"> --}}
-              Belom punya akun?, <a href="{{url('/registerpemohon')}}" style="color: white;">Register now!</a>
+              Belum punya akun?, <a href="{{url('/registerpemohon')}}" style="color: white;">Register now!</a>
             </label>
           </div>
 
