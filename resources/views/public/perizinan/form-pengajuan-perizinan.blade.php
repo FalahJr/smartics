@@ -19,12 +19,6 @@ id="ajukan-perizinan"
     <h3 class="text-center mb-5">Ajukan Perizinan</h3>
     <form>
       <div class="form-group">
-        <label for="jenis_perizinan">Jenis Perizinan</label>
-        <select class="form-control" id="jenis_perizinan">
-          <option>Pilih perizinan</option>
-        </select>
-      </div>
-      <div class="form-group">
         <label for="kategori_perizinan">Kategori Perizinan</label>
         <select class="form-control" id="kategori_perizinan">
           <option>Pilih Kategori</option>
