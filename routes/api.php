@@ -17,15 +17,17 @@ Route::middleware('api')->group(function () {
 
     // Route::any('/notif', 'HomeController@apinotif');
 
-    Route::any('login', 'loginController@loginApi');
 
     // User Petugas
     Route::get('/petugas', 'PetugasController@getData');
     
     // pemohon
     Route::post('pemohon/register', 'PemohonController@simpan');
+    Route::post('login', 'loginController@loginApi');
+
 
     // Surat
+    Route::get('list-surat/', 'SuratController@getData');
     Route::post('surat/create', 'SuratController@simpan');
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');

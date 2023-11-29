@@ -101,7 +101,15 @@ class SuratController extends Controller
           } else if ($data->status == "Ditolak"){
             $color = '<div><strong class="text-danger">' . $data->status . '</strong></div>';
           }else{
-            $color;
+            if(Auth::user()->role_id == 9){
+              if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+                  $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-danger"> ( Butuh Konfirmasi Ketersediaan ) </span> </strong></div>';
+               } if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+                $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-success"> ( Sudah Konfirmasi ) </span>  </strong></div>';
+               }
+            }else{
+              $color;
+            }
           }
           return $color;
       })
@@ -421,5 +429,19 @@ class SuratController extends Controller
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
       return response()->json($data);
+    }
+
+    public function getData(Request $req){
+      try{
+        if($req->user_id){
+          $data = DB::table('surat')->where('user_id',$req->user_id)->get();
+        }else{
+          $data = DB::table('surat')->get();
+        }
+        return response()->json(['status' => 1, 'data' => $data]);
+      }catch(\Exception $e){
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+
+      }
     }
 }
