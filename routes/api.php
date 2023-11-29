@@ -33,6 +33,10 @@ Route::middleware('api')->group(function () {
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
     Route::post('surat/validasi-surat', 'SuratController@validasi');
 
+    // Surat Jenis
+    Route::get('surat-jenis/', 'SuratJenisController@getData');
+
+
     Route::any('/listroom', 'ChatController@apilistroom');
     Route::any('/listchat', 'ChatController@apilistchat');
     Route::any('/sendchat', 'ChatController@apisendchat');
