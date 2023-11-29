@@ -32,11 +32,14 @@ class loginController extends Controller
 
             if ($user) {
                 if(Crypt::decryptString($user->password) ===  $req->password){
-
+                $role = DB::table('role')->where('id', $user->role_id)->first();
             return response()->json([
                         'status' => 1,
                         'message' => 'success login',
-                        'data' => $user
+                        'data' => [
+                            'user' => $user,
+                            'role' => $role
+                        ]
             ]);
         }else{
             return response()->json([
