@@ -15,19 +15,19 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto align-items-center text-right">
-        <li class="nav-item active">
+        <li class="nav-item {{Request::is('/') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('homepage')}}">Beranda</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{Request::is('buat-permohonan') || Request::is('ajukan-perizinan') || Request::is('ajukan-syarat-perizinan') || Request::is('perizinan-berhasil-diajukan')? 'active' : ''}}">
           <a class="nav-link" href="{{route('buat-perizinan')}}">Buat Permohonan</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{Request::is('permohonan-saya') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('list-perizinan')}}">Permohonan Saya</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{Request::is('chat') ? 'active' : ''}}">
           <a class="nav-link" href="chat">Live Chat</a>
         </li>
         <li class="nav-item">

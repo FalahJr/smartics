@@ -43,9 +43,9 @@ id="ajukan-perizinan"
 >
 <div class="col-md-6 col-12">
   <div class="content mt-5">
-    <h3 class="text-center mb-5">Syarat Syarat Perizinan</h3>
+    <h3 class="text-center mb-5">Syarat Perizinan</h3>
     <form>
-      <input
+      {{-- <input
         type="file"
         name="file"
         id="file"
@@ -57,7 +57,7 @@ id="ajukan-perizinan"
         for="file"
         class="w-100 justify-content-between px-3 py-3 align-items-center d-flex"
         >Upload Dokumen <img src="assets/icon/cloud.png" alt=""
-      /></label>
+      /></label> --}}
 
       <div class="form-group mb-5">
         <label for="syarat1"
