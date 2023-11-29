@@ -28,6 +28,7 @@ Route::middleware('api')->group(function () {
 
     // Surat
     Route::get('list-surat/', 'SuratController@getData');
+    Route::get('surat/detail', 'SuratController@edit');
     Route::post('surat/create', 'SuratController@simpan');
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
@@ -35,6 +36,9 @@ Route::middleware('api')->group(function () {
 
     // Surat Jenis
     Route::get('surat-jenis/', 'SuratJenisController@getData');
+
+    // Surat Syarat
+    Route::get('surat-syarat/', 'SuratSyaratController@getData');
 
 
     Route::any('/listroom', 'ChatController@apilistroom');
