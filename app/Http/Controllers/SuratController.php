@@ -52,10 +52,18 @@ class SuratController extends Controller
     $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
   }else{
     // $data;
-    $data = DB::table('surat')->where('user_id', Auth::user()->id)->where(function ($query) {
-      $query->where('status','not like', 'Ditolak')
-            ->orWhere('status','not like', 'Selesai');
-  })->get();
+  //   $data = DB::table('surat')->where('user_id', Auth::user()->id)->where(function ($query) {
+  //     $query->where('status','not like', 'Ditolak')
+  //           ->orWhere('status','not like', 'Selesai');
+  // })->get();
+  // $data = DB::table('surat')->where('user_id', Auth::user()->id)->where('status', 'Pengisian Dokumen')->get();
+  if($status !== 'Semua'){
+    $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
+  }else{
+    // $data;
+    $data = DB::table('surat')->where('user_id', Auth::user()->id)->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
+
+  }
 
   }
 }
@@ -118,10 +126,16 @@ class SuratController extends Controller
 
       })
           ->addColumn('aksi', function ($data) {
-            return  '<div class="btn-group">'.
-                     '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
-                     '<label class="fa fa-eye w-100"></label></button>'.
-                  '</div>';
+            $aksi = '<div class="btn-group">'.
+            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+            '<label class="fa fa-eye w-100"></label></button>';
+            if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+              $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
+              '<label class="fa fa-calendar w-100"></label></button>';
+            }
+
+            $aksi .= '</div>';
+            return $aksi;
           })
           ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_pemohon'])
           ->addIndexColumn()
@@ -186,14 +200,38 @@ class SuratController extends Controller
           $childPath ='file/uploads/dokumen-syarat-pemohon/';
           $path = $childPath;
           $cekDataSurat = DB::table("surat")->where("id", $req->surat_id)->first();
-          $cekDataSuratDokumen = DB::table("surat_dokumen")->where("surat_syarat_id", $req->surat_syarat_id)->first();
+          $cekDataSuratDokumen = DB::table("surat_dokumen")->where("surat_syarat_id", $req->surat_syarat_id)->where("surat_id", $req->surat_id)->first();
           if ($cekDataSurat == null ) {
           return response()->json(["status" => 2, "message" => 'Data Surat Tidak Ditemukan']);
 
           }
           else if($cekDataSuratDokumen != null){
-          return response()->json(["status" => 2, "message" => 'Data Dokumen Sudah Ada']);
-
+          // return response()->json(["status" => 2, "message" => 'Data Dokumen Sudah Ada']);
+          $file = $req->file('dokumen_syarat_pemohon');
+          $name = null;
+          if ($file != null) {
+            $name = $folder . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $name);
+            $imgPath = $childPath . $name;
+          } else {
+              return 'error';
+          }
+  
+         
+          DB::table("surat_dokumen")
+          ->where("surat_syarat_id", $req->surat_syarat_id)->where("surat_id", $req->surat_id)
+          ->update([
+            // "id" => $max,
+            "surat_id" => $req->surat_id,
+            "surat_syarat_id" => $req->surat_syarat_id,
+            "dokumen_upload"=>$imgPath,
+            // "created_at" => $tgl,
+            "updated_at" => $tgl
+          ]);
+            
+            DB::commit();
+        
+            return response()->json(["status" => 1, "message" => "Sukses Upload Dokumen Syarat"]);
           }
           else{
           $file = $req->file('dokumen_syarat_pemohon');

@@ -3,6 +3,7 @@
 
 @include('surat.detail')
 @include('surat.tolak')
+@include('surat.acc-jadwal')
 @php
  $testing = DB::table("surat")->where("id", "2")->first();
 @endphp
@@ -119,7 +120,7 @@ var table = $('#table-data').DataTable({
               },
               {
                  targets: 3,
-                 className: 'type center'
+                 className: 'w-25 center'
               },
               {
                  targets: 4,
@@ -360,6 +361,10 @@ var table = $('#table-data').DataTable({
   	});
   })
 
+  function accJadwal(id){
+   $('#showAccJadwal').modal('show');
+
+  }
 
   function hapus(id) {
     iziToast.question({
@@ -391,6 +396,7 @@ var table = $('#table-data').DataTable({
   		]
   	});
   }
+
 
   function reloadall() {
     $('.table_modal :input').val("");
