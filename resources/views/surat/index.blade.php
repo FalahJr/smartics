@@ -362,9 +362,62 @@ var table = $('#table-data').DataTable({
   })
 
   function accJadwal(id){
-   $('#showAccJadwal').modal('show');
+    console.log({id})
+
+    $.ajax({
+      url:baseUrl + '/editsurat',
+      data:{id},
+      dataType:'json',
+      success:function(data){
+        console.log({data})
+        $('.id').val(data.surat.id);
+      
+        $('#showAccJadwal').modal('show');
+      }
+    });
 
   }
+
+  $('#accJadwalSurvey').click(function(){
+    iziToast.question({
+      close: false,
+  		overlay: true,
+  		displayMode: 'once',
+  		title:
+      'Konfirmasi Ketersediaan Jadwal Survey',
+  		message: 'Apakah anda yakin ?',
+  		position: 'center',
+  		buttons: [
+  			['<button><b>Ya</b></button>', function (instance, toast) {
+          $.ajax({
+            url:baseUrl + '/pemohonaccjadwalsurat',
+            data:$('.table_modal :input').serialize(),
+            dataType:'json',
+            success:function(data){
+              if (data.status == 1) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message:
+              'Jadwal Survey Berhasil Dikonfirmasi',
+          });
+          reloadall();
+        }else if(data.status == 2){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Jadwal Survey Gagal Dikonfirmasi',
+          });
+        }
+
+              reloadall();
+            }
+          });
+  			}, true],
+  			['<button>Tidak</button>', function (instance, toast) {
+  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+  			}],
+  		]
+  	});
+  })
 
   function hapus(id) {
     iziToast.question({
@@ -403,6 +456,8 @@ var table = $('#table-data').DataTable({
     $('#tambah').modal('hide');
     $('#detail').modal('hide');
     $('#showTolak').modal('hide');
+    $('#showAccJadwal').modal('hide');
+    
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");

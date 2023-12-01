@@ -10,10 +10,12 @@
       </div>
       <div class="modal-body bg-light">
         <div class="row table_modal">
+          <input type="hidden" class="form-control form-control-sm id" name="id" id="id">
+
         <h4 class="col-12">Penjadwalan Survey</h4>
 
         <div class="col-12">
-        <button class="btn btn-warning col-12 px-2 mt-4">Bersedia</button>
+        <button class="btn btn-warning col-12 px-2 mt-4"  id="accJadwalSurvey" type="button">Bersedia</button>
         <button class="btn btn-light text-warning border border-warning col-12  mt-4 ">Jadwal Ulang</button>
       </div>
          

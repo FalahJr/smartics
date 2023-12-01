@@ -123,6 +123,7 @@ Route::get('surattable/{status}', 'SuratController@datatable');
 Route::get('editsurat', 'SuratController@edit');
 Route::get('validasisurat', 'SuratController@validasi');
 Route::get('kembalikansurat', 'SuratController@kembalikan');
+Route::get('pemohonaccjadwalsurat', 'SuratController@pemohonAccJadwalSurvey');
 
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');

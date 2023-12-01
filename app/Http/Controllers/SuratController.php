@@ -110,9 +110,9 @@ class SuratController extends Controller
             $color = '<div><strong class="text-danger">' . $data->status . '</strong></div>';
           }else{
             if(Auth::user()->role_id == 9){
-              if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+              if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
                   $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-danger"> ( Butuh Konfirmasi Ketersediaan ) </span> </strong></div>';
-               } if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+               } if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
                 $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-success"> ( Sudah Konfirmasi ) </span>  </strong></div>';
                }
             }else{
@@ -420,6 +420,17 @@ class SuratController extends Controller
       }
     }
 
+    }
+    public function pemohonAccJadwalSurvey(Request $req){
+      DB::beginTransaction();
+      try {
+        DB::table('surat')->where('id', $req->id)->update(['is_acc_penjadwalan' => 'Y']);
+        DB::commit();
+        return response()->json(["status" => "1"]);
+      } catch (\Exception $e) {
+        return response()->json(["status" => 2, 'message' => $e->getMessage()]);
+
+      }
     }
 
     public function hapus(Request $req) {
