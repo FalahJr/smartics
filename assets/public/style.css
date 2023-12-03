@@ -13,6 +13,7 @@ body {
   color: var(--main-collor) !important;
   font-weight: bold;
 }
+
 nav {
   position: fixed !important;
   width: 100%;

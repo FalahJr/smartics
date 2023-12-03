@@ -97,7 +97,7 @@ id="ajukan-perizinan"
           var formData = $(this).serializeArray();
 
           sessionStorage.setItem('form1Data', JSON.stringify(formData));
-          window.location.href = '/smartics/ajukan-syarat-perizinan';
+          window.location.href = 'ajukan-syarat-perizinan';
       });
   });
 </script>
