@@ -24,6 +24,7 @@ Route::get('/lacak-perizinan', 'PublicController@lacakPerizinan')->name('lacak-p
 Route::get('/detail-perizinan', 'PublicController@detailPerizinan')->name('detail-perizinan');
 
 Route::get('/permohonan-saya', 'PublicController@permohonanSaya')->name('list-perizinan');
+Route::get('/get-data-perizinan', 'PublicController@getDataByJenis');
 
 
 Route::group(['middleware' => 'guest'], function () {

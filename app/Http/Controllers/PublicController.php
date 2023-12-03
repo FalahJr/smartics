@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PublicController extends Controller
 {
@@ -11,7 +12,17 @@ class PublicController extends Controller
     }
 
     public function buatPermohonan (){
-        return view('public.buat-permohonan');
+        $jenisPerizinanOptions = DB::table('surat_jenis')
+        ->get();
+        return view('public.buat-permohonan',compact('jenisPerizinanOptions'));
+    }
+
+    public function getDataByJenis(Request $request)
+    {
+        $jenisPerizinan = $request->input('jenis_perizinan');
+        $dataPerizinan = DB::table('surat_syarat')->where('surat_jenis_id', $jenisPerizinan)->get();
+    
+        return response()->json($dataPerizinan);
     }
 
     public function ajukanPerizinan(){

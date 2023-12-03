@@ -31,16 +31,11 @@ id="buat-perizinan"
         >Pilih Jenis Perizinan <i class="fa-solid fa-angle-down"></i
       ></label>
       <div class="section-dropdown">
-        <a href="#" class="option" data-id="1"
-          >Daftar Ulang Izin Operasional</a
-        >
-        <a href="#" class="option" data-id="2">Perizinan Pendirian</a>
-        <a href="#" class="option" data-id="3">Perizinan Operasional</a>
-        <a href="#" class="option" data-id="4">Perizinan Perubahan</a>
-        <a href="#" class="option" data-id="5"
-          >Rekomendasi Satuan Pendidikan Kerjasama</a
-        >
-        <a href="#" class="option">Pencabutan Izin</a>
+        @foreach ($jenisPerizinanOptions as $jenisPerizinanOption)
+          <a href="javascript:void(0)" class="jenis-perizinan-link option" data-id="{{ $jenisPerizinanOption->id }}">
+              {{ $jenisPerizinanOption->nama }}
+          </a>
+        @endforeach
       </div>
     </div>
   </div>
@@ -52,30 +47,15 @@ id="buat-perizinan"
       >
     </div>
     <div class="row mt-5">
-      <table class="table">
+      <table class="table" id="table_perizinan">
         <thead>
           <tr>
-            <th scope="col">No</th>
+            <th scope="col" style="width: 100px;">No</th>
             <th scope="col">Syarat Perizinan</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>
-              Akta pendirian dan perubahan badan penyelenggara satuan
-              pendidikan berbentuk badan hukum dan memperoleh pengesahan
-              dari Kementerian Hukum dan Hak Asasi Manusia
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>
-              Surat permohonan mendirikan Sekolah Baru dari Ketua Yayasan
-              / Perkumpulan / Badan Penyelenggara sesuai akta yayasan yang
-              terakhir
-            </td>
-          </tr>
+          {{-- data perizinan --}}
         </tbody>
       </table>
     </div>
@@ -90,4 +70,40 @@ id="buat-perizinan"
       $("#panduan").css({ opacity: 1 });
     });
   </script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function () {
+        $('.jenis-perizinan-link').click(function (e) {
+                e.preventDefault();
+
+                var jenisPerizinanId = $(this).data('id');
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/smartics/get-data-perizinan',
+                    data: {
+                        jenis_perizinan: jenisPerizinanId
+                    },
+                    success: function (data) {
+                        // Update tabel dengan data perizinan baru
+                        updateTable(data);
+                    }
+                });
+            });
+
+      function updateTable(data) {
+          // Logika untuk memperbarui tabel dengan data perizinan baru
+          // ...
+
+          // Contoh sederhana: Menambahkan baris baru untuk setiap entri perizinan
+          var table = $('#table_perizinan tbody');
+          table.empty();
+
+          $.each(data, function (index, item) {
+            console.log(item);
+              table.append('<tr><td style="width: 100px;">' + (index + 1) + '</td><td>' + item.nama + '</td></tr>');
+          });
+      }
+  });
+</script>
 @endpush
