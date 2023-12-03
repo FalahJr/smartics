@@ -16,7 +16,12 @@ body {
         <h3 class="text-center">Lacak Perizinan</h3>
         <form action="{{route('detail-perizinan')}}" method="post">
           @csrf
-          <div class="form-group my-5">
+          @if(session()->has("gagal"))
+          <div class="alert alert-danger mt-4">
+            <p class="mb-0"> {{session("gagal")}} </p>
+          </div>
+          @endif
+          <div class="form-group mb-5 mt-4">
             <label for="no_regis">Nomor Surat</label>
             <input
               type="text"

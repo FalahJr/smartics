@@ -10,3 +10,14 @@ crossorigin="anonymous"
 ></script>
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script src="{{asset('assets/public/main.js')}}"></script>
+<script rel="stylesheet" src="{{asset('assets/node_modules/izitoast/dist/js/iziToast.min.js')}}"></script>
+<script>
+      iziToast.settings({
+    timeout: 3000,
+    icon: 'material-icons',
+    transitionIn: 'flipInX',
+    transitionOut: 'flipOutX',
+    closeOnClick: true,
+    position:'topRight'
+  });
+</script>

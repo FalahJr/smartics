@@ -27,14 +27,35 @@
         <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
         </li>
+        @if (Auth::check())
         <li class="nav-item {{Request::is('chat') ? 'active' : ''}}">
           <a class="nav-link" href="chat">Live Chat</a>
         </li>
+        @endif
+        @if (Auth::check())
+        <li class="nav-item">
+        <div class="dropdown">
+          <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+          {{Auth::user()->nama_lengkap}}
+          <i class="fa-solid fa-chevron-down ml-1"></i>
+          <div class="dropdown-content">
+            <a href="#">Profile Pengguna</a>
+            <a href="#">Ubah Password</a>
+            <a href="#">Arsip Perizinan</a>
+            <a href="#">Ulasan</a>
+            <a href="#">Logout</a>
+          </div>
+        </div>
+        </li>
+        @else
         <li class="nav-item">
           <a class="nav-link btn btn-main px-4 py-2 ml-0 ml-md-3" href="loginpemohon"
             >Masuk</a
           >
         </li>
+        @endif
+   
+
       </ul>
     </div>
   </nav>

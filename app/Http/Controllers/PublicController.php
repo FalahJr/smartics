@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Session;
 
 class PublicController extends Controller
 {
@@ -105,10 +106,15 @@ class PublicController extends Controller
     ->select('surat.*', 'surat_jenis.nama as nama_perizinan')
     ->where('surat.id',$req->no_regis)
     ->first();
-    $data->created_at = Carbon::parse($data->created_at)->format('d F Y');
-    $data->jadwal_survey = Carbon::parse($data->jadwal_survey)->format('d F Y');
-
+    if($data){
+        $data->created_at = Carbon::parse($data->created_at)->format('d F Y');
+        $data->jadwal_survey = Carbon::parse($data->jadwal_survey)->format('d F Y');
         return view('public.lacak-perizinan.detail',compact('data'));
+    }else{
+        return back()->with('gagal','Nomor Surat Tidak Ditemukan');
+    }
+
+
     }
     
 }

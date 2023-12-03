@@ -46,7 +46,7 @@ id="ajukan-perizinan"
     <h3 class="text-center mb-5">Upload Dokumen Syarat <br> 
       <div id="jenis_perizinan" class="mt-2"></div>
     </h3>
-    <form id="form2" action="/smartics/create-perizinan" method="post" enctype="multipart/form-data">
+    <form id="form2" action="create-perizinan" method="post" enctype="multipart/form-data">
       @csrf
 
       <div id="syarat_perizinan_container"></div>
@@ -89,21 +89,17 @@ id="ajukan-perizinan"
 
           $.ajax({
               type: 'POST',
-              url: '/smartics/create-perizinan',
+              url: 'create-perizinan',
               data: formData,
               contentType: false,
               processData: false,
               success: function (response) {
-                console.log(response.suratId);
-                  alert('Data berhasil disimpan ke database!');
-                  // Bersihkan data session atau local storage setelah disimpan ke database
                   sessionStorage.removeItem('form1Data');
-                  // Redirect ke halaman lain jika diperlukan
-                  window.location.href = '/smartics/perizinan-berhasil-diajukan?dataId='+response.suratId;
+                  window.location.href = 'perizinan-berhasil-diajukan?dataId='+response.suratId;
               },
               error: function (error) {
                   console.error(error);
-                  alert('Terjadi kesalahan saat menyimpan data ke database.');
+                  alert('Terjadi kesalahan saat menyimpan data.');
               }
           });
       });
@@ -113,7 +109,7 @@ id="ajukan-perizinan"
         function getSyaratPerizinan(jenisPerizinan) {
                 $.ajax({
                     type: 'GET',
-                    url: '/smartics/get-data-perizinan',
+                    url: 'get-data-perizinan',
                     data: {
                         jenis_perizinan: jenisPerizinan
                     },

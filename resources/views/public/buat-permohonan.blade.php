@@ -77,11 +77,11 @@ id="buat-perizinan"
                 e.preventDefault();
 
                 var jenisPerizinanId = $(this).data('id');
-                $('.ajukanPerizinan').attr('href', '/smartics/ajukan-perizinan?jenis=' + jenisPerizinanId);
+                $('.ajukanPerizinan').attr('href', 'ajukan-perizinan?jenis=' + jenisPerizinanId);
 
                 $.ajax({
                     type: 'GET',
-                    url: '/smartics/get-data-perizinan',
+                    url: 'get-data-perizinan',
                     data: {
                         jenis_perizinan: jenisPerizinanId
                     },
