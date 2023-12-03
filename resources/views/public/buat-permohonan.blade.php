@@ -16,7 +16,7 @@ id="buat-perizinan"
 >
 <div class="col-md-10 col-12">
   <div class="content row justify-content-between">
-    <h4 class="align-self-center">Panduan Permohonan Perizinan</h4>
+    <h4 class="align-self-center">Panduan Permohonan <span id="namaPerizinan"></span></h4>
 
     <div class="sec-center">
       <input
@@ -32,7 +32,7 @@ id="buat-perizinan"
       ></label>
       <div class="section-dropdown">
         @foreach ($jenisPerizinanOptions as $jenisPerizinanOption)
-          <a href="javascript:void(0)" class="jenis-perizinan-link option" data-id="{{ $jenisPerizinanOption->id }}">
+          <a href="javascript:void(0)" class="jenis-perizinan-link option" data-id="{{ $jenisPerizinanOption->id }}" data-nama="{{ $jenisPerizinanOption->nama }}">
               {{ $jenisPerizinanOption->nama }}
           </a>
         @endforeach
@@ -78,6 +78,9 @@ id="buat-perizinan"
 
                 var jenisPerizinanId = $(this).data('id');
                 $('.ajukanPerizinan').attr('href', 'ajukan-perizinan?jenis=' + jenisPerizinanId);
+
+                var namaPerizinan = $(this).data('nama');
+                $('#namaPerizinan').html(namaPerizinan)
 
                 $.ajax({
                     type: 'GET',
