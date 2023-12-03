@@ -295,19 +295,25 @@ class ArsipController extends Controller
     public function simpanulasan(Request $req) {
       DB::beginTransaction();
       try {
+        
+        $cekulasan = DB::table("ulasan")->where("surat_id", $req->id)->first();
 
-        DB::table("ulasan")
-            ->insert([
-              "surat_id" => $req->id,
-              "isi" => $req->ulasan,
-              "created_at" => Carbon::now("Asia/Jakarta")
-            ]);
+        if ($cekulasan == null) {
+          DB::table("ulasan")
+          ->insert([
+            "surat_id" => $req->id,
+            "isi" => $req->ulasan,
+            "created_at" => Carbon::now("Asia/Jakarta")
+          ]);
 
-        DB::table("surat")
-            ->where("id", $req->id)
-            ->update([
-              "is_ulasan" => "Y"
-            ]);
+          DB::table("surat")
+              ->where("id", $req->id)
+              ->update([
+                "is_ulasan" => "Y"
+              ]);
+        } else {
+          return response()->json(["status" => 2, "message" => "Sudah pernah diulas!"]);
+        }
 
         DB::commit();
         return response()->json(["status" => 1]);
