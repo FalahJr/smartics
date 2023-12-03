@@ -174,7 +174,7 @@
               </a>
             </li>
 
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 9)
             
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/arsip')}}">

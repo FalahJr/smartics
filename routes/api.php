@@ -48,4 +48,6 @@ Route::middleware('api')->group(function () {
 
     Route::any('loginpemohon', 'LoginPemohonController@loginApi');
     Route::any('registerpemohon', 'RegisterPemohonController@apiregister');
+
+    Route::any('simpanulasan', 'ArsipController@simpanulasan');
 });

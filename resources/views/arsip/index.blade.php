@@ -2,6 +2,7 @@
 @section('content')
 
 @include('arsip.detail')
+@include('arsip.ulasan')
 @php
  $jenis = DB::table("surat_jenis")->get();
 @endphp
@@ -156,6 +157,10 @@ var table = $('#table-data').DataTable({
   });
 
 
+  function ulasan(id) {
+    $("#idulasan").val(id);
+    $('#ulasan').modal('show');
+  }
 
   function edit(id) {
     // body...
@@ -295,5 +300,39 @@ var table = $('#table-data').DataTable({
     // table1.ajax.reload();
     table.ajax.reload();
   }
+
+  $('#simpanUlasan').click(function(){
+    $.ajax({
+      url: baseUrl + '/simpanulasan',
+      data:$('.table_modal :input').serialize(),
+      dataType:'json',
+      success:function(data){
+        if (data.status == 1) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Data Berhasil Disimpan!',
+          });
+          reloadall();
+        }else if(data.status == 2){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal disimpan!',
+          });
+        }else if (data.status == 3){
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Data Berhasil Diubah!',
+          });
+          reloadall();
+        }else if (data.status == 4){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal Diubah!',
+          });
+        }
+
+      }
+    });
+  })
 </script>
 @endsection

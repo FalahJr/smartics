@@ -86,10 +86,20 @@ class ArsipController extends Controller
 
       })
           ->addColumn('aksi', function ($data) {
-            return  '<div class="btn-group">'.
-                     '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
-                     '<label class="fa fa-eye w-100"></label></button>'.
-                  '</div>';
+            if ($data->status == "Selesai") {
+              return  '<div class="btn-group">'.
+                        '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+                        '<label class="fa fa-eye w-100"></label></button>'.
+                        '&nbsp;'.
+                        '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
+                        '<label class="fa fa-commenting w-100"></label></button>'.
+                    '</div>';
+            } else {
+              return  '<div class="btn-group">'.
+                        '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+                        '<label class="fa fa-eye w-100"></label></button>'.
+                    '</div>';
+            }
           })
           ->rawColumns(['aksi','jadwal_survey','user', 'tanggal_pengajuan','status'])
           ->addIndexColumn()
@@ -280,5 +290,30 @@ class ArsipController extends Controller
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
       return response()->json($data);
+    }
+
+    public function simpanulasan(Request $req) {
+      DB::beginTransaction();
+      try {
+
+        DB::table("ulasan")
+            ->insert([
+              "surat_id" => $req->id,
+              "isi" => $req->ulasan,
+              "created_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "is_ulasan" => "Y"
+            ]);
+
+        DB::commit();
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2]);
+      }
     }
 }

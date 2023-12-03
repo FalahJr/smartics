@@ -142,6 +142,7 @@ Route::get('editsurveypenugasan', 'SurveyController@edit');
 Route::get('arsip', 'ArsipController@index');
 Route::get('arsiptable/{jenis_surat}', 'ArsipController@datatable');
 Route::get('editarsip', 'ArsipController@edit');
+Route::get('simpanulasan', 'ArsipController@simpanulasan');
 
 
 Route::get('/chat', 'ChatController@index');
