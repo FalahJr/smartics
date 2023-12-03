@@ -43,58 +43,101 @@ id="ajukan-perizinan"
 >
 <div class="col-md-6 col-12">
   <div class="content mt-5">
-    <h3 class="text-center mb-5">Syarat Perizinan</h3>
-    <form>
-      {{-- <input
-        type="file"
-        name="file"
-        id="file"
-        class="inputfile justify-content-around w-100"
-        data-multiple-caption="{count} files selected"
-        multiple
-      />
-      <label
-        for="file"
-        class="w-100 justify-content-between px-3 py-3 align-items-center d-flex"
-        >Upload Dokumen <img src="assets/icon/cloud.png" alt=""
-      /></label> --}}
+    <h3 class="text-center mb-5">Upload Dokumen Syarat <br> 
+      <div id="jenis_perizinan" class="mt-2"></div>
+    </h3>
+    <form id="form2" action="/smartics/create-perizinan" method="post" enctype="multipart/form-data">
+      @csrf
 
-      <div class="form-group mb-5">
-        <label for="syarat1"
-          >Akta pendirian dan perubahan badan penyelenggara satuan
-          pendidikan berbentuk badan hukum dan memperoleh pengesahan dari
-          Kementerian Hukum dan Hak Asasi Manusia</label
-        >
-        <input
-          type="file"
-          class="form-control"
-          id="syarat1"
-          name="syarat1"
-        />
-      </div>
+      <div id="syarat_perizinan_container"></div>
 
-      <div class="form-group my-5">
-        <label for="syarat2"
-          >Akta pendirian dan perubahan badan penyelenggara satuan
-          pendidikan berbentuk badan hukum dan memperoleh pengesahan dari
-          Kementerian Hukum dan Hak Asasi Manusia</label
-        >
-        <input
-          type="file"
-          class="form-control"
-          id="syarat2"
-          name="syarat2"
-        />
-      </div>
-      <a
-        href="{{route('pengajuan-berhasil')}}"
+      <button
         type="submit"
         class="btn btn-main mt-2 w-100"
       >
         Ajukan Perizinan
-      </a>
+      </button>
     </form>
   </div>
 </div>
 </div>
 @endsection
+
+@push('extra_script')
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    
+      var form1Data = JSON.parse(sessionStorage.getItem('form1Data'));
+      $('#jenis_perizinan').html(form1Data[1].value);
+
+      var jenisPerizinan = form1Data.find(item => item.name === 'surat_jenis_id').value;
+      getSyaratPerizinan(jenisPerizinan);
+
+      $('#form2').submit(function (e) {
+          e.preventDefault();
+
+          // Simpan data dari form 1 dan dokumen ke database
+          var formData = new FormData(this);
+          formData.append('surat_jenis_id', form1Data.find(item => item.name === 'surat_jenis_id').value);
+          formData.append('nama', form1Data.find(item => item.name === 'nama').value);
+          formData.append('kategori', form1Data.find(item => item.name === 'kategori').value);
+          formData.append('alamat_lokasi', form1Data.find(item => item.name === 'alamat_lokasi').value);
+          formData.append('longitude', form1Data.find(item => item.name === 'longitude').value);
+          formData.append('latitude', form1Data.find(item => item.name === 'latitude').value);
+          console.log(formData);
+
+          $.ajax({
+              type: 'POST',
+              url: '/smartics/create-perizinan',
+              data: formData,
+              contentType: false,
+              processData: false,
+              success: function (response) {
+                console.log(response.suratId);
+                  alert('Data berhasil disimpan ke database!');
+                  // Bersihkan data session atau local storage setelah disimpan ke database
+                  sessionStorage.removeItem('form1Data');
+                  // Redirect ke halaman lain jika diperlukan
+                  window.location.href = '/smartics/perizinan-berhasil-diajukan?dataId='+response.suratId;
+              },
+              error: function (error) {
+                  console.error(error);
+                  alert('Terjadi kesalahan saat menyimpan data ke database.');
+              }
+          });
+      });
+
+
+        // Fungsi untuk mendapatkan syarat perizinan dari server
+        function getSyaratPerizinan(jenisPerizinan) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/smartics/get-data-perizinan',
+                    data: {
+                        jenis_perizinan: jenisPerizinan
+                    },
+                    success: function (data) {
+                        // Tampilkan syarat perizinan di dalam container
+                        displaySyaratPerizinan(data);
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert('Terjadi kesalahan saat mengambil data syarat perizinan.');
+                    }
+                });
+            }
+
+            // Fungsi untuk menampilkan syarat perizinan dalam bentuk label dan input file
+            function displaySyaratPerizinan(syaratPerizinan) {
+                var container = $('#syarat_perizinan_container');
+                container.empty();
+
+                // Iterasi melalui data syaratPerizinan dan tampilkan label dan input file
+                $.each(syaratPerizinan, function (index, syarat) {
+                    container.append(' <div class="form-group mb-5"><label for="syarat' + (index + 1) + '">' + syarat.nama + ':</label><input type="file" class="form-control" name="syarat' + (index + 1) + '" required></div>');
+                });
+            }
+  });
+</script>
+@endpush

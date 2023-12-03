@@ -18,7 +18,9 @@ Route::get('/', 'PublicController@index')->name('homepage');
 Route::get('/buat-permohonan', 'PublicController@buatPermohonan')->name('buat-perizinan');
 Route::get('/ajukan-perizinan', 'PublicController@ajukanPerizinan')->name('ajukan-perizinan');
 Route::get('/ajukan-syarat-perizinan', 'PublicController@ajukanSyaratPerizinan')->name('ajukan-syarat-perizinan');
+Route::post('/create-perizinan', 'PublicController@createPerizinan');
 Route::get('/perizinan-berhasil-diajukan', 'PublicController@success')->name('pengajuan-berhasil');
+Route::get('/generate-pdf', 'PublicController@cetakRegisPdf');
 
 Route::get('/lacak-perizinan', 'PublicController@lacakPerizinan')->name('lacak-perizinan');
 Route::get('/detail-perizinan', 'PublicController@detailPerizinan')->name('detail-perizinan');

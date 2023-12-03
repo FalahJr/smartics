@@ -42,7 +42,7 @@ id="buat-perizinan"
   <div class="content px-5" id="panduan">
     <div class="row px-2 justify-content-between">
       <h4 class="align-self-center">Panduan Permohonan Perizinan</h4>
-      <a href="{{route('ajukan-perizinan')}}" class="btn btn-success px-4 py-3"
+      <a href="#" class="btn ajukanPerizinan btn-success px-4 py-3"
         >Syarat Saya Lengkap, Siap Ajukan Permohonan</a
       >
     </div>
@@ -77,6 +77,7 @@ id="buat-perizinan"
                 e.preventDefault();
 
                 var jenisPerizinanId = $(this).data('id');
+                $('.ajukanPerizinan').attr('href', '/smartics/ajukan-perizinan?jenis=' + jenisPerizinanId);
 
                 $.ajax({
                     type: 'GET',
@@ -98,9 +99,8 @@ id="buat-perizinan"
           // Contoh sederhana: Menambahkan baris baru untuk setiap entri perizinan
           var table = $('#table_perizinan tbody');
           table.empty();
-
+          
           $.each(data, function (index, item) {
-            console.log(item);
               table.append('<tr><td style="width: 100px;">' + (index + 1) + '</td><td>' + item.nama + '</td></tr>');
           });
       }

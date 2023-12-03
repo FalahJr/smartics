@@ -21,11 +21,12 @@ id="berhasil-mengajukan"
       Permohonan Perizinan Berhasil Diajukan
     </h3>
     <div class="col-12">
-      <a href="#" class="btn btn-main w-100 mt-4"
+      <a href="/smartics/generate-pdf?dataId={{ request()->input('dataId') }}" target="_blank" class="btn btn-main w-100 mt-4"
         >Cetak Nomor Registrasi</a
       >
     </div>
     <div class="col-12">
+      
       <a href="{{route('list-perizinan')}}" class="btn btn-white w-100 mt-4"
         >Lihat Permohonan</a
       >
