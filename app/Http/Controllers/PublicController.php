@@ -99,8 +99,16 @@ class PublicController extends Controller
         return view('public.lacak-perizinan.form-lacak');
     }
 
-    public function detailPerizinan(){
-        return view('public.lacak-perizinan.detail');
+    public function detailPerizinan(Request $req){
+        $data = DB::table('surat')
+    ->join('surat_jenis', 'surat_jenis.id', '=', 'surat.surat_jenis_id')
+    ->select('surat.*', 'surat_jenis.nama as nama_perizinan')
+    ->where('surat.id',$req->no_regis)
+    ->first();
+    $data->created_at = Carbon::parse($data->created_at)->format('d F Y');
+    $data->jadwal_survey = Carbon::parse($data->jadwal_survey)->format('d F Y');
+
+        return view('public.lacak-perizinan.detail',compact('data'));
     }
     
 }

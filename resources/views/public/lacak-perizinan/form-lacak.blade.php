@@ -14,7 +14,8 @@ body {
     <div class="col-md-6 col-12">
       <div class="content">
         <h3 class="text-center">Lacak Perizinan</h3>
-        <form>
+        <form action="{{route('detail-perizinan')}}" method="post">
+          @csrf
           <div class="form-group my-5">
             <label for="no_regis">Nomor Surat</label>
             <input
@@ -25,13 +26,12 @@ body {
               aria-describedby="emailHelp"
             />
           </div>
-          <a
-            href="{{route('detail-perizinan')}}"
+          <button
             type="submit"
             class="btn btn-main mt-5 w-100"
           >
             Lacak Perizinan
-          </a>
+          </button>
         </form>
       </div>
     </div>
