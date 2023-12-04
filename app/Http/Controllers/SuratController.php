@@ -149,8 +149,8 @@ class SuratController extends Controller
         DB::beginTransaction();
         try {
 
-        DB::table("surat")
-              ->insertGetId([
+         DB::table("surat")
+              ->insert([
               "nama" => $req->nama,
               "user_id" => $req->user_id,
               "surat_jenis_id" => $req->surat_jenis_id,
@@ -164,7 +164,8 @@ class SuratController extends Controller
             ]);
 
           DB::commit();
-          return response()->json(["status" => 1,'message' => 'success']);
+          $dataBaru = DB::table("surat")->orderBy("id", "DESC")->first();
+          return response()->json(["status" => 1,'message' => 'success', 'data' => $dataBaru]);
         } catch (\Exception $e) {
           DB::rollback();
           return response()->json(["status" => 2, "message" =>$e->getMessage()]);
