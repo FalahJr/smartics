@@ -66,10 +66,13 @@ class PerizinanPemohonController extends Controller
                 }else{
                   if(Auth::user()->role_id == 9){
                     if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
-                        $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-danger"> ( Butuh Konfirmasi Ketersediaan ) </span> </strong></div>';
+                        $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-primary"> ( Butuh Konfirmasi Ketersediaan ) </span> </strong></div>';
                      } if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
                       $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-success"> ( Sudah Konfirmasi ) </span>  </strong></div>';
-                     }if ($data->is_dikembalikan == "Y" && $data->alasan_dikembalikan !== NULL) {
+                     }if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL) {
+                        $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-primary"> ( Menunggu Jadwal Terbaru ) </span>  </strong></div>';
+                       }
+                       if ($data->is_dikembalikan == "Y" && $data->alasan_dikembalikan !== NULL) {
                         $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-danger"> ( Berkas Dikembalikan ) </span>  </strong></div>';
                        }
                   }else{
@@ -119,7 +122,7 @@ class PerizinanPemohonController extends Controller
           public function jadwalulang(Request $req){
             DB::beginTransaction();
             try {
-              DB::table('surat')->where('id', $req->id)->update(['jadwal_survey' => NULL]);
+              DB::table('surat')->where('id', $req->id)->update(['is_reschedule' => "Y",'is_acc_penjadwalan' => 'N']);
               DB::commit();
               return response()->json(["status" => "1"]);
             } catch (\Exception $e) {

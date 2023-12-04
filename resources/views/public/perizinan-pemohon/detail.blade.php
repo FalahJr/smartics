@@ -23,10 +23,6 @@
           <b id="status_surat" class="mt-1"></b>
          </div>
          <div class="col-6">
-          <strong>Email</strong>
-          <p id="email" class="mt-1"></p>
-         </div>
-         <div class="col-6">
           <strong>Tanggal</strong>
           <p id="tanggal_pengajuan" class="mt-1"></p>
          </div>
