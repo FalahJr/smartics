@@ -1,8 +1,8 @@
 @extends('main')
 @section('content')
-
+{{-- 
 @include('arsip.detail')
-@include('arsip.ulasan')
+@include('arsip.ulasan') --}}
 @php
  $jenis = DB::table("surat_jenis")->get();
 @endphp
@@ -24,41 +24,17 @@
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Daftar Arsip Perizinan ( <span id="filter_jenis_surat">Semua</span> )</h4>
+                    <h4 class="card-title">Daftar Arsip Perizinan</h4>
                     
-                    <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
-                      {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                    	<div class="btn-group">
-                        <button type="button" class="btn btn-warning dropdown-toggle border-0 shadown-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Filter Jenis Perizinan
-                        </button>
-                        <div class="dropdown-menu">
-                             <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
-                             @foreach ($jenis as $list)
-                                <a class="dropdown-item" href="#" onclick="handleFilter('@php echo $list->nama; @endphp')">@php echo $list->nama; @endphp</a>
-                             @endforeach
-                            {{-- <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Hasil Survey')">Verifikasi Hasil Survey</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Selesai')">Selesai</a> --}}
-                        </div>
-                    </div>
-                      {{-- @endif --}}
-                    </div>
+                   
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                           <thead class="bg-warning text-white">
                               <tr>
                                 <th>No. Surat</th>
-                                <th>Jenis Surat</th>
-                                <th>Nama Pemohon</th>
-                                <th>Jadwal Survey</th>
-                                <th>Status</th>
-                                <th>Tanggal Pengajuan</th>
-                                <th>Action</th>
+                                <th>Jenis Perizinan</th>
+                                <th>Isi Ulasan</th>
+                                <th>Tanggal</th>
                               </tr>
                             </thead>
 
@@ -78,19 +54,19 @@
 @endsection
 @section('extra_script')
 <script>
-var selectedStatus = 'Semua'; 
-function handleFilter(status) {
-  console.log({status});
-    selectedStatus = status ;  // update selectedStatus
-    document.getElementById("filter_jenis_surat").innerHTML = status
+// var selectedStatus = 'Semua'; 
+// function handleFilter(status) {
+//   console.log({status});
+//     selectedStatus = status ;  // update selectedStatus
+//     document.getElementById("filter_jenis_surat").innerHTML = status
 
-    // Update DataTable's Ajax URL
-    table.ajax.url("{{ url('/arsiptable') }}/" + selectedStatus).load();
-};
+//     // Update DataTable's Ajax URL
+//     table.ajax.url("{{ url('/arsiptable') }}/" + selectedStatus).load();
+// };
 var table = $('#table-data').DataTable({
         processing: true,
         serverSide: true,
-        searching: true,
+        searching: false,
         paging: true,
         // dom: 'Bfrtip',
         title: '',
@@ -100,7 +76,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-          url: "{{ url('/arsiptable') }}/" + selectedStatus ,
+          url: "{{ url('/ulasantable') }}" ,
         },
         columnDefs: [
 
@@ -120,21 +96,15 @@ var table = $('#table-data').DataTable({
                  targets: 3,
                  className: 'center'
               },
-              {
-                 targets: 4,
-                 className: 'center'
-              },
+             
              
              
             ],
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'surat_jenis', name: 'surat_jenis'},
-          {data: 'user', name: 'user'},
-          {data:'jadwal_survey', name: 'jadwal_survey'},
-          {data:'status', name: 'status'},
-          {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
-          {data: 'aksi', name: 'aksi'},
+          {data: 'isi', name: 'isi'},
+          {data:'tanggal_kirim_ulasan', name: 'tanggal_kirim_ulasan'},
 
         ],
         "language": {

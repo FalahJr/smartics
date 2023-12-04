@@ -68,7 +68,7 @@ class HomeController extends Controller
         Session::forget('key');
         
         if($role == "9") {
-            return Redirect('/loginpemohon');
+            return Redirect('/');
         } else {
             return Redirect('/login');
         }

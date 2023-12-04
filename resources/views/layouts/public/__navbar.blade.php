@@ -41,9 +41,9 @@
           <div class="dropdown-content">
             <a href="#">Profile Pengguna</a>
             <a href="#">Ubah Password</a>
-            <a href="#">Arsip Perizinan</a>
+            <a href="{{ url('arsip') }}">Arsip Perizinan</a>
             <a href="#">Ulasan</a>
-            <a href="#">Logout</a>
+            <a href="{{ url('logout') }}">Logout</a>
           </div>
         </div>
         </li>

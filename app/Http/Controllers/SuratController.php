@@ -232,7 +232,7 @@ class SuratController extends Controller
             
             DB::commit();
         
-            return response()->json(["status" => 1, "message" => "Sukses Upload Dokumen Syarat"]);
+            return response()->json(["status" => 1, "message" => "Sukses Upload Dokumen Syarat Baru"]);
           }
           else{
           $file = $req->file('dokumen_syarat_pemohon');

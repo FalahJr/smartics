@@ -18,7 +18,7 @@ use Session;
 
 use Yajra\Datatables\Datatables;
 
-class ArsipController extends Controller
+class UlasanController extends Controller
 {
     public function index() {
   //     $tes =  "<select class='custom-select float-right bg-warning' id='statusFilter' onchange='handleFilter()'>
@@ -27,23 +27,17 @@ class ArsipController extends Controller
   //     <option value='rejected'>Rejected</option>
   // </select>";
 
-      return view('arsip.index');
+      return view('ulasan.index');
     }
 
-    public function datatable($surat_jenis) {
+    public function datatable() {
       // $data = DB::table('surat')->get();
 
-      if($surat_jenis !== 'Semua'){
-      $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->where('surat_jenis.nama', $surat_jenis)->where(function ($query) {
-        $query->where('status', 'Ditolak')
-              ->orWhere('status', 'Selesai');
-    })->get();
-
-      // $surat_dokumen = DB::table("surat_dokumen")->join('surat_syarat', 'surat_syarat.id', '=', 'surat_dokumen.surat_syarat_id')
-      // ->where('surat_dokumen.surat_id', $surat->id)->get();
+      if(Auth::user()->role_id =="9"){
+   
+      $data = DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->select('ulasan.*','surat.surat_jenis_id as surat_jenis_id','surat.id as surat')->where('surat.user_id', Auth::user()->id)->get();
     }else{
-      // $data;
-      $data = DB::table('surat')->where('status', 'Selesai')->orWhere('status', 'Ditolak')->get();
+      $data = DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->select('ulasan.*','surat.surat_jenis_id as surat_jenis_id')->where('status', 'Selesai')->orWhere('status', 'Ditolak')->get();
     }
 
 
@@ -56,52 +50,21 @@ class ArsipController extends Controller
           $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
           return $surat_jenis->nama;
         })
-        ->addColumn('jadwal_survey', function ($data) {
-          if($data->jadwal_survey !== null){
-            return Carbon::parse($data->jadwal_survey)->format('d F Y');
+        // ->addColumn('jadwal_survey', function ($data) {
+        //   if($data->jadwal_survey !== null){
+        //     return Carbon::parse($data->jadwal_survey)->format('d F Y');
 
-          }else{
-            return '<div><i>Belum Tersedia</i></div>';
-          }
-        })
-        ->addColumn("user", function($data) {
-          $user = DB::table('user')->where('id', $data->user_id)->first();
-          return $user->nama_lengkap;
-        })
-        ->addColumn('status', function ($data) {
-          $color = '<div><strong class="text-warning">' . $data->status . '</strong></div>';
-      
-          if ($data->status == "Selesai") {
-              // Tombol "Approve" hanya muncul jika is_active == 1
-              $color =  '<div><strong class="text-success">' . $data->status . '</strong></div>';
-          } else if ($data->status == "Ditolak"){
-            $color = '<div><strong class="text-danger">' . $data->status . '</strong></div>';
-          }else{
-            $color;
-          }
-          return $color;
-      })
-      ->addColumn('tanggal_pengajuan', function ($data) {
+        //   }else{
+        //     return '<div><i>Belum Tersedia</i></div>';
+        //   }
+        // })
+       
+      ->addColumn('tanggal_kirim_ulasan', function ($data) {
         return Carbon::parse($data->created_at)->format('d F Y');
 
       })
-          ->addColumn('aksi', function ($data) {
-            if ($data->status == "Selesai" && $data->is_ulasan == "N") {
-              return  '<div class="btn-group">'.
-                        '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
-                        '<label class="fa fa-eye w-100"></label></button>'.
-                        '&nbsp;'.
-                        '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
-                        '<label class="fa fa-commenting w-100"></label></button>'.
-                    '</div>';
-            } else {
-              return  '<div class="btn-group">'.
-                        '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
-                        '<label class="fa fa-eye w-100"></label></button>'.
-                    '</div>';
-            }
-          })
-          ->rawColumns(['aksi','jadwal_survey','user', 'tanggal_pengajuan','status'])
+         
+          ->rawColumns([ 'tanggal_kirim_ulasan'])
           ->addIndexColumn()
           // ->setTotalRecords(2)
           ->make(true);

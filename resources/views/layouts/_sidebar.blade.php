@@ -210,9 +210,9 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 9)
             <li class="nav-item {{Request::is('statistik') ? 'active' : ''}}">
-              <a class="nav-link" href="{{url('/statistik')}}">
+              <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
                 <i class="fa fa-bar-chart"></i>

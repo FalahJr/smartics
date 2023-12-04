@@ -87,7 +87,7 @@ class LoginPemohonController extends Controller
                 if ($user_pass->is_active == "Y") {
                   Auth::login($user);
                   // logController::inputlog('Login', 'Login', $username);
-                  return Redirect('/home');
+                  return Redirect('/');
                 } else {
                   $id = $user_pass->id;
                   return redirect("/verification/".encrypt($id)."");
