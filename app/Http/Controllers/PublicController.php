@@ -49,6 +49,7 @@ class PublicController extends Controller
             'alamat_lokasi' => $req['alamat_lokasi'],
             'longitude' => $req['longitude'],
             'latitude' => $req['latitude'],
+            'status' => 'Validasi Operator',
             "created_at" => $tgl,
             "updated_at" => $tgl
         ]);
@@ -56,14 +57,18 @@ class PublicController extends Controller
         $surat = DB::table('surat')->where('id', $surat)->first();
 
         $syarat = DB::table('surat_syarat')->where('surat_jenis_id', $req['surat_jenis_id'])->get();
-        $path = public_path('uploads/dokumen-syarat-pemohon');
+        // $path = public_path('uploads/dokumen-syarat-pemohon');
+        $childPath ='file/uploads/dokumen-syarat-pemohon/';
+        $folder = $tgl->year . $tgl->month . $tgl->timestamp;
         $i = 1;
         foreach ($syarat as $syaratId) {
             
             $file = $req->file('syarat'.$i);
-            $name = time() . '.' . $file->getClientOriginalExtension();
-            $file->move($path, $name);
-            $imgPath = 'uploads/dokumen-syarat-pemohon/' . $name;
+            $name = $folder . '.' . $file->getClientOriginalExtension();
+            // $name = time() . '.' . $file->getClientOriginalExtension();
+            // $file->move($path, $name);
+            $file->move($childPath, $name);
+            $imgPath = $childPath . $name;
 
             DB::table('surat_dokumen')->insert([
                 'surat_id' => $surat->id,
@@ -82,7 +87,7 @@ class PublicController extends Controller
     public function cetakRegisPdf(Request $req)
     {
         $data = DB::table('surat')->where('id',$req->dataId)->first();
-        $qrcode = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('string'));
+        $qrcode = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate($req->dataId));
         $namaPerizinan=DB::table('surat_jenis')->where('id',$data->surat_jenis_id)->first()->nama;
         $pdf = \PDF::loadView('public.perizinan.cetak-regis', compact('data','qrcode','namaPerizinan'));
         return $pdf->stream();

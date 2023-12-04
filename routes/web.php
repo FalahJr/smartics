@@ -25,9 +25,14 @@ Route::get('/generate-pdf', 'PublicController@cetakRegisPdf');
 Route::get('/lacak-perizinan', 'PublicController@lacakPerizinan')->name('lacak-perizinan');
 Route::post('/detail-perizinan', 'PublicController@detailPerizinan')->name('detail-perizinan');
 
-Route::get('/permohonan-saya', 'PublicController@permohonanSaya')->name('list-perizinan');
+Route::get('/permohonan-saya', 'PerizinanPemohonController@index')->name('list-perizinan');
 Route::get('/get-data-perizinan', 'PublicController@getDataByJenis');
 
+Route::get('perizinan', 'PerizinanPemohonController@index');
+Route::get('perizinantable/{status}', 'PerizinanPemohonController@datatable');
+Route::get('editperizinan', 'PerizinanPemohonController@edit');
+Route::get('pemohonaccjadwalperizinan', 'PerizinanPemohonController@pemohonAccJadwalSurvey');
+Route::get('jadwalulang', 'PerizinanPemohonController@jadwalulang');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/admin', 'loginController@admin')->name('admin');
