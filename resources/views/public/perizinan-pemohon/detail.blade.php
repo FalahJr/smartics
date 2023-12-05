@@ -55,6 +55,12 @@
           </button>
         </div>
          @endif
+
+        <div class="col-12">
+          <a href="javascript:void(0)" target="_blank" class="btn btn-main w-100 mt-4" id="cetakNoRegis"
+          >Cetak Nomor Registrasi</a
+        >
+        </div>
         
         </div>
       </div>

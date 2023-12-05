@@ -174,6 +174,7 @@ function edit(id) {
           document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
           document.getElementById("jadwal_survey").innerHTML = data.jadwal_survey;
           document.getElementById("alamat_lokasi").innerHTML = data.surat.alamat_lokasi;
+          document.getElementById('cetakNoRegis').setAttribute('href','generate-pdf?dataId='+data.surat.id);
           // data.surat_dokumen.forEach(function(surat_syarat) {
           // document.getElementsByClassName("nama_surat_syarat").innerHTML = surat_syarat.nama;
           // });

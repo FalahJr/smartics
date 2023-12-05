@@ -9,15 +9,14 @@
     <style>
         body{
             font-family: Arial, sans-serif;
-
             background-color: #F3F8FB;
             width: 100%;
         }
         .card{
             position: relative;
             left: 50%;
-            transform: translateX(-50%);
-            top: 50px;
+            top: 45%;
+            transform: translate(-50%,-50%);
             border-radius: 20px;
             padding: 40px 0px ;
             /* border-radius: 10px;
