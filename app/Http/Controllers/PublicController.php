@@ -113,7 +113,9 @@ class PublicController extends Controller
     ->first();
     if($data){
         $data->created_at = Carbon::parse($data->created_at)->format('d F Y');
-        $data->jadwal_survey = Carbon::parse($data->jadwal_survey)->format('d F Y');
+        if($data->jadwal_survey){
+            $data->jadwal_survey = Carbon::parse($data->jadwal_survey)->format('d F Y');
+        }
         return view('public.lacak-perizinan.detail',compact('data'));
     }else{
         return back()->with('gagal','Nomor Surat Tidak Ditemukan');
