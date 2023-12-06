@@ -1,48 +1,48 @@
 <!-- partial:partials/_navbar.html -->
 
-    @if (Auth::user()->role_id = 9)
-    <style>
-      .navbar .navbar-menu-wrapper .navbar-nav .nav-item{
-        border: none;
-      }
-    </style>
-    <nav class="navbar col-lg-12 col-12 py-3 p-md-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-none d-md-flex align-items-center justify-content-center ">
-        <a class="navbar-brand brand-logo" href="{{url('/home')}}">
-          <img src="{{asset('public/assets/img/smartics.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
-        </a>
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch pr-4">
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item {{Request::is('/') ? 'active' : ''}}">
-            <a class="nav-link" href="{{route('homepage')}}">Beranda</a>
-          </li>
-          <li class="nav-item {{Request::is('buat-permohonan') || Request::is('ajukan-perizinan') || Request::is('ajukan-syarat-perizinan') || Request::is('perizinan-berhasil-diajukan')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('buat-perizinan')}}">Buat Permohonan</a>
-          </li>
-          <li class="nav-item {{Request::is('permohonan-saya') ? 'active' : ''}}">
-            <a class="nav-link" href="{{route('list-perizinan')}}">Permohonan Saya</a>
-          </li>
-          <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
-            <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
-          </li>
-          <li class="nav-item">
-          <div class="dropdown">
-            <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
-            {{Auth::user()->nama_lengkap}}
-            <i class="fa-solid fa-chevron-down ml-1"></i>
-            <div class="dropdown-content">
-              <a href="#">Profile Pengguna</a>
-              <a href="#">Ubah Password</a>
-              <a href="{{ url('arsip') }}">Arsip Perizinan</a>
-              <a href="{{url('/ulasan')}}">Ulasan</a>
-              <a href="{{ url('logout') }}">Logout</a>
+    @if (Auth::user()->role_id == 9)
+      <style>
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item{
+          border: none;
+        }
+      </style>
+      <nav class="navbar col-lg-12 col-12 py-3 p-md-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-none d-md-flex align-items-center justify-content-center ">
+          <a class="navbar-brand brand-logo" href="{{url('/home')}}">
+            <img src="{{asset('public/assets/img/smartics.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
+          </a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch pr-4">
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item {{Request::is('/') ? 'active' : ''}}">
+              <a class="nav-link" href="{{route('homepage')}}">Beranda</a>
+            </li>
+            <li class="nav-item {{Request::is('buat-permohonan') || Request::is('ajukan-perizinan') || Request::is('ajukan-syarat-perizinan') || Request::is('perizinan-berhasil-diajukan')? 'active' : ''}}">
+              <a class="nav-link" href="{{route('buat-perizinan')}}">Buat Permohonan</a>
+            </li>
+            <li class="nav-item {{Request::is('permohonan-saya') ? 'active' : ''}}">
+              <a class="nav-link" href="{{route('list-perizinan')}}">Permohonan Saya</a>
+            </li>
+            <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
+              <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
+            </li>
+            <li class="nav-item">
+            <div class="dropdown">
+              <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+              {{Auth::user()->nama_lengkap}}
+              <i class="fa-solid fa-chevron-down ml-1"></i>
+              <div class="dropdown-content">
+                <a href="#">Profile Pengguna</a>
+                <a href="#">Ubah Password</a>
+                <a href="{{ url('arsip') }}">Arsip Perizinan</a>
+                <a href="{{url('/ulasan')}}">Ulasan</a>
+                <a href="{{ url('logout') }}">Logout</a>
+              </div>
             </div>
-          </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+            </li>
+          </ul>
+        </div>
+      </nav>
     @else
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center ">
