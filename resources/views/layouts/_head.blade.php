@@ -30,6 +30,11 @@
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="{{asset('assets/node_modules/font-awesome/css/font-awesome.min.css')}}" />
   <!-- End plugin css for this page -->
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+
 
   <!-- JP-list -->
   <link rel="stylesheet" type="text/css" href="{{asset('assets/jp-list/css/jplist.core.min.css')}}">
@@ -177,4 +182,51 @@ body.modal-open{
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+</style>
+
+<style>
+  #showDropdown:hover {
+  cursor: pointer;
+}
+img.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+}
+
+.dropdown {
+  cursor: pointer;
+      position: relative;
+      display: inline-block;
+    }
+
+.dropdown .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      box-shadow: 0 8px 20px rgba(90, 90, 90, 0.1);
+      z-index: 1;
+      border-radius: 10px;
+      text-align: left;
+      padding: 10px 0px;
+
+    }
+
+    /* Style item dropdown */
+    .dropdown .dropdown-content a {
+      color: black;
+      padding: 12px 30px;
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Style item dropdown saat dihover */
+    .dropdown .dropdown-content a:hover {
+      background-color: #fab754;
+    }
+
+    /* Tampilkan dropdown content saat menu dihover */
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
 </style>

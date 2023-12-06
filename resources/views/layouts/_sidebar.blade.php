@@ -1,5 +1,50 @@
 <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+
+    @if (Auth::user()->role_id = 9)
+    <style>
+      .navbar .navbar-menu-wrapper .navbar-nav .nav-item{
+        border: none;
+      }
+    </style>
+    <nav class="navbar col-lg-12 col-12 py-3 p-md-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-none d-md-flex align-items-center justify-content-center ">
+        <a class="navbar-brand brand-logo" href="{{url('/home')}}">
+          <img src="{{asset('public/assets/img/smartics.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch pr-4">
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item {{Request::is('/') ? 'active' : ''}}">
+            <a class="nav-link" href="{{route('homepage')}}">Beranda</a>
+          </li>
+          <li class="nav-item {{Request::is('buat-permohonan') || Request::is('ajukan-perizinan') || Request::is('ajukan-syarat-perizinan') || Request::is('perizinan-berhasil-diajukan')? 'active' : ''}}">
+            <a class="nav-link" href="{{route('buat-perizinan')}}">Buat Permohonan</a>
+          </li>
+          <li class="nav-item {{Request::is('permohonan-saya') ? 'active' : ''}}">
+            <a class="nav-link" href="{{route('list-perizinan')}}">Permohonan Saya</a>
+          </li>
+          <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
+            <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
+          </li>
+          <li class="nav-item">
+          <div class="dropdown">
+            <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+            {{Auth::user()->nama_lengkap}}
+            <i class="fa-solid fa-chevron-down ml-1"></i>
+            <div class="dropdown-content">
+              <a href="#">Profile Pengguna</a>
+              <a href="#">Ubah Password</a>
+              <a href="{{ url('arsip') }}">Arsip Perizinan</a>
+              <a href="{{url('/ulasan')}}">Ulasan</a>
+              <a href="{{ url('logout') }}">Logout</a>
+            </div>
+          </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    @else
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center ">
         <a class="navbar-brand brand-logo" href="{{url('/home')}}">
           <img src="{{asset('public/assets/img/smartics.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
@@ -20,16 +65,7 @@
               <input id="filterInput" type="text" class="form-control bg-transparent border-0" placeholder="Search Menu">
               <div class="input-group-btn">
                 <button id="btn-reset" type="button" class="btn bg-transparent px-0 d-none" style="cursor: pointer;"><i class="fa fa-times"></i></button>
-                <!-- <button type="button" class="btn bg-transparent dropdown-toggle px-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="mdi mdi-earth"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="#">Today</a>
-                  <a class="dropdown-item" href="#">This week</a>
-                  <a class="dropdown-item" href="#">This month</a>
-                  <div role="separator" class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Month and older</a>
-                </div> -->
+
               </div>
               <div class="input-group-addon bg-transparent border-0 search-button">
                 <button type="button" class="btn btn-sm bg-transparent px-0" id="btn-search-menu">
@@ -45,54 +81,6 @@
               <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
             </a>
           </li>
-         <!--  <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              <i class="mdi mdi-email-outline"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-              <h6 class="p-3 mb-0">Messages</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{{asset('assets/images/faces/face4.jpg')}}" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
-                  <p class="text-gray mb-0">
-                    1 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{{asset('assets/images/faces/face2.jpg')}}" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a message</h6>
-                  <p class="text-gray mb-0">
-                    15 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="{{asset('assets/images/faces/face3.jpg')}}" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture updated</h6>
-                  <p class="text-gray mb-0">
-                    18 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <h6 class="p-3 mb-0 text-center">4 new messages</h6>
-            </div>
-          </li> -->
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-profile" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               {{-- <img src="{{asset('assets/image/faces1.jpg')}}" alt="image"> --}}
@@ -120,6 +108,7 @@
         </button>
       </div>
     </nav>
+    @endif
 
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
