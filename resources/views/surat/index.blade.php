@@ -24,10 +24,10 @@
     </div>
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Daftar Permohonan ( <span id="filter_status">Semua</span> )</h4>
+                  <div class="card-body row">
+                    <h4 class="card-title col-12 align-self-center col-md-8 px-0">Daftar Permohonan ( <span id="filter_status">Semua</span> )</h4>
                     
-                    <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
+                    <div class="col-12 col-md-4 px-0" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
                         @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 9)
                       
@@ -48,7 +48,7 @@
                    
                       @endif
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive mt-3">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
