@@ -229,4 +229,10 @@ img.avatar {
     .dropdown:hover .dropdown-content {
       display: block;
     }
+    .btn-update-profile{
+      justify-content: center;
+    }
+    .btn-main{
+      background-color: #fab754;
+    }
 </style>

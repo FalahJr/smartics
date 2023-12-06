@@ -32,10 +32,10 @@
               {{Auth::user()->nama_lengkap}}
               <i class="fa-solid fa-chevron-down ml-1"></i>
               <div class="dropdown-content">
-                <a href="#">Profile Pengguna</a>
+                <a href="{{ url('arsip') }}">Profil Pengguna</a>
                 <a href="#">Ubah Password</a>
                 <a href="{{ url('arsip') }}">Arsip Perizinan</a>
-                <a href="{{url('/ulasan')}}">Ulasan</a>
+                <a href="{{url('ulasan')}}">Ulasan</a>
                 <a href="{{ url('logout') }}">Logout</a>
               </div>
             </div>
@@ -116,6 +116,16 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar"">
           <ul class="nav" id="ayaysir">
+
+            @if (Auth::user()->role_id == 9 )
+            <li class="nav-item {{Request::is('profil-pengguna') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/profil-pengguna')}}">
+                <span class="menu-title">Profil Pengguna</span>
+                {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
+                <i class="mdi mdi-account menu-icon"></i>
+              </a>
+            </li>
+            @else
             <li class="nav-item {{Request::is('home') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/home')}}">
                 <span class="menu-title">Dashboard</span>
@@ -123,6 +133,9 @@
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
+            @endif
+
+
             @if (Auth::user()->role_id == 1 )
 
             <li class="nav-item {{Request::is('data-master') || Request::is('data-master/*') ? 'active' : ''   }}">
@@ -146,7 +159,7 @@
 
             
 
-            <li class="nav-item {{Request::is('uangkeluar') ? 'active' : ''}}">
+            <li class="nav-item {{Request::is('surat') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/surat')}}">
                 <span class="menu-title">Daftar Permohonan</span>
                 <span class="menu-sub-title">@php 
@@ -200,7 +213,7 @@
               </a>
             </li> --}}
             @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 9)
-            <li class="nav-item {{Request::is('statistik') ? 'active' : ''}}">
+            <li class="nav-item {{Request::is('ulasan') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
