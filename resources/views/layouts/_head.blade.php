@@ -49,7 +49,8 @@
   <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('assets/css/style-op.css')}}">
   <!-- endinject -->
-  <link rel="shortcut icon" href="{{asset('assets/dompetqu.png')}}" />
+  {{-- <link rel="shortcut icon" href="{{asset('assets/dompetqu.png')}}" /> --}}
+  <link rel="shortcut icon" href="{{asset('assets/favicon.ico')}}" type="image/x-icon" />
   <!-- <link rel="stylesheet" type="text/css" href="{{asset('assets/css/data-table.min.css')}}"> -->
 
   <!-- <link rel="stylesheet" type="text/css" href="{{asset('assets/datepicker/css/bootstrap-datepicker3.min.css')}}"> -->
