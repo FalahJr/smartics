@@ -68,6 +68,8 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/home', 'HomeController@index')->name('index');
+Route::get('/pie-chart-data', 'HomeController@getPieChartData');
+
 Route::get('logout', 'HomeController@logout')->name('logout');
 
 Route::get('mastertagihan', 'MastertagihanController@index');

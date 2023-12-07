@@ -14,6 +14,7 @@ use App\Authentication;
 
 use Carbon\Carbon;
 
+
 // use Session;
 
 use DB;
@@ -40,13 +41,28 @@ class HomeController extends Controller
 
      public function index() {
 
-    //    $uangkeluar = DB::table("uangkeluar")->where("uangkeluar_users_id", Auth::user()->users_id)->whereMonth("created_at", date('m'))->whereYear("created_at", date('Y'))->sum("uangkeluar_nominal");
+        $currentYear = now()->year;
+        // basic column chart
+        $columnchart = DB::table('surat')
+        ->select(DB::raw('DATE_FORMAT(created_at, "%M") as month'), DB::raw('COUNT(*) as total'))
+        ->whereYear('created_at', $currentYear)
+        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->get();
 
-    //    $tagihan = DB::table("daftar_tagihan")->join('tagihan','tagihan_id','=','daftar_tagihan_tagihan_id')->where("tagihan_users_id", Auth::user()->users_id)->where("daftar_tagihan_bayar", "N")->whereMonth("daftar_tagihan.created_at", date('m'))->whereYear("daftar_tagihan.created_at", date('Y'))->sum("tagihan_nominal");
+        // pie chart
+    $rejectedCount = DB::table('surat')->where('status', 'Ditolak')->count();
+    $acceptedCount = DB::table('surat')->where('status', '!=', 'Ditolak')->count();
 
-    //    $saldo = SaldoController::ceksaldo();
+    $total = $acceptedCount + $rejectedCount;
 
-       return view("home");
+    $piechart = [
+        'acceptedPercentage' => ($acceptedCount / $total) * 100,
+        'rejectedPercentage' => ($rejectedCount / $total) * 100,
+        'acceptedColor' => '#1CC88A', 
+        'rejectedColor' => '#FF8D8D', 
+    ];
+
+       return view("home", compact('piechart','columnchart'));
      }
 
      public function logout(){
@@ -73,4 +89,5 @@ class HomeController extends Controller
             return Redirect('/login');
         }
     }
+
 }
