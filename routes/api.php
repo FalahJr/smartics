@@ -27,12 +27,14 @@ Route::middleware('api')->group(function () {
 
 
     // Surat
-    Route::get('list-surat/', 'SuratController@getData');
+    Route::get('list-surat', [SuratController::class, 'getData']);
     Route::get('surat/detail', 'SuratController@edit');
     Route::post('surat/create', 'SuratController@simpan');
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
     Route::post('surat/validasi-surat', 'SuratController@validasi');
+    Route::post('surat/verifikasi-surat', 'SuratController@validasi');
+
 
     // Surat Jenis
     Route::get('surat-jenis/', 'SuratJenisController@getData');
