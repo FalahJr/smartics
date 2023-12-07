@@ -39,6 +39,10 @@ Route::middleware('api')->group(function () {
     Route::post('surat/kembalikan', 'SuratController@kembalikan');
     Route::get('generate-pdf', 'PublicController@cetakRegisPdf');
 
+    // monitoring
+    Route::get('list-semua-perizinan', 'SuratController@listSemuaPerizinan');
+
+
 
     // Surat Jenis
     Route::get('surat-jenis/', 'SuratJenisController@getData');
