@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SuratController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 
 /*
@@ -44,6 +45,10 @@ Route::middleware('api')->group(function () {
 
     // Surat Syarat
     Route::get('surat-syarat/', 'SuratSyaratController@getData');
+
+    // Survey
+    Route::get('list-survey', [SurveyController::class, 'getData']);
+
 
 
     Route::any('/listroom', 'ChatController@apilistroom');
