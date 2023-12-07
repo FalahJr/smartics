@@ -86,7 +86,7 @@ class HomeController extends Controller
         if($role == "9") {
             return Redirect('/');
         } else {
-            return Redirect('/login');
+            return Redirect('/admin');
         }
     }
 

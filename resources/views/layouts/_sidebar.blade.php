@@ -166,7 +166,7 @@
               </a>
             </li>
 
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 9)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9)
             
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/arsip')}}">
@@ -176,7 +176,7 @@
               </a>
             </li>
             @endif
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 6)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 6)
 
             <li class="nav-item {{Request::is('setting') || Request::is('setting/*') ? 'active' : ''  }}">
               <a class="nav-link" data-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="ui-basic">
@@ -203,7 +203,7 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id === 2 || Auth::user()->role_id === 9)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 4)
             <li class="nav-item {{Request::is('ulasan') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>

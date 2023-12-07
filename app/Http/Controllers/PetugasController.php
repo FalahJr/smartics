@@ -23,7 +23,7 @@ use Yajra\Datatables\Datatables;
 class PetugasController extends Controller
 {
     public function index() {
-    $roles = DB::table("role")->get();
+    $roles = DB::table("role")->where('id', 'not like', '9')->get();
 
       return view('petugas.index', compact('roles'));
     }
