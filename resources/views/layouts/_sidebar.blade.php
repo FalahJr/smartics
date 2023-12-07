@@ -81,27 +81,17 @@
               <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
             </a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle nav-profile" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              {{-- <img src="{{asset('assets/image/faces1.jpg')}}" alt="image"> --}}
-              <span class="d-none d-lg-inline">{{Auth::user()->users_username}}</span>
-            </a>
-            <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
-
-              <a class="dropdown-item" href="{{ url('logout') }}">
-                <i class="mdi mdi-logout mr-2 text-primary"></i>
-                Signout
-              </a>
+          <li class="nav-item">
+            <div class="dropdown">
+              <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+              {{Auth::user()->nama_lengkap}}
+              <i class="fa-solid fa-chevron-down ml-1"></i>
+              <div class="dropdown-content">
+                <a href="{{ url('profil') }}">Profil</a>
+                <a href="{{ url('logout') }}">Logout</a>
+              </div>
             </div>
-          </li>
-          <li class="nav-item nav-logout d-none d-lg-block" title="Logout">
-            <a class="nav-link" href="{{ url('logout') }}">
-              <i class="mdi mdi-power"></i>
-            </a>
-          </li>
-          <form id="logout-form" action="{{ url('logout') }}" method="post" style="display: none;">
-              {{ csrf_field() }}
-          </form>
+            </li>
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
         <span class="mdi mdi-menu"></span>
