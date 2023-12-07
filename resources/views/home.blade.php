@@ -20,7 +20,11 @@
             <p>Perizinan Diajukan</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status', 'not like', 'Pengisian Dokumen')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -30,7 +34,11 @@
             <p>Perizinan Divalidasi</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status', 'Validasi Operator')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -40,7 +48,11 @@
             <p>Perizinan Diverifikasi</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status', 'Verifikasi Verifikator')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -50,7 +62,11 @@
             <p>Perizinan Diproses</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->whereNotIn('status', ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -60,7 +76,11 @@
             <p>Perizinan Ditolak</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status','Ditolak')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -70,7 +90,11 @@
             <p>Perizinan Disetujui</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status','Selesai')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -80,7 +104,11 @@
             <p>Terlambat Diproses</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('is_terlambat','Y')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
@@ -90,7 +118,11 @@
             <p>Jumlah Ulasan</p>
             <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
           </div>
-          <h1 class="row my-0 py-0">20</h1>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('ulasan')->count();
+          @endphp
+          </h1>
         </div>
       </div>
 
