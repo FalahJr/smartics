@@ -28,16 +28,17 @@ class loginController extends Controller
         $password = $req->password;
         // if ($user && Crypt::decryptString($user->password) ===  $req->password) {
         try{
-        $user = Account::where("email", $email)->first();
+        $pemohon = Account::where("email", $email)->first();
+        $petugas = Account::where("username", $email)->first();
 
-            if ($user) {
-                if(Crypt::decryptString($user->password) ===  $req->password){
-                $role = DB::table('role')->where('id', $user->role_id)->first();
+            if ($pemohon) {
+                if(Crypt::decryptString($pemohon->password) ===  $req->password){
+                $role = DB::table('role')->where('id', $pemohon->role_id)->first();
             return response()->json([
                         'status' => 1,
-                        'message' => 'success login',
+                        'message' => 'success login pemohon',
                         'data' => [
-                            'user' => $user,
+                            'user' => $pemohon,
                             'role' => $role
                         ]
             ]);
@@ -47,7 +48,26 @@ class loginController extends Controller
                 'message' => 'password yang anda masukkan salah'
     ]);
         }
-        } else {
+        } else if ($petugas) {
+            if(Crypt::decryptString($petugas->password) ===  $req->password){
+            $role = DB::table('role')->where('id', $petugas->role_id)->first();
+        return response()->json([
+                    'status' => 1,
+                    'message' => 'success login petugas',
+                    'data' => [
+                        'user' => $petugas,
+                        'role' => $role
+                    ]
+        ]);
+    }else{
+        return response()->json([
+            'status' => 2,
+            'message' => 'password yang anda masukkan salah'
+]);
+    }
+    } 
+        
+        else {
             return response()->json([
                         'status' => 3,
                         'message' => 'akun tidak ditemukan'
