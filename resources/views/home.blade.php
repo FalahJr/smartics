@@ -9,7 +9,7 @@
     <div class="col-12">
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb bg-warning">
-          <li class="breadcrumb-item active" aria-current="page">Dashboard - Role :{{Auth::user()->role_id}}</li>
+          <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
         </ol>
       </nav>
     </div>
