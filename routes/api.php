@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SuratController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 
 /*
@@ -27,18 +29,26 @@ Route::middleware('api')->group(function () {
 
 
     // Surat
-    Route::get('list-surat/', 'SuratController@getData');
+    Route::get('list-surat', [SuratController::class, 'getData']);
     Route::get('surat/detail', 'SuratController@edit');
     Route::post('surat/create', 'SuratController@simpan');
     Route::post('surat/upload-dokumen', 'SuratController@uploadDokumenSyarat');
     Route::post('surat/kirim-surat', 'SuratController@kirimSuratPengajuan');
     Route::post('surat/validasi-surat', 'SuratController@validasi');
+    Route::post('surat/verifikasi-surat', 'SuratController@validasi');
+    Route::post('surat/kembalikan', 'SuratController@kembalikan');
+    Route::get('generate-pdf', 'PublicController@cetakRegisPdf');
+
 
     // Surat Jenis
     Route::get('surat-jenis/', 'SuratJenisController@getData');
 
     // Surat Syarat
     Route::get('surat-syarat/', 'SuratSyaratController@getData');
+
+    // Survey
+    Route::get('list-survey', [SurveyController::class, 'getData']);
+
 
 
     Route::any('/listroom', 'ChatController@apilistroom');
