@@ -35,7 +35,6 @@
           </table>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" id="simpan" type="button">Process</button>
           <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
         </div>
       </div>

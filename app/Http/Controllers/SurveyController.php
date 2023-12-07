@@ -87,7 +87,10 @@ class SurveyController extends Controller
        '</div>';
                  } else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
 
-                 $aksi;
+                  $aksi = '<div class="btn-group">'.
+          '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="penjadwalan survey">'.
+          '<label class="fa fa-calendar-plus-o w-100" style="padding:0 2px"></label></button>'.
+       '</div>';
                  } else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
           $aksi = '<div class="btn-group">'.
             '<button type="button" onclick="detail('.$data->id.')" class="btn btn-info btn-lg pt-2" title="lihat detail penugasan">'.
