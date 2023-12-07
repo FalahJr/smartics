@@ -172,7 +172,7 @@
                   echo "(".$total.")";
                   }
                 @endphp</span>
-                <i class="fa fa-cloud-upload-alt"></i>
+                <i class="fa-solid fa-envelope-open-text"></i>
               </a>
             </li>
 
@@ -182,7 +182,7 @@
               <a class="nav-link" href="{{url('/arsip')}}">
                 <span class="menu-title">Arsip Perizinan</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
-                <i class="fa fa-cloud-download-alt"></i>
+                <i class="fa-solid fa-folder-open"></i>
               </a>
             </li>
             @endif
@@ -193,7 +193,8 @@
                 <span class="menu-title">Survey</span>
                 
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-settings menu-icon mdi-spin"></i>
+                <i class="fa-solid fa-file"></i>
+                {{-- <i class="mdi mdi-settings menu-icon mdi-spin"></i> --}}
               </a>
               <div class="collapse {{Request::is('setting') || Request::is('setting/*') ? 'show' : '' }}" id="setting">
                 <ul class="nav flex-column sub-menu">
@@ -217,7 +218,7 @@
               <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
-                <i class="fa fa-bar-chart"></i>
+                <i class="fa-solid fa-comment"></i>
               </a>
             </li>
             @endif
@@ -227,7 +228,7 @@
               <a class="nav-link" href="{{url('/chatbot')}}">
                 <span class="menu-title">Chatbot</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
-                <i class="fa fa-bar-chart"></i>
+                <i class="fa-solid fa-robot"></i>
               </a>
             </li>
             @endif
@@ -237,7 +238,7 @@
               <a class="nav-link" href="{{url('/chat')}}">
                 <span class="menu-title">Live Chat</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
-                <i class="fa fa-bar-chart"></i>
+                <i class="fa-solid fa-headset"></i>
               </a>
             </li>
             @endif
