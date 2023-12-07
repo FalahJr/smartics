@@ -41,6 +41,8 @@ Route::middleware('api')->group(function () {
 
     // monitoring
     Route::get('list-semua-perizinan', 'SuratController@listSemuaPerizinan');
+    Route::get('list-perizinan-masuk', 'SuratController@listPerizinanMasuk');
+    Route::get('list-perizinan-terlambat', 'SuratController@listPerizinanTerlambat');
 
 
 
