@@ -44,6 +44,9 @@ Route::middleware('api')->group(function () {
     Route::get('list-perizinan-masuk', 'SuratController@listPerizinanMasuk');
     Route::get('list-perizinan-terlambat', 'SuratController@listPerizinanTerlambat');
 
+    // ulasan
+    Route::get('list-ulasan', 'UlasanController@getData');
+
 
 
     // Surat Jenis
