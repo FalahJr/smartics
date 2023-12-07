@@ -46,6 +46,7 @@ Route::middleware('api')->group(function () {
 
     // ulasan
     Route::get('list-ulasan', 'UlasanController@getData');
+    Route::get('detail-ulasan', 'UlasanController@getDetailData');
 
 
 

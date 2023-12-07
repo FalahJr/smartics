@@ -642,7 +642,7 @@ class SuratController extends Controller
               'jenis_perizinan' => $item->surat_jenis_nama,
               'nomor_surat'      => $item->id_surat,
               'tanggal'          => $item->created_at,
-              'perizinan'        => $item->is_terlambat == 'Y' ? 'Terlambat' : $item->status,
+              'perizinan'        => $item->is_terlambat == 'Y' ? 'Terlambat' : 'Masuk',
           ];
       }
 
@@ -665,7 +665,7 @@ class SuratController extends Controller
               'jenis_perizinan' => $item->surat_jenis_nama,
               'nomor_surat'      => $item->id_surat,
               'tanggal'          => $item->created_at,
-              'perizinan'        => $item->status,
+              'perizinan'        => 'Masuk',
           ];
       }
 

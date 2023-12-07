@@ -307,4 +307,27 @@ class UlasanController extends Controller
       return response()->json(["status" => 2, "message" => $e->getMessage()]);
     }
     }
+
+    public function getDetailData(Request $req) {
+      try{
+
+      $ulasan= DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->join('user', 'user.id', '=', "surat.user_id")->select('ulasan.id','surat.id as nomor_surat','user.nama_lengkap as nama_lengkap', 'ulasan.created_at as tanggal', 'surat_jenis.nama as jenis_perizinan', 'ulasan.isi as isi_ulasan')->where('ulasan.id', $req->id)->first();
+
+      // $data = [];
+
+      // foreach ($surat as $item) {
+      //     $data[] = [
+      //         'id'               => $item->id_surat,
+      //         'jenis_perizinan' => $item->surat_jenis_nama,
+      //         'nomor_surat'      => $item->id_surat,
+      //         'tanggal'          => $item->created_at,
+      //         'perizinan'        => 'Terlambat',
+      //     ];
+      // }
+
+      return response()->json(['status' => 1, 'data' => $ulasan]);
+    }catch(\Exception $e){
+      return response()->json(["status" => 2, "message" => $e->getMessage()]);
+    }
+    }
 }
