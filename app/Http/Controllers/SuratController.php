@@ -66,6 +66,8 @@ class SuratController extends Controller
   }
 
   }
+}else{
+  $data = DB::table('surat')->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
 }
 
 
@@ -129,7 +131,7 @@ class SuratController extends Controller
             $aksi = '<div class="btn-group">'.
             '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
             '<label class="fa fa-eye w-100"></label></button>';
-            if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+            if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL && $data->status == "Penjadwalan Survey") {
               $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
               '<label class="fa fa-calendar w-100"></label></button>';
             }

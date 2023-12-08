@@ -205,7 +205,7 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 4)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 4 || Auth::user()->role_id == 3)
             <li class="nav-item {{Request::is('ulasan') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>
