@@ -146,6 +146,7 @@
             </li>
             @endif
             
+            @if (Auth::user()->role_id != 4 )
 
             
 
@@ -165,6 +166,7 @@
                 <i class="fa-solid fa-envelope-open-text"></i>
               </a>
             </li>
+            @endif
 
             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9)
             
