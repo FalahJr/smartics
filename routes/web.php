@@ -158,6 +158,11 @@ Route::get('simpanulasan', 'ArsipController@simpanulasan');
 Route::get('ulasan', 'UlasanController@index');
 Route::get('ulasantable', 'UlasanController@datatable');
 
+//audit
+Route::get('simpanaudit', 'AuditController@simpan');
+Route::get('audit', 'AuditController@index');
+Route::get('audittable', 'AuditController@datatable');
+
 
 
 Route::get('/chat', 'ChatController@index');

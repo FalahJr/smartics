@@ -58,6 +58,7 @@ Route::middleware('api')->group(function () {
 
     // Survey
     Route::get('list-survey', [SurveyController::class, 'getData']);
+    Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
 
 
 

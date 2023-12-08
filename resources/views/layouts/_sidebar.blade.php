@@ -146,10 +146,16 @@
             </li>
             @endif
             
+            @if (Auth::user()->role_id == 8 )
+            <li class="nav-item {{Request::is('audit') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/audit')}}">
+                <span class="menu-title">Laporan Audit</span>
+                <i class="fa-solid fa-envelope-open-text"></i>
+              </a>
+            </li>
+            @endif
+
             @if (Auth::user()->role_id != 4 )
-
-            
-
             <li class="nav-item {{Request::is('surat') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/surat')}}">
                 <span class="menu-title">Daftar Permohonan</span>
