@@ -58,7 +58,12 @@ Route::middleware('api')->group(function () {
 
     // Survey
     Route::get('list-survey', [SurveyController::class, 'getData']);
+    Route::get('jadwal-penugasan/{id}', 'SurveyController@getDataBySurveyorId');
+    Route::get('detail-form-laporan-survey/{id}', 'SurveyController@getDetailLaporanSurvey');
+    Route::get('list-pertanyaan-survey', [SurveyController::class, 'getDataPertanyaanSurvey']);
+    Route::post('kirim-laporan', 'SurveyController@submitFormLaporanPertama');
     Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
+
 
 
 

@@ -89,9 +89,7 @@ class SuratController extends Controller
           }else{
             return '<div><i>Belum Tersedia</i></div>';
           }
-        // }else{
-        //   return null;
-        // }
+      
         })
         ->addColumn('nama_pemohon', function ($data) {
           // if(Auth::user()->role_id === 1){
@@ -552,7 +550,16 @@ class SuratController extends Controller
     public function pemohonAccJadwalSurvey(Request $req){
       DB::beginTransaction();
       try {
-        DB::table('surat')->where('id', $req->id)->update(['is_acc_penjadwalan' => 'Y']);
+        DB::table('surat')->where('id', $req->id)->update([
+          'is_acc_penjadwalan' => 'Y',
+          'updated_at' => Carbon::now("Asia/Jakarta") ]);
+         
+        DB::table("survey")
+          ->where("surat_id", $req->id)
+          ->update([
+            'status' => 'Belum Disurvey',
+            "updated_at" => Carbon::now("Asia/Jakarta")
+          ]);
         DB::commit();
         return response()->json(["status" => "1"]);
       } catch (\Exception $e) {

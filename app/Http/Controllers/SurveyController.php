@@ -27,10 +27,19 @@ class SurveyController extends Controller
     }
 
     public function datatable() {
-      $data = DB::table('surat')
+      if (Auth::user()->role_id == 7) {
+         $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
+        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
+        ->get();
+
+      } else {
+        $data = DB::table('surat')
         ->where("status",'Penjadwalan Survey')
         ->get();
 
+      }
+    
+    
 
         // return $data;
         // $xyzab = collect($data);
@@ -283,6 +292,150 @@ class SurveyController extends Controller
         $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
         ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
         ->get();
+  
+        return response()->json(["status" => 1, "data" => $data]);
+      }catch(\Exception $e){
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+
+    public function getDataBySurveyorId($id){
+      try {
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id', 'surat_jenis.nama as jenis_perizinan')
+        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', $id)
+        ->get();
+        return response()->json(["status" => 1, "data" => $data]);
+
+      } catch (\Exception $e) {
+        //throw $th;
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+
+      }
+    }
+
+    public function getDetailDataPenugasan($id){
+      try {
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
+        ->where('survey.id', $id)
+        ->get();
+        return response()->json(["status" => 1, "data" => $data]);
+
+      } catch (\Exception $e) {
+        //throw $th;
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+
+      }
+    }
+
+    // get detail data survey untuk pengisian hasil survey
+    public function getDetailLaporanSurvey($id){
+      try{
+        $data = DB::table('survey')
+        ->where('surat_id', $id)
+        ->first();
+  
+        return response()->json(["status" => 1, "data" => $data]);
+      }catch(\Exception $e){
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+    public function submitFormLaporanPertama(Request $request)
+    {
+      // DB::beginTransaction();
+
+       try {
+        //code...
+        $imgPath = null;
+        $tgl = Carbon::now('Asia/Jakarta');
+        $folder = $tgl->year . $tgl->month . $tgl->timestamp;
+        $childPath ='file/uploads/laporan-survey/foto-survey';
+        $path = $childPath;
+
+        $file = $request->file('foto_survey');
+        $name = null;
+        if ($file != null) {
+          $name = $folder . '.' . $file->getClientOriginalExtension();
+          $file->move($path, $name);
+          $imgPath = $childPath . $name;
+        } else {
+          return response()->json(["status" => 2, "message" => 'Foto Survey Belum Di upload']);
+
+        }
+
+        // DB::table('survey')->where('surat_id', $request->surat_id)->update([
+        //   'jadwal_survey' => $request->input('jadwal_survey'),
+        //   'status' => 'Sudah Disurvey',
+        //   'foto_survey' => $request
+        // ]);
+        DB::table('survey')->where('id', $request->id)->update([
+          'jadwal_survey' => $request->jadwal_survey,
+          'status' => 'Belum Disurvey',
+          "foto_survey"=>$imgPath,
+          "alamat_survey"=>$request->alamat_survey,
+          "longitude"=>$request->longitude,
+          "latitude"=>$request->latitude,
+          "alasan_ditolak"=> null,
+          "updated_at" => $tgl
+         
+      ]);
+       
+
+      DB::commit();
+
+        return response()->json(["status" => 1,'message' => 'Sukses memperbarui laporan']);
+       } catch (\Exception $e) {
+        return response()->json(["status" => 2, "message" => $e]);
+
+       }
+       
+    }
+    public function isiSurvey(Request $request)
+    {
+        // Validasi request
+        // $request->validate([
+        //     'survey_id' => 'required|exists:surveys,id',
+        //     'survey_pertanyaan_id.*' => 'required|exists:survey_pertanyaans,id',
+        //     'jawaban.*' => 'required',
+        // ]);
+
+        // Simpan jawaban ke dalam database
+        // foreach ($request->input('survey_pertanyaan_id') as $key => $surveyPertanyaanId) {
+        //     DB::table('survey_hasil')->insert([
+        //         'survey_id' => $request->input('survey_id'),
+        //         'survey_pertanyaan_id' => $surveyPertanyaanId,
+        //         'jawaban' => $request->input('jawaban')[$key],
+        //         "created_at" => Carbon::now("Asia/Jakarta"),
+        //         "updated_at" => Carbon::now("Asia/Jakarta")
+        //     ]);
+        // }
+        // return response()->json(['data' => $request->input('survey_pertanyaan_id')]);
+        DB::beginTransaction();
+        // DB::table('survey')->where('surat_id', $request->surat_id)->update([
+        //   'jadwal_survey' => $request->input('jadwal_survey'),
+        //   'status' => 'Sudah Disurvey',
+        //   'foto_survey' => $request
+        // ]);
+
+        foreach ($request->input('survey_pertanyaan_id') as $key => $surveyPertanyaanId) {
+        // return response()->json(['data' => $request->input('survey_id')]);
+
+          DB::table('survey_hasil')->insertGetId([
+              'survey_id' => $request->input('survey_id'),
+              'survey_pertanyaan_id' => $surveyPertanyaanId,
+              'jawaban' => $request->input('jawaban')[$key],
+              "created_at" => Carbon::now("Asia/Jakarta"),
+                "updated_at" => Carbon::now("Asia/Jakarta")
+          ]);
+      }
+
+      DB::commit();
+
+        return response()->json(["status" => 1,'message' => 'Jawaban survei berhasil disimpan']);
+    }
+    
+    public function getDataPertanyaanSurvey(Request $req){
+      try{
+        $data = DB::table('survey_pertanyaan')->where('surat_jenis_id', $req->surat_jenis_id)->get();
   
         return response()->json(["status" => 1, "data" => $data]);
       }catch(\Exception $e){

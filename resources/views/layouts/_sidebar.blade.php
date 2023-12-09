@@ -184,7 +184,7 @@
               </a>
             </li>
             @endif
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 6)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 6 || Auth::user()->role_id == 7)
 
             <li class="nav-item {{Request::is('setting') || Request::is('setting/*') ? 'active' : ''  }}">
               <a class="nav-link" data-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="ui-basic">
