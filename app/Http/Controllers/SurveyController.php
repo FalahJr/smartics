@@ -330,7 +330,7 @@ class SurveyController extends Controller
     // get detail data survey untuk pengisian hasil survey
     public function getDetailLaporanSurvey($id){
       try{
-        $data = DB::table('survey')
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id')
         ->where('surat_id', $id)
         ->first();
   
