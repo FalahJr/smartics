@@ -452,11 +452,18 @@ var table = $('#table-data').DataTable({
 
 
   function reloadall() {
+    const container = document.getElementById("nama_surat_syarat");
+
+// Create paragraph element
+const para = document.createElement("p");
+para.remove()
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     $('#detail').modal('hide');
     $('#showTolak').modal('hide');
     $('#showAccJadwal').modal('hide');
+    
+// Append paragraph and link to the container
     
     // $('#table_modal :input').val('');
    

@@ -18,24 +18,24 @@ use Session;
 
 use Yajra\Datatables\Datatables;
 
-class SurveyController extends Controller
+class PenugasanSurveyController extends Controller
 {
     public function index() {
     $surveyors = DB::table("user")->where('role_id', '7')->get();
 
-      return view('survey-jadwal.index', compact('surveyors'));
+      return view('survey-penugasan.index', compact('surveyors'));
     }
 
     public function datatable() {
       // if (Auth::user()->role_id == 7) {
-      //    $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
-      //   ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
-      //   ->get();
+         $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
+        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
+        ->get();
 
       // } else {
-        $data = DB::table('surat')
-        ->where("status",'Penjadwalan Survey')
-        ->get();
+      //   $data = DB::table('surat')
+      //   ->where("status",'Penjadwalan Survey')
+      //   ->get();
 
       // }
     
@@ -86,7 +86,7 @@ class SurveyController extends Controller
       })
           ->addColumn('aksi', function ($data) {
             $aksi = '<div class="btn-group">'.
-            '<button type="button" onclick="detail('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="penjadwalan survey">'.
+            '<button type="button" onclick="detail('.$data->id.')" class="btn btn-info btn-lg pt-2" title="penjadwalan survey">'.
             '<label class="fa fa-calendar-check-o w-100" style="padding:0 2px"></label></button>'.
          '</div>';
          if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
@@ -101,9 +101,12 @@ class SurveyController extends Controller
           '<label class="fa fa-calendar-plus-o w-100" style="padding:0 2px"></label></button>'.
        '</div>';
                  } else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
-          $aksi = '<div class="btn-group">'.
-            '<button type="button" onclick="detail('.$data->id.')" class="btn btn-info btn-lg pt-2" title="lihat detail penugasan">'.
-            '<label class="fa fa-eye w-100" ></label></button>'.
+          $aksi = '<div class="btn-group border">'.
+            '<button type="button" onclick="detailSurat('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="lihat detail penugasan">'.
+            '<label class="fa fa-eye w-100" ></label></button>
+            <button type="button" onclick="laporan('.$data->id.')" class="btn btn-success btn-lg pt-2 px-2 ml-2" title="lihat detail penugasan">'.
+            '<label class="fa fa-file-text-o w-100 px-1" ></label></button>
+            '.
          '</div>';
          }
          
@@ -302,7 +305,7 @@ class SurveyController extends Controller
     public function getDataBySurveyorId($id){
       try {
         $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id', 'surat_jenis.nama as jenis_perizinan')
-        ->where("surat.status",'Penjadwalan Survey')->where('survey.status','Belum Disurvey')->where('survey.user_id', $id)
+        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', $id)
         ->get();
         return response()->json(["status" => 1, "data" => $data]);
 
@@ -417,33 +420,15 @@ class SurveyController extends Controller
         // ]);
 
         foreach ($request->input('survey_pertanyaan_id') as $key => $surveyPertanyaanId) {
-          $surveyId = $request->input('survey_id');
-          $jawaban = $request->input('jawaban')[$key];
+        // return response()->json(['data' => $request->input('survey_id')]);
 
-          // Check if data already exists for the given survey_id and survey_pertanyaan_id
-          $existingData = DB::table('survey_hasil')
-              ->where('survey_id', $surveyId)
-              ->where('survey_pertanyaan_id', $surveyPertanyaanId)
-              ->first();
-
-          if ($existingData) {
-              // If data already exists, update the existing record
-              DB::table('survey_hasil')
-                  ->where('id', $existingData->id)
-                  ->update([
-                      'jawaban' => $jawaban,
-                      'updated_at' => Carbon::now("Asia/Jakarta")
-                  ]);
-          } else {
-              // If data doesn't exist, insert a new record
-              DB::table('survey_hasil')->insert([
-                  'survey_id' => $surveyId,
-                  'survey_pertanyaan_id' => $surveyPertanyaanId,
-                  'jawaban' => $jawaban,
-                  'created_at' => Carbon::now("Asia/Jakarta"),
-                  'updated_at' => Carbon::now("Asia/Jakarta")
-              ]);
-          }
+          DB::table('survey_hasil')->insertGetId([
+              'survey_id' => $request->input('survey_id'),
+              'survey_pertanyaan_id' => $surveyPertanyaanId,
+              'jawaban' => $request->input('jawaban')[$key],
+              "created_at" => Carbon::now("Asia/Jakarta"),
+                "updated_at" => Carbon::now("Asia/Jakarta")
+          ]);
       }
       DB::table('survey')->where('id', $request->input('survey_id'))->update([
           'status' => 'Sudah Disurvey',

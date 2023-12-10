@@ -1,10 +1,8 @@
 @extends('main')
 @section('content')
 
-@include('surat.detail')
-
-@include('survey-penugasan.detail')
-@include('survey-penugasan.tambah')
+@include('survey-jadwal.detail')
+@include('survey-jadwal.tambah')
 @php
  $jenis = DB::table("surat_jenis")->get();
 @endphp
@@ -102,7 +100,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-          url: "{{ url('/surveypenugasantable') }}"  ,
+          url: "{{ url('/surveyjadwaltable') }}"  ,
         },
         columnDefs: [
 
@@ -168,7 +166,7 @@ var table = $('#table-data').DataTable({
   function edit(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editsurveypenugasan',
+      url:baseUrl + '/editsurveyjadwal',
       data:{id},
       dataType:'json',
       success:function(data){
@@ -188,74 +186,10 @@ var table = $('#table-data').DataTable({
 
   }
 
-
-  function detailSurat(id) {
-    // body...
-    $.ajax({
-      url:baseUrl + '/editsurat',
-      data:{id},
-      dataType:'json',
-      success:function(data){
-        console.log({data})
-        $('.id').val(data.surat.id);
-        document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
-        document.getElementById("surat_id").innerHTML = data.surat.id;
-        document.getElementById("status_surat").innerHTML = data.surat.status;
-        data.surat.status === "Selesai" ? document.getElementById("status_surat").style.color = "green" : data.surat.status === "Ditolak" ? document.getElementById("status_surat").style.color = "red" : document.getElementById("status_surat").style.color = "#F3B137";
-        document.getElementById("nama_pemohon").innerHTML = data.user.nama_lengkap;
-        document.getElementById("email").innerHTML = data.user.email;
-        document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
-        document.getElementById("jadwal_survey").innerHTML = data.jadwal_survey;
-        document.getElementById("alamat_lokasi").innerHTML = data.surat.alamat_lokasi;
-        // data.surat_dokumen.forEach(function(surat_syarat) {
-        // document.getElementsByClassName("nama_surat_syarat").innerHTML = surat_syarat.nama;
-        // });
-
-        data.surat_dokumen.forEach(myFunction);
-
-        // document.getElementById("nama_surat_syarat").innerHTML = text;
-        function myFunction(item, index) {
-          const container = document.getElementById("nama_surat_syarat");
-
-    // Create paragraph element
-    const para = document.createElement("p");
-    const node = document.createTextNode((index + 1) + ".) " + item.nama);
-    para.appendChild(node);
-
-    // Create link element
-    const link = document.createElement("a");
-    link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
-    link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
-    const text = document.createTextNode("Lihat Dokumen");
-    link.appendChild(text);
-
-    // Apply CSS styles to reduce the margin between para and link
-    para.style.marginBottom = "1px";  // Adjust the value as needed
-    link.style.color = "#F3B137"
-    // Append paragraph and link to the container
-    container.appendChild(para);
-    container.appendChild(link);
-
-    // Add a line break for better separation
-    const lineBreak = document.createElement("br");
-    container.appendChild(lineBreak);
-    const lineBreak2 = document.createElement("br");
-    container.appendChild(lineBreak2);
-
-
-};
-      
-        // $('.datepicker').val(data.created_at)
-        $('#detail').modal('show');
-      }
-    });
-
-  }
-
   function detail(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editsurveypenugasan',
+      url:baseUrl + '/editsurveyjadwal',
       data:{id},
       dataType:'json',
       success:function(data){
@@ -269,7 +203,7 @@ var table = $('#table-data').DataTable({
        
       
         // $('.datepicker').val(data.created_at)
-        $('#detailPenugasan').modal('show');
+        $('#detail').modal('show');
       }
     });
 
@@ -277,7 +211,7 @@ var table = $('#table-data').DataTable({
 
   $('#simpan').click(function(){
     $.ajax({
-      url: baseUrl + '/simpansurveypenugasan',
+      url: baseUrl + '/simpansurveyjadwal',
       data:$('.table_modal :input').serialize(),
       dataType:'json',
       success:function(data){

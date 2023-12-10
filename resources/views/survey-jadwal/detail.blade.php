@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div id="detailPenugasan" class="modal fade" role="dialog">
+<div id="detail" class="modal fade" role="dialog">
   <div class="modal-dialog modal-xs">
 
     <!-- Modal content-->

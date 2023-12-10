@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RiwayatSurveyController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
@@ -63,6 +64,14 @@ Route::middleware('api')->group(function () {
     Route::get('list-pertanyaan-survey', [SurveyController::class, 'getDataPertanyaanSurvey']);
     Route::post('kirim-laporan', 'SurveyController@submitFormLaporanPertama');
     Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
+
+    // Riwayat Survey
+    Route::get('riwayat-penugasan/{id}', 'RiwayatSurveyController@getDataBySurveyorId');
+    Route::get('detail-riwayat-penugasan/{id}', 'RiwayatSurveyController@getDetailData');
+    Route::get('list-jawaban-survey/{id}', [RiwayatSurveyController::class, 'getDataJawabanSurvey']);
+
+
+
 
 
 

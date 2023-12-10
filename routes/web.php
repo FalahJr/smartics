@@ -145,10 +145,15 @@ Route::get('pemohonaccjadwalsurat', 'SuratController@pemohonAccJadwalSurvey');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
 // Survey
-Route::get('survey/penugasan', 'SurveyController@index');
-Route::get('surveypenugasantable', 'SurveyController@datatable');
-Route::get('simpansurveypenugasan', 'SurveyController@simpan');
-Route::get('editsurveypenugasan', 'SurveyController@edit');
+Route::get('survey/jadwal', 'SurveyController@index');
+Route::get('surveyjadwaltable', 'SurveyController@datatable');
+Route::get('simpansurveyjadwal', 'SurveyController@simpan');
+Route::get('editsurveyjadwal', 'SurveyController@edit');
+
+Route::get('survey/penugasan', 'PenugasanSurveyController@index');
+Route::get('surveypenugasantable', 'PenugasanSurveyController@datatable');
+Route::get('simpansurveypenugasan', 'PenugasanSurveyController@simpan');
+Route::get('editsurveypenugasan', 'PenugasanSurveyController@edit');
 
 
 // Arsip

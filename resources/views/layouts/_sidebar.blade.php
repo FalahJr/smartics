@@ -206,8 +206,15 @@
               </a>
               <div class="collapse {{Request::is('setting') || Request::is('setting/*') ? 'show' : '' }}" id="setting">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link {{Request::is('setting/modul/keuangan/setting/klasifikasi-akun') || Request::is('setting/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('survey/penugasan')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
+                  @if (Auth::user()->role_id != 7)
+                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal') || Request::is('survey/jadwal/*') ? 'active' : ''  }}" href="{{url('survey/jadwal')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
                   <li class="nav-item"> <a class="nav-link {{Request::is('setting/modul/keuangan/setting/klasifikasi-akun') || Request::is('setting/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('setting/modul/keuangan/setting/klasifikasi-akun')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
+                  @endif
+                  @if (Auth::user()->role_id == 7)
+                 
+                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/penugasan') || Request::is('survey/penugasan/*') ? 'active' : ''  }}" href="{{url('survey/penugasan')}}">Penugasan Survey<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('setting/modul/keuangan/setting/klasifikasi-akun') || Request::is('setting/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('setting/modul/keuangan/setting/klasifikasi-akun')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
+                  @endif
 
                 </ul>
                 </div>
