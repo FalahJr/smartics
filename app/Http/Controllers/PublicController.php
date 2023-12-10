@@ -127,7 +127,10 @@ class PublicController extends Controller
 
 
     public function profilPengguna(Request $req){
-        $user = DB::table('user')->where('id',Auth::user()->id)->first();
+        $user = DB::table('user')
+        ->join('role','role.id','=','user.role_id')
+        ->select('user.*','role.nama as role_user')
+        ->where('user.id',Auth::user()->id)->first();
         return view('profil-pengguna',compact('user'));
     }
 
