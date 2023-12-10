@@ -37,6 +37,9 @@ Route::get('jadwalulang', 'PerizinanPemohonController@jadwalulang');
 Route::get('profil-pengguna', 'PublicController@profilPengguna');
 Route::put('/profil-pengguna/{id}', 'PublicController@profilPenggunaUpdate')->name('profil-pengguna.update');
 
+Route::get('ubah-password-pengguna', 'PublicController@indexUbahPassword');
+Route::post('ubah-password-pengguna', 'PublicController@updatePassword');
+
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/admin', 'loginController@admin')->name('admin');
 

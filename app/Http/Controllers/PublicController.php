@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Session;
+use Illuminate\Support\Facades\Crypt;
 
 class PublicController extends Controller
 {
@@ -149,6 +150,31 @@ class PublicController extends Controller
             // ... tambahkan kolom lainnya
         ]);
         return redirect()->back()->with('success', 'Perubahan berhasil disimpan');
+    }
+
+    public function indexUbahPassword(){
+        return view('ubah-password-pengguna');
+    }
+
+    public function updatePassword(Request $req){
+        $req->validate([
+            'password' => 'min:6',
+            'password_confirmation' => 'same:password',
+        ], [
+            'password.min' => 'Kata sandi minimal harus :min karakter.',
+            'password_confirmation.same' => 'Konfirmasi kata sandi tidak sesuai',
+        ]);
+
+        $passwordUpdate = Crypt::encrypt($req->password);
+        // $passwordUpdate = $req->password;
+        
+        $user = auth()->user(); // Mendapatkan pengguna yang sedang login
+        
+        // Update password di dalam tabel users
+        DB::table('user')
+        ->where('id', $user->id)
+        ->update(['password' => $passwordUpdate]);
+        return back()->with('passwordUpadate', 'Kata Sandi Berhasil Diubah');
     }
     
 }

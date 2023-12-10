@@ -125,6 +125,16 @@
             </li>
             @endif
 
+            @if (Auth::user()->role_id == 9 )
+            <li class="nav-item {{Request::is('ubah-password-pengguna') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/ubah-password-pengguna')}}">
+                <span class="menu-title">Ubah Password</span>
+                {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
+                <i class="mdi mdi-account menu-icon"></i>
+              </a>
+            </li>
+            @endif
+
 
             @if (Auth::user()->role_id == 1 )
 
