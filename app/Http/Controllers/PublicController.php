@@ -165,7 +165,7 @@ class PublicController extends Controller
             'password_confirmation.same' => 'Konfirmasi kata sandi tidak sesuai',
         ]);
 
-        $passwordUpdate = Crypt::encrypt($req->password);
+        $passwordUpdate = Crypt::encryptString($req->password);
         // $passwordUpdate = $req->password;
         
         $user = auth()->user(); // Mendapatkan pengguna yang sedang login
