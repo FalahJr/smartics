@@ -20,17 +20,17 @@
                                                      <div class="row col-12">
                             <div class="form-group col-md-6 col-12">
                                 <label for="nama_lengkap">Nama</label>
-                                <input type="text" class="form-control" id="nama_lengkap" value="{{ $user->nama_lengkap }}" disabled>
+                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap"  value="{{ $user->nama_lengkap }}">
                             </div>
                     
                             <div class="form-group col-md-6 col-12">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" value="{{ $user->email }}" disabled>
+                                <input type="email" class="form-control" id="email" name="email"  value="{{ $user->email }}">
                             </div>
                     
                             <div class="form-group col-md-6 col-12">
                                 <label for="no_telp">Nomor Telepon</label>
-                                <input type="text" class="form-control" id="no_telp" value="{{ $user->no_telp }}" disabled>
+                                <input type="text" class="form-control" id="no_telp" name="no_telp"  value="{{ $user->no_telp }}">
                             </div>
                     
                             <div class="form-group col-md-6 col-12">
@@ -105,17 +105,17 @@
 
                         <div class="form-group col-12">
                             <label for="nama_lengkap">Nama</label>
-                            <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{ $user->nama_lengkap }}" disabled>
+                            <input type="text" class="form-control" id="nama_lengkap" value="{{ $user->nama_lengkap }}" disabled>
                         </div>
 
                         <div class="form-group col-12">
                             <label for="no_telp">Sebagai</label>
-                            <input type="text" class="form-control" id="no_telp" name="no_telp" value="{{ $user->role_user }}" disabled>
+                            <input type="text" class="form-control" id="no_telp"  value="{{ $user->role_user }}" disabled>
                         </div>
                 
                         <div class="form-group col-12">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" disabled>
+                            <input type="email" class="form-control" id="email" value="{{ $user->email }}" disabled>
                         </div>
                     </div>
 
