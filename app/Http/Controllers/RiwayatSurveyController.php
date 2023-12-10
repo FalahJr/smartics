@@ -439,7 +439,7 @@ class RiwayatSurveyController extends Controller
     
     public function getDataJawabanSurvey($id){
       try{
-        $data = DB::table('survey_hasil')->where('survey_id', $id)->get();
+        $data = DB::table('survey_hasil')->join('survey_pertanyaan', 'survey_pertanyaan.id', '=', 'survey_hasil.survey_pertanyaan_id')->select('survey_hasil.*', 'survey_pertanyaan.pertanyaan')->where('survey_id', $id)->get();
   
         return response()->json(["status" => 1, "data" => $data]);
       }catch(\Exception $e){
