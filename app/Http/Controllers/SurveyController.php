@@ -348,7 +348,7 @@ class SurveyController extends Controller
         $imgPath = null;
         $tgl = Carbon::now('Asia/Jakarta');
         $folder = $tgl->year . $tgl->month . $tgl->timestamp;
-        $childPath ='file/uploads/laporan-survey/foto-survey';
+        $childPath ='file/uploads/laporan-survey/foto-survey/';
         $path = $childPath;
 
         $file = $request->file('foto_survey');
