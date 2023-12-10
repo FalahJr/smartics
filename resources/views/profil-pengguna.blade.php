@@ -48,8 +48,8 @@
                             <div class="form-group col-md-6 col-12">
                                 <label for="jenis_identitas">Jenis Identitas</label>
                                 <select class="form-control" id="jenis_identitas" name="jenis_identitas">
-                                    <option value="ktp" {{ $user->jenis_identitas == 'KTP' ? 'selected' : '' }}>KTP</option>
-                                    <option value="sim" {{ $user->jenis_identitas == 'Paspor' ? 'selected' : '' }}>Paspor</option>
+                                    <option value="KTP" {{ $user->jenis_identitas == 'KTP' ? 'selected' : '' }}>KTP</option>
+                                    <option value="Paspor" {{ $user->jenis_identitas == 'Paspor' ? 'selected' : '' }}>Paspor</option>
                                     <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
                                 </select>
                             </div>
