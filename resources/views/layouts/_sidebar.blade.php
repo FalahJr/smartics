@@ -130,7 +130,7 @@
               <a class="nav-link" href="{{url('/ubah-password-pengguna')}}">
                 <span class="menu-title">Ubah Password</span>
                 {{-- <span class="menu-sub-title">( 2 new updates )</span> --}}
-                <i class="mdi mdi-account menu-icon"></i>
+                <i class="mdi mdi-account-edit menu-icon"></i>
               </a>
             </li>
             @endif
