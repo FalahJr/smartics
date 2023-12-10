@@ -302,7 +302,7 @@ class RiwayatSurveyController extends Controller
     public function getDataBySurveyorId($id){
       try {
         $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id', 'surat_jenis.nama as jenis_perizinan', 'survey.status as verifikasi_verifikator')
-        ->where("surat.status",'Penjadwalan Survey')->where('survey.status', 'not like', 'Belum Disurvey')->where('survey.user_id', $id)
+       ->where('survey.status', 'not like', 'Belum Disurvey')->where('survey.user_id', $id)
         ->get();
         return response()->json(["status" => 1, "data" => $data]);
 
