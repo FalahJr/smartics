@@ -165,7 +165,10 @@ var table = $('#table-data').DataTable({
   });
 
 
-
+let para;
+let link;
+let lineBreak;
+let lineBreak2;
   function edit(id) {
     // body...
     $.ajax({
@@ -195,12 +198,12 @@ var table = $('#table-data').DataTable({
           const container = document.getElementById("nama_surat_syarat");
 
     // Create paragraph element
-    const para = document.createElement("p");
+     para = document.createElement("p");
     const node = document.createTextNode((index + 1) + ".) " + item.nama);
     para.appendChild(node);
 
     // Create link element
-    const link = document.createElement("a");
+     link = document.createElement("a");
     link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
     link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
     const text = document.createTextNode("Lihat Dokumen");
@@ -214,9 +217,9 @@ var table = $('#table-data').DataTable({
     container.appendChild(link);
 
     // Add a line break for better separation
-    const lineBreak = document.createElement("br");
+     lineBreak = document.createElement("br");
     container.appendChild(lineBreak);
-    const lineBreak2 = document.createElement("br");
+     lineBreak2 = document.createElement("br");
     container.appendChild(lineBreak2);
 
 
@@ -449,14 +452,37 @@ var table = $('#table-data').DataTable({
   		]
   	});
   }
+  function clearNamaSuratSyarat() {
+    // Dapatkan referensi ke elemen div dengan ID "nama_surat_syarat"
+    var container = document.getElementById("nama_surat_syarat");
 
-
-  function reloadall() {
-    const container = document.getElementById("nama_surat_syarat");
+    // Hapus semua elemen di dalam container
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+  function closeModal() {
+  // Menutup modal
+  // ...
+  // const container = document.getElementById("nama_surat_syarat");
 
 // Create paragraph element
-const para = document.createElement("p");
-para.remove()
+// const para = document.createElement("p");
+// para.remove()
+  // Menghapus elemen <p> jika sudah dibuat sebelumnya
+  // if (para) {
+
+    clearNamaSuratSyarat()
+    
+
+    // $('#detail').modal('hide');
+    // table.ajax.reload();
+    
+
+  // }
+}
+  function reloadall() {
+   
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     $('#detail').modal('hide');
