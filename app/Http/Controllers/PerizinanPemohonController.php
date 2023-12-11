@@ -118,7 +118,7 @@ class PerizinanPemohonController extends Controller
                 "updated_at" => Carbon::now("Asia/Jakarta")
               ]);
               DB::commit();
-              return response()->json(["status" => "1", 'message' => 'Berhasil konfirmasi jadwal']);
+              return response()->json(["status" => "1", 'message' => 'Selamat, Survey Lokasi Dilakukan Sesuai Dengan Alamat dan Jadwal Survey']);
             } catch (\Exception $e) {
               return response()->json(["status" => 2, 'message' => $e->getMessage()]);
       
@@ -130,7 +130,7 @@ class PerizinanPemohonController extends Controller
             try {
               DB::table('surat')->where('id', $req->id)->update(['is_reschedule' => "Y",'is_acc_penjadwalan' => 'N', "updated_at" => Carbon::now("Asia/Jakarta")]);
               DB::commit();
-              return response()->json(["status" => "1", 'message' => 'Berhasil melakukan penjadwalan ulang']);
+              return response()->json(["status" => "1", 'message' => 'Berhasil Melakukan Penjadwalan Ulang, Tunggu Notifikasi Terkait Jadwal Survey Terbaru']);
             } catch (\Exception $e) {
               return response()->json(["status" => 2, 'message' => $e->getMessage()]);
       
