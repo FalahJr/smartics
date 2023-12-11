@@ -618,7 +618,7 @@ class SuratController extends Controller
     public function getData(Request $req){
       try{
         if($req->input('user_id') ){
-          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
+          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
         }else{
           if($req->input('status')){
           $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) {
@@ -712,7 +712,7 @@ class SuratController extends Controller
       DB::beginTransaction();
       // if(Auth::user()->role_id ===5){
         $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
-     ->where('surat.id', $req->input('id'))->first();
+     ->where('surat.id', $req->id)->first();
      $verifikator = DB::table('user')->where('role_id', '6')->first(); 
      $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
 
@@ -780,7 +780,7 @@ class SuratController extends Controller
         PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Disetujui','Selamat! Hasil Survey Pengajuan surat Anda telah sukses disetujui. Kami akan melakukan Verifikasi Kepala Dinas, mohon tunggu pemberitahuan selanjutnya yaa' );
 
         PushNotifController::sendMessage($kepala_dinas->id,'Hai Kepala Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Verifikasi. Silakan akses tugas Anda sekarang dan lakukan Verifikasi. Terima kasih!' );
-        return response()->json(["status" => 1,  "message" => "Hasil Survey Permohonan Perizinan Berhasil Diverifikasi"]);
+        return response()->json(["status" => 1,  "message" => "Hasil Survey Berhasil di Approve dan Akan Diproses Kepala Dinas"]);
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
@@ -818,7 +818,7 @@ class SuratController extends Controller
             ->where("surat_id", $req->id)
             ->update([
               "status" => 'Survey Ditolak',
-              'alasan_ditolak' => $req->alasan_ditolak,
+              'alasan_ditolak' => $req->alasan_dikembalikan,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
@@ -852,7 +852,7 @@ class SuratController extends Controller
             ->where("surat_id", $req->id)
             ->update([
               "status" => 'Survey Ditolak',
-              'alasan_ditolak' => $req->alasan_ditolak,
+              'alasan_ditolak' => $req->alasan_dikembalikan,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
         DB::commit();
