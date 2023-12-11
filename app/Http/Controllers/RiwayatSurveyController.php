@@ -313,11 +313,11 @@ class RiwayatSurveyController extends Controller
       }
     }
 
-    public function getDetailDataPenugasan($id){
+    public function getDetailDataHasilSurvey($id){
       try {
-        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
-        ->where('survey.id', $id)
-        ->get();
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('user', 'user.id', '=', "survey.user_id")->select('surat.*','user.nama_lengkap as nama_surveyor', 'user.email as email_surveyor','survey.id as survey_id', 'survey.latitude as latitude_survey','survey.longitude as longitude_survey', 'survey.user_id as surveyor_id', 'survey.foto_survey as foto_survey')
+        ->where('surat_id', $id)
+        ->first();
         return response()->json(["status" => 1, "data" => $data]);
 
       } catch (\Exception $e) {
@@ -330,7 +330,7 @@ class RiwayatSurveyController extends Controller
     // get detail data survey untuk pengisian hasil survey
     public function getDetailData($id){
       try{
-        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id')
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id', 'surat.latitude as latitude_surat','surat.longitude as longitude_surat',)
         ->where('survey.id', $id)
         ->first();
   
