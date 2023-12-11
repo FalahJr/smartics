@@ -317,7 +317,7 @@ class SuratController extends Controller
         $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
      ->where('surat.id', $req->input('id'))->first();
      $verifikator = DB::table('user')->where('role_id', '6')->first(); 
-     $admin_dinas = DB::table('user')->where('role_id', '3')->first(); 
+     $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
 
     //  if($cekDataUser){
     //   // return $cekDataUser->nama_lengkap;
@@ -683,6 +683,7 @@ class SuratController extends Controller
       return response()->json(["status" => 2, "message" => $e->getMessage()]);
     }
     }
+    
     public function listPerizinanTerlambat() {
       try{
 
@@ -704,5 +705,167 @@ class SuratController extends Controller
     }catch(\Exception $e){
       return response()->json(["status" => 2, "message" => $e->getMessage()]);
     }
+    }
+
+    
+    public function approveHasilSurvey(Request $req) {
+      DB::beginTransaction();
+      // if(Auth::user()->role_id ===5){
+        $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->input('id'))->first();
+     $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+     $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
+
+    //  if($cekDataUser){
+    //   // return $cekDataUser->nama_lengkap;
+    //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+    //  }
+    if (Auth::check()) {
+    if(  Auth::user()->role_id == 6 )
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Verifikasi Kepala Dinas',
+              "is_dikembalikan" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+            DB::table("survey")
+            ->where("surat_id", $req->id)
+            ->update([
+              "status" => 'Survey Disetujui',
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Hasil Survey dari surat pengajuan anda sukses disetujui . Kami akan melakukan Verifikasi Kepala Dinas,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Hasil Survey Permohonan Anda Disetujui", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Disetujui','Selamat! Hasil Survey Pengajuan surat Anda telah sukses disetujui. Kami akan melakukan Verifikasi Kepala Dinas, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($kepala_dinas->id,'Hai Kepala Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Verifikasi. Silakan akses tugas Anda sekarang dan lakukan Verifikasi. Terima kasih!' );
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+  }
+  // response api
+  else {
+    if( $req->input('role_id') == 6 )
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Verifikasi Kepala Dinas',
+              "is_dikembalikan" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+            DB::table("survey")
+            ->where("surat_id", $req->id)
+            ->update([
+              "status" => 'Survey Disetujui',
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Hasil Survey dari surat pengajuan anda sukses disetujui . Kami akan melakukan Verifikasi Kepala Dinas,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Hasil Survey Permohonan Anda Disetujui", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Disetujui','Selamat! Hasil Survey Pengajuan surat Anda telah sukses disetujui. Kami akan melakukan Verifikasi Kepala Dinas, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($kepala_dinas->id,'Hai Kepala Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Verifikasi. Silakan akses tugas Anda sekarang dan lakukan Verifikasi. Terima kasih!' );
+        return response()->json(["status" => 1,  "message" => "Hasil Survey Permohonan Perizinan Berhasil Diverifikasi"]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+}
+
+    }
+
+    public function tolakHasilSurvey(Request $req) {
+      DB::beginTransaction();
+      // if(Auth::user()->role_id ===5){
+        $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->input('id'))->first();
+
+    //  if($cekDataUser){
+    //   // return $cekDataUser->nama_lengkap;
+    //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+    //  }
+    if (Auth::check()) {
+    if(  Auth::user()->role_id == 6 )
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Ditolak',
+              "is_dikembalikan" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+            DB::table("survey")
+            ->where("surat_id", $req->id)
+            ->update([
+              "status" => 'Survey Ditolak',
+              'alasan_ditolak' => $req->alasan_ditolak,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+  }
+  // response api
+  else {
+    if( $req->input('role_id') == 6 )
+    {
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Ditolak',
+              "is_dikembalikan" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+            DB::table("survey")
+            ->where("surat_id", $req->id)
+            ->update([
+              "status" => 'Survey Ditolak',
+              'alasan_ditolak' => $req->alasan_ditolak,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+
+        return response()->json(["status" => 1,  "message" => "Hasil Survey Permohonan Perizinan Ditolak"]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+}
+
     }
 }
