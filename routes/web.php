@@ -154,6 +154,8 @@ Route::get('survey/penugasan', 'PenugasanSurveyController@index');
 Route::get('surveypenugasantable', 'PenugasanSurveyController@datatable');
 Route::get('simpansurveypenugasan', 'PenugasanSurveyController@simpan');
 Route::get('editsurveypenugasan', 'PenugasanSurveyController@edit');
+Route::get('detail-form-laporan-survey/{id}', 'SurveyController@getDetailLaporanSurvey');
+
 
 
 // Arsip

@@ -3,6 +3,7 @@
 @include('layouts._head')
 
 @yield('extra_style')
+
 <body>
 	@include('layouts._setting')
 
@@ -17,5 +18,6 @@
 @include('layouts._script')
 
 @yield('extra_script')
+
 </body>
 </html>

@@ -162,6 +162,10 @@ var table = $('#table-data').DataTable({
     $('#ulasan').modal('show');
   }
 
+  let para;
+let link;
+let lineBreak;
+let lineBreak2;
   function edit(id) {
     // body...
     $.ajax({
@@ -185,35 +189,34 @@ var table = $('#table-data').DataTable({
 
         data.surat_dokumen.forEach(myFunction);
 
-        // document.getElementById("nama_surat_syarat").innerHTML = text;
-        function myFunction(item, index) {
-          const container = document.getElementById("nama_surat_syarat");
+// document.getElementById("nama_surat_syarat").innerHTML = text;
+function myFunction(item, index) {
+  const container = document.getElementById("nama_surat_syarat");
 
-    // Create paragraph element
-    const para = document.createElement("p");
-    const node = document.createTextNode((index + 1) + ".) " + item.nama);
-    para.appendChild(node);
+// Create paragraph element
+para = document.createElement("p");
+const node = document.createTextNode((index + 1) + ".) " + item.nama);
+para.appendChild(node);
 
-    // Create link element
-    const link = document.createElement("a");
-    link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
-    link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
-    const text = document.createTextNode("Lihat Dokumen");
-    link.appendChild(text);
+// Create link element
+link = document.createElement("a");
+link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
+link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
+const text = document.createTextNode("Lihat Dokumen");
+link.appendChild(text);
 
-    // Apply CSS styles to reduce the margin between para and link
-    para.style.marginBottom = "1px";  // Adjust the value as needed
-    link.style.color = "#499DB1"
-    // Append paragraph and link to the container
-    container.appendChild(para);
-    container.appendChild(link);
+// Apply CSS styles to reduce the margin between para and link
+para.style.marginBottom = "1px";  // Adjust the value as needed
+link.style.color = "#F3B137"
+// Append paragraph and link to the container
+container.appendChild(para);
+container.appendChild(link);
 
-    // Add a line break for better separation
-    const lineBreak = document.createElement("br");
-    container.appendChild(lineBreak);
-    const lineBreak2 = document.createElement("br");
-    container.appendChild(lineBreak2);
-
+// Add a line break for better separation
+lineBreak = document.createElement("br");
+container.appendChild(lineBreak);
+lineBreak2 = document.createElement("br");
+container.appendChild(lineBreak2);
 
 };
       
@@ -289,7 +292,35 @@ var table = $('#table-data').DataTable({
   		]
   	});
   }
+  function clearNamaSuratSyarat() {
+    // Dapatkan referensi ke elemen div dengan ID "nama_surat_syarat"
+    var container = document.getElementById("nama_surat_syarat");
 
+    // Hapus semua elemen di dalam container
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+  function closeModal() {
+  // Menutup modal
+  // ...
+  // const container = document.getElementById("nama_surat_syarat");
+
+// Create paragraph element
+// const para = document.createElement("p");
+// para.remove()
+  // Menghapus elemen <p> jika sudah dibuat sebelumnya
+  // if (para) {
+
+    clearNamaSuratSyarat()
+    
+
+    // $('#detail').modal('hide');
+    // table.ajax.reload();
+    
+
+  // }
+}
   function reloadall() {
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');

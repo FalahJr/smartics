@@ -1,16 +1,36 @@
 @extends('main')
+{{-- @section('styles')
+<!-- Leaflet CSS -->
+     
+@endsection --}}
+@section('extra_style')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+   /* #map {
+          height: 400px;
+        } */
+        #map {
+          height: 100px;
+    /* height: 100%; */
+    width: 100%;
+    /* overflow: hidden; */
+}
+
+
+
+</style>
+@endsection
 @section('content')
+
 
 @include('surat.detail')
 
 @include('survey-penugasan.detail')
-@include('survey-penugasan.tambah')
+@include('survey-penugasan.laporan-pertama')
 @php
  $jenis = DB::table("surat_jenis")->get();
 @endphp
-<style type="text/css">
 
-</style>
 <!-- partial -->
 <div class="content-wrapper">
   <div class="row">
@@ -27,6 +47,7 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">List Penugasan Survey</h4>
+
                     
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
@@ -78,8 +99,35 @@
 </div>
 <!-- content-wrapper ends -->
 @endsection
-@section('extra_script')
+{{-- @push('scripts')
+ <!-- Leaflet JavaScript -->
+      <!-- Make sure you put this AFTER Leaflet's CSS -->
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin="">
+      </script>
+     
 <script>
+var map = L.map('mapid').setView([{{ config('leafletsetup.map_center_latitude') }},
+    {{ config('leafletsetup.map_center_longitude') }}],
+    {{ config('leafletsetup.zoom_level') }});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+</script>
+@endpush --}}
+@section('extra_script')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  var map = L.map('map').setView([-7.157358, 112.656169], 13);
+  var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+</script>
+
+<script>
+
 // var selectedStatus = 'Semua'; 
 // function handleFilter(status) {
 //   console.log({status});
@@ -165,20 +213,21 @@ var table = $('#table-data').DataTable({
 
   }
 
-  function edit(id) {
+  function laporan(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editsurveypenugasan',
-      data:{id},
+      url:baseUrl + '/detail-form-laporan-survey/'+id,
+      // data:{id},
       dataType:'json',
       success:function(data){
-        console.log({data});
-        $('.is_acc_penjadwalan').val(data.surat.is_acc_penjadwalan);
-        $('.is_reschedule').val(data.surat.is_reschedule);
-        $('.id').val(data.surat.id);
-        $('.jadwal_survey').val(data.surat.jadwal_survey);
-        $('#user_id').val(data.survey ? data.survey.user_id : '');
-        $('#user_id').select2();
+        console.log({id})
+        console.log('data',data);
+        // $('.is_acc_penjadwalan').val(data.surat.is_acc_penjadwalan);
+        // $('.is_reschedule').val(data.surat.is_reschedule);
+        // $('.id').val(data.surat.id);
+        // $('.jadwal_survey').val(data.surat.jadwal_survey);
+        // $('#user_id').val(data.survey ? data.survey.user_id : '');
+        // $('#user_id').select2();
        
       
         // $('.datepicker').val(data.created_at)
@@ -353,5 +402,18 @@ var table = $('#table-data').DataTable({
     // table1.ajax.reload();
     table.ajax.reload();
   }
+
+  
+  // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  //   }).addTo(map);
+
+//     const map = L.map('map').setView([-7.157358, 112.656169], 10);
+
+// const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//     maxZoom: 19,
+//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+// }).addTo(map);
+
 </script>
 @endsection

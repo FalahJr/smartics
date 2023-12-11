@@ -29,7 +29,7 @@ class PenugasanSurveyController extends Controller
     public function datatable() {
       // if (Auth::user()->role_id == 7) {
          $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
-        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
+        ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)->where('survey.status', 'Belum Disurvey')
         ->get();
 
       // } else {

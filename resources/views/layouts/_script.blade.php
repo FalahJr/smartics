@@ -1,3 +1,5 @@
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
  <!-- plugins:js -->
   <script src="{{asset('assets/node_modules/jquery/dist/jquery.min.js')}}"></script>
   <!-- Mainly scripts -->
@@ -89,15 +91,15 @@
 
 
   <script src="{{asset('assets/jp-list/js/jplist.pagination-bundle-custom.min.js')}}"></script>
-
+{{-- 
   <script src="{{asset('assets/jp-list/js/jplist.bootstrap-pagination-bundle-custom.min.js')}}"></script>
-
+ --}}
 
 
   {{-- core js --}}
   <script src="{{asset('assets/js/misc.js')}}"></script>
 
-
+  
   <script type="text/javascript">
     $('.input-daterange').datepicker({
         format:'dd-mm-yyyy'

@@ -2,10 +2,19 @@
 @section('title','Ajukan Perizinan')
 
 @push('extra_style')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
 <style>
 body {
     background-color: #f3f8fb;
   }
+  #map {
+          height: 100px;
+    /* height: 100%; */
+    width: 100%;
+    /* overflow: hidden; */
+}
+
 </style>
 @endpush
 
@@ -54,6 +63,10 @@ id="ajukan-perizinan"
         <textarea class="form-control" name="alamat_lokasi" id="alamat" rows="3"></textarea>
       </div>
       <div class="form-group">
+        <div id="map" class="" ></div>
+
+      </div>
+      <div class="form-group">
         <label for="longitude">Longitude</label>
         <input
         value="112.7028162"
@@ -89,6 +102,14 @@ id="ajukan-perizinan"
 @endsection
 
 @push('extra_script')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  var map = L.map('map').setView([-7.157358, 112.656169], 13);
+  var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+</script>
 <script>
   $(document).ready(function () {
       $('#form1').submit(function (e) {

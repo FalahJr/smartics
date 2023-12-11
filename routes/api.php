@@ -70,6 +70,10 @@ Route::middleware('api')->group(function () {
     Route::get('detail-riwayat-penugasan/{id}', 'RiwayatSurveyController@getDetailData');
     Route::get('list-jawaban-survey/{id}', [RiwayatSurveyController::class, 'getDataJawabanSurvey']);
 
+    // notification
+    Route::get('/notifikasi', 'NotifikasiController@getData');
+    Route::get('/notifikasi-detail', 'NotifikasiController@geDetailData');
+    
 
 
 
