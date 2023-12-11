@@ -77,6 +77,8 @@ Route::middleware('api')->group(function () {
     Route::get('riwayat-penugasan/{id}', 'RiwayatSurveyController@getDataBySurveyorId');
     Route::get('detail-riwayat-penugasan/{id}', 'RiwayatSurveyController@getDetailData');
     Route::get('list-jawaban-survey/{id}', [RiwayatSurveyController::class, 'getDataJawabanSurvey']);
+    Route::get('detail-hasil-survey/{id}', 'RiwayatSurveyController@getDetailDataHasilSurvey');
+
 
     // notification
     Route::get('/notifikasi', 'NotifikasiController@getData');

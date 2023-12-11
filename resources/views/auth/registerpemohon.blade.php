@@ -38,6 +38,8 @@
       .test{
       display: flex;
       flex-direction: row;
+      background-color: white;
+      border-radius: 50px;
       /* gap: 20px; */
     }
     .eye-input{
@@ -48,11 +50,13 @@
     /* display: flex;
     justify-content: center;
     align-items: center; */
-    background-color: #EAEAEA;
+    background-color: white;
     padding:0 10px;
     align-self: center;
     color: black;
     font-size: 20px;
+    border-radius: 2px;
+
     /* background-color: red; */
 }
     </style>
@@ -179,7 +183,7 @@
             <div class="col-md-6 mb-3">
               <label for="password" class="mb-2">Password</label>
               <div class="test">
-              <input type="password" class="form-control form-control-sm inputtext password" name="password" id="password">
+              <input type="password" class="form-control form-control-sm inputtext password border-0" name="password" id="password">
               <span class=" eye-input">
                 <i class="fa fa-eye" id="togglePassword"></i>
             </span>
@@ -193,7 +197,7 @@
               <label for="konfirmasi_password" class="mb-2">Konfirmasi Password</label>
               <div class="test">
 
-              <input type="password" class="form-control form-control-sm inputtext konfirmasi_password" name="konfirmasi_password" id="passwordKonfirmasi">
+              <input type="password" class="form-control form-control-sm inputtext konfirmasi_password border-0" name="konfirmasi_password" id="passwordKonfirmasi">
               <span class=" eye-input">
                 <i class="fa fa-eye" id="togglePasswordKonfirmasi"></i>
             </span>
