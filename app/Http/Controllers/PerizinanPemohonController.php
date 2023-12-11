@@ -110,9 +110,15 @@ class PerizinanPemohonController extends Controller
           public function pemohonAccJadwalSurvey(Request $req){
             DB::beginTransaction();
             try {
-              DB::table('surat')->where('id', $req->id)->update(['is_acc_penjadwalan' => 'Y']);
+              DB::table('surat')->where('id', $req->id)->update(['is_acc_penjadwalan' => 'Y','updated_at' => Carbon::now("Asia/Jakarta") ]);
+              DB::table("survey")
+              ->where("surat_id", $req->id)
+              ->update([
+                'status' => 'Belum Disurvey',
+                "updated_at" => Carbon::now("Asia/Jakarta")
+              ]);
               DB::commit();
-              return response()->json(["status" => "1"]);
+              return response()->json(["status" => "1", 'message' => 'Berhasil konfirmasi jadwal']);
             } catch (\Exception $e) {
               return response()->json(["status" => 2, 'message' => $e->getMessage()]);
       
@@ -122,9 +128,9 @@ class PerizinanPemohonController extends Controller
           public function jadwalulang(Request $req){
             DB::beginTransaction();
             try {
-              DB::table('surat')->where('id', $req->id)->update(['is_reschedule' => "Y",'is_acc_penjadwalan' => 'N']);
+              DB::table('surat')->where('id', $req->id)->update(['is_reschedule' => "Y",'is_acc_penjadwalan' => 'N', "updated_at" => Carbon::now("Asia/Jakarta")]);
               DB::commit();
-              return response()->json(["status" => "1"]);
+              return response()->json(["status" => "1", 'message' => 'Berhasil melakukan penjadwalan ulang']);
             } catch (\Exception $e) {
               return response()->json(["status" => 2, 'message' => $e->getMessage()]);
       
