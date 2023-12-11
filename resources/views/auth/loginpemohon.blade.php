@@ -31,6 +31,24 @@
     .merah{
       background: red;
     }
+    .test{
+      display: flex;
+      flex-direction: row;
+      
+    }
+    .eye-input{
+    /* margin-left: 260pt;
+    margin-top: 0px; */
+    /* z-index: 199; */
+    /* width: 100%; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    align-self: center;
+    color: white;
+    font-size: 20px;
+    /* background-color: red; */
+}
   </style>
 </head>
 <body>
@@ -59,13 +77,30 @@
               <div class="red"  style="color: red"><b>Email Tidak Ada</b></div>
             @endif
           </div>
-          <div class="wrap-input100 validate-input" data-validate="Enter password">
+          <div class="test wrap-input100 validate-input">
+          <div class=" w-100" data-validate="Enter password">
             <input required="" class="input100" autocomplete="off" value="" type="password" name="password" id="password" placeholder="Password">
+            {{-- <div class="testing"> --}}
             <span class="focus-input100" data-placeholder="&#xf191;"></span>
+            {{-- <div class="input-group-append eye-input"> --}}
+             
+            {{-- </div> --}}
+          {{-- </div> --}}
+            {{-- <div class="input-group-append eye-input">
+              <span class="input-group-text">
+                  <i class="fa fa-eye" id="togglePassword"></i>
+              </span>
+          </div> --}}
             @if (session('password'))
             <div class="red"  style="color: red"><b>Password Yang Anda Masukan Salah</b></div>
             @endif
+            
           </div>
+          <span class=" eye-input">
+            <i class="fa fa-eye" id="togglePassword"></i>
+        </span>
+      </div>
+         
 
           {{-- <div class="text-center p-t-90">
              <a class="txt1" href="#">
@@ -121,8 +156,19 @@
 </body>
 </html>
 <script type="text/javascript">
+ $(document).ready(function() {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
+    });
 window.onload = function(e){
 $('#username').val(null);
 $('#password').val(null);
 }
+
 </script>

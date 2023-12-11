@@ -34,6 +34,27 @@
       .merah{
         background: red;
       }
+
+      .test{
+      display: flex;
+      flex-direction: row;
+      /* gap: 20px; */
+    }
+    .eye-input{
+    /* margin-left: 260pt;
+    margin-top: 0px; */
+    /* z-index: 199; */
+    /* width: 100%; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    background-color: #EAEAEA;
+    padding:0 10px;
+    align-self: center;
+    color: black;
+    font-size: 20px;
+    /* background-color: red; */
+}
     </style>
   </head>
   <body>
@@ -157,7 +178,12 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="password" class="mb-2">Password</label>
-              <input type="password" class="form-control form-control-sm inputtext password" name="password">
+              <div class="test">
+              <input type="password" class="form-control form-control-sm inputtext password" name="password" id="password">
+              <span class=" eye-input">
+                <i class="fa fa-eye" id="togglePassword"></i>
+            </span>
+          </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="nomor_identitas" class="mb-2">Nomor Identitas</label>
@@ -165,7 +191,13 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="konfirmasi_password" class="mb-2">Konfirmasi Password</label>
-              <input type="password" class="form-control form-control-sm inputtext konfirmasi_password" name="konfirmasi_password">
+              <div class="test">
+
+              <input type="password" class="form-control form-control-sm inputtext konfirmasi_password" name="konfirmasi_password" id="passwordKonfirmasi">
+              <span class=" eye-input">
+                <i class="fa fa-eye" id="togglePasswordKonfirmasi"></i>
+            </span>
+              </div>
               @if (session('password'))
               <div class="red"  style="color: red"><b> Password confirm anda tidak sama! </b></div>
               @endif
@@ -224,7 +256,25 @@
   </body>
 
   <script>
+$(document).ready(function() {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
 
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
+
+        const togglePasswordKonfirmasi = document.getElementById('togglePasswordKonfirmasi');
+        const passwordInputKonfirmasi = document.getElementById('passwordKonfirmasi');
+
+        togglePasswordKonfirmasi.addEventListener('click', function () {
+            const type = passwordInputKonfirmasi.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInputKonfirmasi.setAttribute('type', type);
+            togglePasswordKonfirmasi.classList.toggle('fa-eye-slash');
+        });
+    });
   provinsi();
 
   function provinsi() {
