@@ -40,6 +40,10 @@ Route::middleware('api')->group(function () {
     Route::post('surat/kembalikan', 'SuratController@kembalikan');
     Route::get('generate-pdf', 'PublicController@cetakRegisPdf');
 
+    // Verifikasi Hasil Survey
+    Route::post('surat/verifikasi-survey', 'SuratController@approveHasilSurvey');
+    Route::post('surat/tolak-survey', 'SuratController@tolakHasilSurvey');
+
     // monitoring
     Route::get('list-semua-perizinan', 'SuratController@listSemuaPerizinan');
     Route::get('list-perizinan-masuk', 'SuratController@listPerizinanMasuk');
@@ -72,7 +76,13 @@ Route::middleware('api')->group(function () {
 
     // notification
     Route::get('/notifikasi', 'NotifikasiController@getData');
-    Route::get('/notifikasi-detail', 'NotifikasiController@geDetailData');
+    Route::get('/detail-notifikasi', 'NotifikasiController@geDetailData');
+    
+    // audit
+    Route::get('/list-audit', 'AuditController@getData');
+    // Route::get('/detail-audit', 'AuditController@geDetailData');
+
+    
     
 
 

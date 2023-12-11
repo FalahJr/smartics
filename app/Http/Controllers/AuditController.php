@@ -80,18 +80,33 @@ class AuditController extends Controller
 
     public function getData(Request $req){
       try{
-        if($req->id){
-          $data = DB::table('user')->where("id",$req->id)->first();
-        }else{
-          $data = DB::table('user')
-             ->where("role_id",'not like', '9')->get();
-        }
+        // if($req->id){
+          $data = DB::table('audit')->get();
+        // }else{
+        //   $data = DB::table('user')
+        //      ->where("role_id",'not like', '9')->get();
+        // }
   
         return response()->json(["status" => 1, "data" => $data]);
       }catch(\Exception $e){
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
       }
     }
+
+    // public function getDetailData(Request $req){
+    //   try{
+    //     // if($req->id){
+    //       $data = DB::table('audit')->where("id",$req->id)->first();
+    //     // }else{
+    //     //   $data = DB::table('user')
+    //     //      ->where("role_id",'not like', '9')->get();
+    //     // }
+  
+    //     return response()->json(["status" => 1, "data" => $data]);
+    //   }catch(\Exception $e){
+    //     return response()->json(["status" => 2, "message" => $e->getMessage()]);
+    //   }
+    // }
 
     public function simpan(Request $req) {
       $nominal = str_replace("Rp. ", "", $req->nominal);
