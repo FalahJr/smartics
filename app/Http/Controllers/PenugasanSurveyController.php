@@ -434,6 +434,11 @@ class PenugasanSurveyController extends Controller
           'status' => 'Sudah Disurvey',
           "updated_at" => Carbon::now("Asia/Jakarta")
         ]);
+        $getSuratId =  DB::table('survey')->where('id', $request->input('survey_id'))->first();
+        DB::table('surat')->where('id', $getSuratId->surat_id)->update([
+          'status' => 'Verifikasi Hasil Survey',
+          "updated_at" => Carbon::now("Asia/Jakarta")
+        ]);
 
       DB::commit();
 
