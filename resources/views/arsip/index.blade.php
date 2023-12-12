@@ -52,7 +52,7 @@
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                           <thead class="bg-warning text-white">
                               <tr>
-                                <th>No. Surat</th>
+                                <th>No</th>
                                 <th>Jenis Surat</th>
                                 <th>Nama Pemohon</th>
                                 <th>Jadwal Survey</th>

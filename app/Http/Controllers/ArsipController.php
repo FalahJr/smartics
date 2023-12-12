@@ -86,20 +86,26 @@ class ArsipController extends Controller
 
       })
           ->addColumn('aksi', function ($data) {
-            if ($data->status == "Selesai" && $data->is_ulasan == "N") {
-              return  '<div class="btn-group">'.
+            $aksi = '';
+
+            if($data->status == "Selesai"){
+              $aksi = $aksi . '<div class="btn-group">'.
                         '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
                         '<label class="fa fa-eye w-100"></label></button>'.
                         '&nbsp;'.
-                        '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
-                        '<label class="fa fa-commenting w-100"></label></button>'.
-                    '</div>';
-            } else {
-              return  '<div class="btn-group">'.
-                        '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
-                        '<label class="fa fa-eye w-100"></label></button>'.
+                        '<a href="cetak-perizinan?dataId='.$data->id.'" class="btn btn-primary btn-lg pt-2" target="_blank" title="cetak perizinan">'.
+                        '<label class="fa fa-print w-100"></label></a>'.
                     '</div>';
             }
+            
+            if ($data->status == "Selesai" && $data->is_ulasan == "N") {
+              $aksi =  $aksi .'<div class="btn-group">'.
+                        '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
+                        '<label class="fa fa-commenting w-100"></label></button>'.
+                        '</div>';
+            }
+
+            return $aksi;
           })
           ->rawColumns(['aksi','jadwal_survey','user', 'tanggal_pengajuan','status'])
           ->addIndexColumn()
