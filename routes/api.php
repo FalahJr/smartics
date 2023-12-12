@@ -83,6 +83,8 @@ Route::middleware('api')->group(function () {
     // notification
     Route::get('/notifikasi', 'NotifikasiController@getData');
     Route::get('/detail-notifikasi', 'NotifikasiController@geDetailData');
+    Route::get('/total-notifikasi', 'NotifikasiController@count_notifikasi');
+
     
     // audit
     Route::get('/list-audit', 'AuditController@getData');
