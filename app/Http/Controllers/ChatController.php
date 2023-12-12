@@ -99,7 +99,7 @@ class ChatController extends Controller
                                 ->first();
           }
 
-          $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+          $value->created_at = Carbon::parse($value->created_at)->locale('id')->diffForHumans();
         }
 
          return Response()->json($chat);
@@ -124,7 +124,7 @@ class ChatController extends Controller
                           ->first();
       }
 
-      $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+      $value->created_at = Carbon::parse($value->created_at)->locale('id')->diffForHumans();
       }
 
       return Response()->json($chat);
@@ -201,7 +201,7 @@ class ChatController extends Controller
         }
          
          foreach ($allchat as $key => $value) {
-           $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+           $value->created_at = Carbon::parse($value->created_at)->locale('id')->diffForHumans();
          }
 
          return Response()->json($allchat);
@@ -277,7 +277,7 @@ class ChatController extends Controller
       }
        
        foreach ($allchat as $key => $value) {
-         $value->created_at = Carbon::parse($value->created_at)->diffForHumans();
+         $value->created_at = Carbon::parse($value->created_at)->locale('id')->diffForHumans();
        }
 
        return Response()->json($allchat);

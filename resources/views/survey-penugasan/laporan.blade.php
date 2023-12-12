@@ -20,7 +20,7 @@ body {
         <div class="col-lg-12">
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb bg-warning">
-                    <li class="breadcrumb-item active" aria-current="page">Profil pengguna</li>
+                    <li class="breadcrumb-item active" aria-current="page">Laporan Survey</li>
                 </ol>
             </nav>
         </div>
