@@ -9,9 +9,10 @@ body {
     background-color: #f3f8fb;
   }
   #map {
-          height: 100px;
+          height: 50vh;
     /* height: 100%; */
     width: 100%;
+    z-index: 1;
     /* overflow: hidden; */
 }
 
@@ -104,23 +105,115 @@ id="ajukan-perizinan"
 @push('extra_script')
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-  var map = L.map('map').setView([-7.157358, 112.656169], 13);
-  var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
+ 
 </script>
 <script>
-  $(document).ready(function () {
-      $('#form1').submit(function (e) {
-          e.preventDefault();
+  // Minta izin lokasi
+  var latitude = ''; // Default latitude
+var longitude = ''; // Default longitude
 
-          var formData = $(this).serializeArray();
+function askForLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, handleError);
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
 
-          sessionStorage.setItem('form1Data', JSON.stringify(formData));
-          window.location.href = 'ajukan-syarat-perizinan';
-      });
+// Tanggapan ketika lokasi ditemukan
+function showPosition(position) {
+  latitude = position.coords.latitude;
+  longitude = position.coords.longitude;
+
+  // Memperbarui nilai elemen HTML dengan longitude dan latitude terbaru
+  document.getElementById("longitude").value = longitude;
+  document.getElementById("latitude").value = latitude;
+
+  console.log({ latitude, longitude }); // Menampilkan nilai latitude dan longitude ke konsol
+
+  // Setelah lokasi ditemukan, inisialisasi peta dan marker
+  initializeMap();
+}
+
+// Inisialisasi peta dan marker setelah lokasi ditemukan
+function initializeMap() {
+  var map = L.map('map').setView([latitude, longitude], 17);
+  var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  var marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
+
+  // Fungsi yang dipanggil saat marker digeser
+  function onMarkerDrag(event) {
+    var marker = event.target;
+    var position = marker.getLatLng();
+    latitude = position.lat;
+    longitude = position.lng;
+
+    updatePopupContent();
+    document.getElementById("longitude").value = longitude;
+    document.getElementById("latitude").value = latitude;
+  }
+
+  // Fungsi untuk memperbarui konten popup marker
+  function updatePopupContent() {
+    marker.setPopupContent(`Latitude: ${latitude}<br>Longitude: ${longitude}`);
+  }
+
+  // Panggil fungsi saat marker digeser
+  marker.on('drag', onMarkerDrag);
+
+  // Fungsi yang dipanggil saat peta diklik
+  function onMapClick(event) {
+    var clickedLatLng = event.latlng;
+    latitude = clickedLatLng.lat;
+    longitude = clickedLatLng.lng;
+
+    marker.setLatLng(clickedLatLng);
+    updatePopupContent();
+  }
+
+  // Panggil fungsi saat peta diklik
+  map.on('click', onMapClick);
+
+  // Inisialisasi konten popup
+  updatePopupContent();
+}
+
+// Panggil fungsi untuk meminta lokasi saat halaman dimuat
+askForLocation();
+
+// Tanggapan jika terjadi kesalahan
+function handleError(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
+}
+
+$(document).ready(function () {
+  $('#form1').submit(function (e) {
+    e.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    sessionStorage.setItem('form1Data', JSON.stringify(formData));
+    window.location.href = 'ajukan-syarat-perizinan';
   });
+});
+
 </script>
 
 @endpush
