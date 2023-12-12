@@ -41,12 +41,12 @@
         @if (Auth::check())
         <li class="nav-item">
         <div class="dropdown">
-          <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+          <img src="{{ asset(optional(Auth::user())->avatar ? Auth::user()->avatar : 'assets/icon/avatar.png')  }}" class="avatar mr-1 ml-3" alt="">
           {{Auth::user()->nama_lengkap}}
           <i class="fa-solid fa-chevron-down ml-1"></i>
           <div class="dropdown-content">
             <a href="{{ url('profil-pengguna') }}">Profil Pengguna</a>
-            <a href="#">Ubah Password</a>
+            <a href="{{ url('profil-password-pengguna') }}">Ubah Password</a>
             <a href="{{ url('arsip') }}">Arsip Perizinan</a>
             <a href="{{url('/ulasan')}}">Ulasan</a>
             <a href="{{ url('logout') }}">Logout</a>

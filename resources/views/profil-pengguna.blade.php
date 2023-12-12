@@ -1,4 +1,13 @@
 @extends('main')
+@push('before_style')
+<style>
+    .profile-avatar{
+        width: 100px;
+        height: 100px;
+        border-radius: 100px;
+    }
+</style>
+@endpush
 @section('content')
 <!-- partial -->
 <div class="content-wrapper">
@@ -13,10 +22,17 @@
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body row justify-content-center">
-                        <form action="{{ route('profil-pengguna.update', $user->id) }}" method="post">
+                        <form action="{{ route('profil-pengguna.update', $user->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             @if (Auth::user()->role_id == 9)
+                                <div class="text-left mb-4">
+                                    <div class="col-md-6 align-items-center col-12 mt-3 d-flex">
+
+                                <img src="{{ asset(optional(Auth::user())->avatar ? Auth::user()->avatar : 'assets/icon/avatar.png')  }}" class="profile-avatar" alt=""><br>
+                                        <input type="file" class="form-control ml-3" name="avatar" accept="image/*">
+                                </div>
+                            </div>
                                                      <div class="row col-12">
                             <div class="form-group col-md-6 col-12">
                                 <label for="nama_lengkap">Nama</label>

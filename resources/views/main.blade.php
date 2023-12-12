@@ -3,7 +3,7 @@
 @include('layouts._head')
 
 @yield('extra_style')
-
+@stack('before_style')
 <body>
 	@include('layouts._setting')
 

@@ -28,7 +28,7 @@
             </li>
             <li class="nav-item">
             <div class="dropdown">
-              <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
+              <img src="{{ asset(optional(Auth::user())->avatar ? Auth::user()->avatar : 'assets/icon/avatar.png')  }}" class="avatar mr-1 ml-3" alt="">
               {{Auth::user()->nama_lengkap}}
               <i class="fa-solid fa-chevron-down ml-1"></i>
               <div class="dropdown-content">
