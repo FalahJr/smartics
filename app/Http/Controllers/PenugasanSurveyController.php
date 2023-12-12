@@ -26,6 +26,13 @@ class PenugasanSurveyController extends Controller
       return view('survey-penugasan.index', compact('surveyors'));
     }
 
+    public function laporan($id) {
+      $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id')
+      ->where('surat_id', $id)
+      ->first();
+  
+        return view('survey-penugasan.laporan', compact('data'));
+      }
     public function datatable() {
       // if (Auth::user()->role_id == 7) {
          $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
@@ -104,8 +111,8 @@ class PenugasanSurveyController extends Controller
           $aksi = '<div class="btn-group border">'.
             '<button type="button" onclick="detailSurat('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="lihat detail penugasan">'.
             '<label class="fa fa-eye w-100" ></label></button>
-            <button type="button" onclick="laporan('.$data->id.')" class="btn btn-success btn-lg pt-2 px-2 ml-2" title="lihat detail penugasan">'.
-            '<label class="fa fa-file-text-o w-100 px-1" ></label></button>
+            <a type="button" href="penugasan/laporan/'.$data->id.'" class="btn btn-success btn-lg pt-2 px-2 ml-2" title="lihat detail penugasan">'.
+            '<label class="fa fa-file-text-o w-100 px-1" ></label></a>
             '.
          '</div>';
          }

@@ -104,6 +104,11 @@ class NotifikasiController extends Controller
       }
     }
 
+    public function count_notifikasi(Request $req) {
+      $totalNotifikasi = DB::table('notifikasi')->where('user_id', $req->user_id)->where('is_seen', "N")->count();
+      return response()->json(["status"=>1,"data"=>$totalNotifikasi]);
+  }
+
     public function simpan(Request $req) {
       $nominal = str_replace("Rp. ", "", $req->nominal);
       $nominal = str_replace(".", "", $nominal);
