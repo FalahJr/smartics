@@ -90,7 +90,9 @@ Route::middleware('api')->group(function () {
     Route::get('/list-audit', 'AuditController@getData');
     // Route::get('/detail-audit', 'AuditController@geDetailData');
 
-    
+    // terbitkan surat 
+    Route::get('surat/terbitkan', 'SuratController@terbitkanSurat');
+
     
 
 

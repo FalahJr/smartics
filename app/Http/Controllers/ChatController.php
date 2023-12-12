@@ -124,7 +124,16 @@ class ChatController extends Controller
                           ->first();
       }
 
-      $value->created_at = Carbon::parse($value->created_at)->locale('id')->diffForHumans();
+      $created_at = Carbon::parse($value->created_at);
+
+// Jika lebih dari 24 jam, gunakan format "1 hari yang lalu" dan seterusnya
+if ($created_at->diffInHours() >= 24) {
+    $formattedTime = $created_at->locale('id')->format('d/m');
+} else {
+    // Jika kurang dari 24 jam, gunakan format jam dan menit biasa
+    $formattedTime = $created_at->format('H:i');
+}
+      $value->created_at = $formattedTime;
       }
 
       return Response()->json($chat);
