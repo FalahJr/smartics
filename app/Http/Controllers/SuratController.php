@@ -623,7 +623,7 @@ class SuratController extends Controller
             } else {
               $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')
               ->where('user_id', $req->input('user_id'))
-              ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%")
+              ->Where('surat.id','like', "%" . $req->keyword . "%")
               ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
               ->orderByDesc('id')->get();
             } 
@@ -638,7 +638,7 @@ class SuratController extends Controller
                 $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
                   $query->where('status','not like', 'Ditolak')
                       ->Where('status','not like', 'Selesai')
-                      ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+                      ->Where('id','like', "%" . $req->keyword . "%");
                   })->get();
               }
             }else{
@@ -651,7 +651,7 @@ class SuratController extends Controller
                 $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) use ($req) {
                   $query->where('status','not like', 'Ditolak')
                       ->Where('status','not like', 'Selesai')
-                      ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+                      ->Where('surat.id','like', "%" . $req->keyword . "%");
                   })->get();
               }
             }
@@ -667,7 +667,7 @@ class SuratController extends Controller
 
       if ($req->keyword) {
         $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
-        ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+        ->Where('surat.id','like', "%" . $req->keyword . "%")
         ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
       } else {
         $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
