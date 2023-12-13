@@ -109,4 +109,6 @@ Route::middleware('api')->group(function () {
     Route::any('registerpemohon', 'RegisterPemohonController@apiregister');
 
     Route::any('simpanulasan', 'ArsipController@simpanulasan');
+
+    Route::get("apidoforgot", 'ForgotpasswordController@apidoforgot');
 });

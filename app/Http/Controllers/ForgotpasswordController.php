@@ -16,6 +16,8 @@ use Session;
 
 use DB;
 
+use Crypt;
+
 class ForgotpasswordController extends Controller
 {
     public function index() {
@@ -23,20 +25,51 @@ class ForgotpasswordController extends Controller
     }
 
     public function doforgot(Request $req) {
+      if ($req->password != $req->confirmpassword) {
+        Session::flash('confirmpassword','Berhasil');
+        return back();
+      }
 
-      $cekemail = DB::table("users")
-                    ->where("users_email", $req->email)
+      $cekemail = DB::table("user")
+                    ->where("email", $req->email)
                     ->first();
 
       if ($cekemail != null) {
-        SendemailController::Send($cekemail->users_name, "Your link reset password : ".url('/forgotlink')."/".$cekemail->users_id."/".$cekemail->users_accesstoken."", 'Link Reset Password Account DompetQu', $cekemail->users_email);
+        DB::table("user")
+          ->where("id", $cekemail->id)
+          ->update([
+            "password" => Crypt::encryptString($req->password),
+          ]);
+
         Session::flash('sukses','Berhasil');
         return back();
       } else {
         Session::flash('email','Berhasil');
         return back();
       }
+    }
 
+    public function apidoforgot(Request $req) {
+      if ($req->password != $req->confirmpassword) {
+        return response()->json(["status" => 2, "message" => "Password tidak sama"]);
+      }
+
+      $cekemail = DB::table("user")
+                    ->where("email", $req->email)
+                    ->first();
+
+      if ($cekemail != null) {
+        DB::table("user")
+          ->where("id", $cekemail->id)
+          ->update([
+            "password" => Crypt::encryptString($req->password),
+          ]);
+
+          return response()->json(["status" => 1, "message" => "Berhasil update password"]);
+      } else {
+        return response()->json(["status" => 2, "message" => "Akun tidak ditemukan"]);
+        return back();
+      }
     }
 
     public function forgotlink($id, $accesstoken) {
