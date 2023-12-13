@@ -322,10 +322,10 @@ class ArsipController extends Controller
         }
 
         DB::commit();
-        return response()->json(["status" => 1]);
+        return response()->json(["status" => 1, "message" => "Ulasan Anda Diterima Terimakasih Telah Memberikan Ulasan"]);
       } catch (\Exception $e) {
         DB::rollback();
-        return response()->json(["status" => 2]);
+        return response()->json(["status" => 2 , 'message' => $e->getMessage()]);
       }
     }
 }
