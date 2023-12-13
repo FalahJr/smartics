@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PenugasanSurveyController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +158,11 @@ Route::get('surveypenugasantable', 'PenugasanSurveyController@datatable');
 Route::get('simpansurveypenugasan', 'PenugasanSurveyController@simpan');
 Route::get('editsurveypenugasan', 'PenugasanSurveyController@edit');
 Route::get('survey/penugasan/laporan/{id}',  [PenugasanSurveyController::class, 'laporan']);
+Route::post('kirim-laporan', 'SurveyController@submitFormLaporanPertama');
+
+Route::get('survey/penugasan/laporan/{id}/form-pertanyaan-survey', 'PenugasanSurveyController@laporanPertanyaanSurvey');
+Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
+
 Route::get('detail-form-laporan-survey/{id}', 'SurveyController@getDetailLaporanSurvey');
 
 
