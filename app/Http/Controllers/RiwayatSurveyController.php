@@ -339,6 +339,7 @@ class RiwayatSurveyController extends Controller
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
       }
     }
+   
     public function submitFormLaporanPertama(Request $request)
     {
       // DB::beginTransaction();
@@ -389,6 +390,7 @@ class RiwayatSurveyController extends Controller
        }
        
     }
+    
     public function isiSurvey(Request $request)
     {
         // Validasi request
