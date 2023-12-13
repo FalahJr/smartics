@@ -77,8 +77,6 @@
             <br>
            @endif
 
-          
-
           <div class="wrap-input100 validate-input" data-validate = "Enter Email">
             <input required="" class="input100" autocomplete="off" value="" type="text" name="email" id="email" placeholder="Email" autofocus="">
             <span class="focus-input100" data-placeholder="&#xf207;"></span>

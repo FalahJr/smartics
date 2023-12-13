@@ -618,19 +618,43 @@ class SuratController extends Controller
     public function getData(Request $req){
       try{
         if($req->input('user_id') ){
-          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
-        }else{
-          if($req->input('status')){
-          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) {
-            $query->where('status','not like', 'Ditolak')
-                  ->orWhere('status','not like', 'Selesai');
-        })->get();
-      }else{
-        $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) {
-          $query->where('status','not like', 'Ditolak')
-                ->orWhere('status','not like', 'Selesai');
-      })->get();
-      }
+            if ($req->keyword == "") {
+              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
+            } else {
+              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')
+              ->where('user_id', $req->input('user_id'))
+              ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%")
+              ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
+              ->orderByDesc('id')->get();
+            } 
+          }else{
+            if($req->input('status')){
+              if ($req->keyword == "") {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
+                $query->where('status','not like', 'Ditolak')
+                    ->orWhere('status','not like', 'Selesai');
+                })->get();
+              } else {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
+                  $query->where('status','not like', 'Ditolak')
+                      ->Where('status','not like', 'Selesai')
+                      ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+                  })->get();
+              }
+            }else{
+              if ($req->keyword == "") {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) use ($req) {
+                  $query->where('status','not like', 'Ditolak')
+                      ->orWhere('status','not like', 'Selesai');
+                  })->get();
+              } else {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) use ($req) {
+                  $query->where('status','not like', 'Ditolak')
+                      ->Where('status','not like', 'Selesai')
+                      ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+                  })->get();
+              }
+            }
         }
         return response()->json(['status' => 1, 'data' => $data]);
       }catch(\Exception $e){
@@ -638,11 +662,17 @@ class SuratController extends Controller
       }
     }
 
-    public function listSemuaPerizinan() {
+    public function listSemuaPerizinan(Request $req) {
       try{
 
-      $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
-
+      if ($req->keyword) {
+        $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->Where('nomor_penerbitan','like', "%" . $req->keyword . "%");
+        ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
+      } else {
+        $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
+      }
+      
       $data = [];
 
       foreach ($surat as $item) {

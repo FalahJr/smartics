@@ -289,9 +289,16 @@ class SurveyController extends Controller
 
     public function getData(Request $req){
       try{
-        $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
-        ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
-        ->get();
+        if ($req->keyword != "") {
+          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
+          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
+          ->where("surat.nomor_penerbitan", "like", "%" . $req->keyword . "%")
+          ->get();
+        } else {
+          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
+          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
+          ->get();
+        }
   
         return response()->json(["status" => 1, "data" => $data]);
       }catch(\Exception $e){
