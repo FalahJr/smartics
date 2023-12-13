@@ -737,6 +737,30 @@ class SuratController extends Controller
     }
     }
 
+    public function getDataArsip() {
+      try{
+
+      $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereIn('surat.status', ['Selesai', 'Ditolak'])->get();
+
+      $data = [];
+
+      foreach ($surat as $item) {
+          $data[] = [
+              'id'               => $item->id_surat,
+              'jenis_perizinan' => $item->surat_jenis_nama,
+              'nomor_surat'      => $item->id_surat,
+              'tanggal'          => $item->created_at,
+              'status'        => $item->status,
+
+          ];
+      }
+
+      return response()->json(['status' => 1, 'data' => $data]);
+    }catch(\Exception $e){
+      return response()->json(["status" => 2, "message" => $e->getMessage()]);
+    }
+    }
+
     
     public function approveHasilSurvey(Request $req) {
       DB::beginTransaction();

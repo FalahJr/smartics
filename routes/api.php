@@ -57,6 +57,8 @@ Route::middleware('api')->group(function () {
     Route::get('list-ulasan', 'UlasanController@getData');
     Route::get('detail-ulasan', 'UlasanController@getDetailData');
 
+    // arsip
+    Route::get('surat/arsip', 'SuratController@getDataArsip');
 
 
     // Surat Jenis
@@ -108,7 +110,7 @@ Route::middleware('api')->group(function () {
     Route::any('loginpemohon', 'LoginPemohonController@loginApi');
     Route::any('registerpemohon', 'RegisterPemohonController@apiregister');
 
-    Route::any('simpanulasan', 'ArsipController@simpanulasan');
+    Route::post('simpanulasan', 'ArsipController@simpanulasan');
 
     Route::get("apidoforgot", 'ForgotpasswordController@apidoforgot');
 });
