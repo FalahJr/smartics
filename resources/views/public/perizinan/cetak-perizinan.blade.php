@@ -14,9 +14,10 @@
         body{
             font-family: Arial, sans-serif;
             width: 100%;
+           
         }
         .table{
-            margin-top: 200px;
+            margin-top: 150px;
         }
         .description{
             text-align: justify;
@@ -43,13 +44,72 @@
         Sehubungan dengan permohonan anda, dengan ini kami beritahukan bahwa:
     </div>
     <div class="row my-4 pl-3">
-        Nama &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{$data->nama_lengkap}} <br>
-        Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{$data->email}} <br>
-        Nama Surat &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{$data->nama}} <br>
-        Kategori &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{$data->kategori}} <br>
-        Alamat Lokasi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{$data->alamat_lokasi}} <br>
-        Jadwal Survey &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp; {{Carbon::parse($data->jadwal_survey)->format('d F Y')}} <br>
-        Tanggal Pengajuan &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;{{Carbon::parse($data->created_at)->format('d F Y')}} <br>
+        <table>
+            <tr>
+                <td style="width: 148px">
+                    Nama
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{$data->nama_lengkap}} 
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Email
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{$data->email}} 
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Nama Surat
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{$data->nama}}
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Kategori
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{$data->kategori}}
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Alamat
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{$data->alamat_lokasi}}
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Jadwal Survey
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{Carbon::parse($data->jadwal_survey)->format('d F Y')}}
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 148px">
+                    Tanggal Pengajuan
+                </td>
+                <td>:</td>
+                <td style="padding-left: 24px">
+                    {{Carbon::parse($data->created_at)->format('d F Y')}}
+                </td>
+            </tr>
+        </table>
+       
     </div>
 
 
@@ -63,7 +123,7 @@ Kami juga ingin menyampaikan apresiasi kami atas kerjasama yang baik dari pihak 
         {{Carbon::parse($data->updated_at)->format('d F Y')}} <br>
         Hormat Kami,
         <br><br><br><br>
-        Admin Kepala Dinas
+        M. Syachrul Yahya
     </div>
 
 

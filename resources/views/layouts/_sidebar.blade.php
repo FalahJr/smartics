@@ -184,7 +184,7 @@
             </li>
             @endif
 
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 8)
             
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/arsip')}}">

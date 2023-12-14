@@ -89,6 +89,7 @@ class ArsipController extends Controller
             $aksi = '';
 
             if($data->status == "Selesai"){
+              if(Auth::user()->role_id == 9){
               $aksi = $aksi . '<div class="btn-group">'.
                         '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
                         '<label class="fa fa-eye w-100"></label></button>'.
@@ -96,6 +97,13 @@ class ArsipController extends Controller
                         '<a href="cetak-perizinan?dataId='.$data->id.'" class="btn btn-primary btn-lg pt-2" target="_blank" title="cetak perizinan">'.
                         '<label class="fa fa-print w-100"></label></a>'.
                     '</div>';
+            }else{
+              $aksi = $aksi . '<div class="btn-group">'.
+              '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+              '<label class="fa fa-eye w-100"></label></button>'.
+              '&nbsp;'.
+          '</div>';
+            }
             }
             
             if ($data->status == "Selesai" && $data->is_ulasan == "N") {
