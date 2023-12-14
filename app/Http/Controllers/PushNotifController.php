@@ -24,7 +24,16 @@ use Response;
 
 class PushNotifController extends Controller
 {
+    public function apinotif (Request $req) {
+        $this->sendMessage($req->id, $req->title, $req->message);
+    }
+
     public static function sendMessage($userid, $title, $message) {
+
+        $user = DB::table("user")
+                    ->where("id", $userid)
+                    ->first();
+
         $heading = array(
             "en" => $title
          );
@@ -34,11 +43,11 @@ class PushNotifController extends Controller
         );
     
         $fields = array(
-            'app_id' => "78f36c43-942f-46e4-a155-aab7ecfdf1cc",
-            'included_segments' => array('All'),
+            'app_id' => "216dd09c-3506-42e7-85d4-c26b355711a1",
             'data' => array("userid" => $userid),
             'contents' => $content,
-            'headings' => $heading
+            'headings' => $heading,
+            'filters' => [['field' => 'tag', 'key' => $userid, 'relation' => '=', 'value' => '99']],
         );
     
         $fields = json_encode($fields);
@@ -48,7 +57,7 @@ class PushNotifController extends Controller
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-                                                    'Authorization: Basic OThkYjkyY2EtODI2ZC00NGU2LTk4ZTYtMDM2MmRiZmQ1ZDU0'));
+                                                    'Authorization: Basic MGI4MzNjZjgtODZlNy00ODZiLTg1MjQtMTc5Mzc3YjRjOTBh'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_POST, TRUE);

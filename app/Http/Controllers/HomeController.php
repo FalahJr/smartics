@@ -71,6 +71,7 @@ class HomeController extends Controller
         Account::where('id', Auth::user()->id)->update([
              'updated_at' => Carbon::now('Asia/Jakarta'),
              'is_login' => "N"
+             "SubID" => null,
             //  "users_accesstoken" => md5(uniqid(Auth::user()->users_username, true)),
         ]);
 

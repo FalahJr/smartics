@@ -26,7 +26,8 @@ Route::middleware('api')->group(function () {
     
     // pemohon
     Route::post('pemohon/register', 'PemohonController@simpan');
-    Route::post('login', 'loginController@loginApi');
+    Route::any('login', 'loginController@loginApi');
+    Route::get('logout', 'loginController@logout');
 
 
     // Surat
@@ -113,4 +114,6 @@ Route::middleware('api')->group(function () {
     Route::post('simpanulasan', 'ArsipController@simpanulasan');
 
     Route::get("apidoforgot", 'ForgotpasswordController@apidoforgot');
+
+    Route::get("sendnotif", 'PushNotifController@apinotif');
 });
