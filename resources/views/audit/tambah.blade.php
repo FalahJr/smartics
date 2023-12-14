@@ -27,6 +27,8 @@
           <tr>
             <td>Dokumen Hasil Audit</td>
             <td>
+              <input type="file" class="form-control form-control-sm inputtext file_upload" name="file_upload">
+
               {{-- <select class="form-control form-control-sm role_id" name="role" id="role_id" >
                 <option disabled>Pilih</option>
                 @foreach ($roles as $key => $value)

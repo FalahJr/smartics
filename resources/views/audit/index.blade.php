@@ -23,8 +23,10 @@
                     <h4 class="card-title">Laporan Audit</h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
+                      @if (Auth::user()->role_id == 8)
+                        
                     	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
-                      {{-- @endif --}}
+                      @endif
                     </div>
                     <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
@@ -97,7 +99,7 @@ var table = $('#table-data').DataTable({
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'periode', name: 'periode'},
           {data: 'created_at', name: 'created_at'},
-          {data: 'created_at', name: 'created_at'},
+          {data: 'dokumen_audit', name: 'dokumen_audit'},
           {data: 'aksi', name: 'aksi'},
 
         ],
@@ -129,10 +131,10 @@ var table = $('#table-data').DataTable({
       data:{id},
       dataType:'json',
       success:function(data){
-        // console.log
+        console.log({data})
         $('.id').val(data.id);
         $('.periode').val(data.periode);
-        $('.file_upload').val(data.file_upload);
+        // $('.file_upload').val(data.file_upload);
        
 
         
@@ -145,38 +147,55 @@ var table = $('#table-data').DataTable({
   }
 
   $('#simpan').click(function(){
+    var formData = new FormData();
+    formData.append('periode', $('.periode').val());
+    formData.append('file_upload', $('.file_upload')[0].files[0]);
+    formData.append('id', $('.id').val());
+
     $.ajax({
       url: baseUrl + '/simpanaudit',
-      data:$('.table_modal :input').serialize(),
-      dataType:'json',
-      success:function(data){
-        if (data.status == 1) {
-          iziToast.success({
-              icon: 'fa fa-save',
-              message: 'Data Berhasil Disimpan!',
-          });
-          reloadall();
-        }else if(data.status == 2){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Data Gagal disimpan!',
-          });
-        }else if (data.status == 3){
-          iziToast.success({
-              icon: 'fa fa-save',
-              message: 'Data Berhasil Diubah!',
-          });
-          reloadall();
-        }else if (data.status == 4){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Data Gagal Diubah!',
-          });
-        }
-
-      }
+    data: formData,
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    dataType: 'json',
+    headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+        success: function (data) {
+            if (data.status == 1) {
+                iziToast.success({
+                    icon: 'fa fa-save',
+                    message: 'Data Berhasil Disimpan!',
+                });
+                reloadall();
+            } else if (data.status == 2) {
+                iziToast.warning({
+                    icon: 'fa fa-info',
+                    message: data.message,
+                });
+            } else if (data.status == 3) {
+                iziToast.success({
+                    icon: 'fa fa-save',
+                    message: 'Data Berhasil Diubah!',
+                });
+                reloadall();
+            } else if (data.status == 4) {
+                iziToast.warning({
+                    icon: 'fa fa-info',
+                    message: 'Data Gagal Diubah!',
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+        console.log(xhr.responseText);
+        iziToast.error({
+            icon: 'fa fa-times',
+            message: 'Terjadi kesalahan saat mengirim data!',
+        });
+    },
     });
-  })
+});
 
 
   function hapus(id) {
