@@ -132,7 +132,7 @@ Kami juga ingin menyampaikan apresiasi kami atas kerjasama yang baik dari pihak 
           <tr>
             <th scope="col">No</th>
             <th scope="col">Nama Kelengkapan</th>
-            <th scope="col">Kelengkapan</th>
+            <th scope="col" class="text-center">Kelengkapan</th>
           </tr>
         </thead>
         <tbody>
@@ -140,7 +140,7 @@ Kami juga ingin menyampaikan apresiasi kami atas kerjasama yang baik dari pihak 
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$syarat->nama}}</td>
-                <td><img src="{{ asset('assets/icon/checklist.png') }}" alt="checklist"></td>
+                <td class="text-center"><img src="{{ asset('assets/icon/checklist.png') }}" alt="checklist"></td>
             </tr>   
             @endforeach
         </tbody>

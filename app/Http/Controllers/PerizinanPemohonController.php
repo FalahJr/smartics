@@ -195,11 +195,11 @@ class PerizinanPemohonController extends Controller
             $data = DB::table('surat')
             ->join('surat_jenis','surat_jenis.id','=','surat.surat_jenis_id')
             ->join('user','user.id','=','surat.user_id')
-            ->select('surat.*','user.*','surat_jenis.nama as namaPerizinan')
+            ->select('surat.*','user.nama_lengkap as nama_lengkap','user.email as email','surat_jenis.nama as namaPerizinan')
             ->where('surat.id',$req->dataId)->first();
 
             $syarats = DB::table('surat_syarat')
-            ->where('surat_jenis_id',$req->dataId)->get();
+            ->where('surat_jenis_id',$data->surat_jenis_id)->get();
 
               $pdf = \PDF::loadView('public.perizinan.cetak-perizinan', compact('data','syarats'));
               return $pdf->stream('cetak-sk-perizinan.pdf');

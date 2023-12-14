@@ -104,6 +104,12 @@ class ArsipController extends Controller
               '&nbsp;'.
           '</div>';
             }
+            }else{
+              $aksi = $aksi . '<div class="btn-group border-0">'.
+              '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2 m-0" title="edit">'.
+              '<label class="fa fa-eye w-100"></label></button>'.
+              '&nbsp;'.
+            '</div>';
             }
             
             if ($data->status == "Selesai" && $data->is_ulasan == "N") {

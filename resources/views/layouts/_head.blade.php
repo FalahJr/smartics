@@ -228,7 +228,8 @@ img.avatar {
       border-radius: 10px;
       text-align: left;
       padding: 10px 0px;
-
+      width: 200px;
+      right: 0px;
     }
 
     /* Style item dropdown */
