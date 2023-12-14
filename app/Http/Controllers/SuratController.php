@@ -638,21 +638,14 @@ class SuratController extends Controller
                 $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
                   $query->where('status','not like', 'Ditolak')
                       ->orWhere('status','not like', 'Selesai')
-                      ->orWhere('id','like', "%" . $req->keyword . "%");
+                      ->orWhere('surat.id','like', "%" . $req->keyword . "%");
                   })->get();
               }
             }else{
               if ($req->keyword == "") {
-                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) use ($req) {
-                  $query->where('status','not like', 'Ditolak')
-                      ->orWhere('status','not like', 'Selesai');
-                  })->get();
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->get();
               } else {
-                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) use ($req) {
-                  $query->where('status','not like', 'Ditolak')
-                      ->orWhere('status','not like', 'Selesai')
-                      ->orWhere('surat.id','like', "%" . $req->keyword . "%");
-                  })->get();
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id','like', "%" . $req->keyword . "%")->get();
               }
             }
         }
