@@ -186,6 +186,7 @@ Route::post('simpanaudit', 'AuditController@simpan');
 Route::get('audit', 'AuditController@index');
 Route::get('audittable', 'AuditController@datatable');
 Route::get('editaudit', 'AuditController@edit');
+Route::get('hapusaudit', 'AuditController@hapus');
 
 Route::get('survey/laporan-survey', 'SuratController@getListLaporanSurvey');
 Route::get('laporansurveytable', 'SuratController@datatableLaporanSurvey');

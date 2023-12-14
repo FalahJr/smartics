@@ -167,15 +167,15 @@ class AuditController extends Controller
       DB::beginTransaction();
       try {
 
-        DB::table("user")
+        DB::table("audit")
             ->where("id", $req->id)
             ->delete();
 
         DB::commit();
-        return response()->json(["status" => 3]);
+        return response()->json(["status" => 1]);
       } catch (\Exception $e) {
         DB::rollback();
-        return response()->json(["status" => 4]);
+        return response()->json(["status" => 2]);
       }
 
     }
