@@ -85,17 +85,15 @@
                                 <label for="alamat">Alamat</label>
                                 <textarea class="form-control" id="alamat" name="alamat" rows="3">{{ $user->alamat }}</textarea>
                             </div>
-                    
-                                <div class="form-group col-md-6 col-12">
-                                    <label for="provinsi">Provinsi</label>
-                                    <input type="text" class="form-control" id="provinsi" name="provinsi" value="{{ $user->provinsi }}">
-                                </div>
+                            <div class="form-group col-md-6 col-12">
+                                <label for="pekerjaan">Pekerjaan</label>
+                                <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" value="{{ $user->pekerjaan }}">
+                            </div>
+                           
                                 <div class="form-group col-md-6 col-12">
                                     <label for="kabupaten_kota">Kota</label>
                                     <input type="text" class="form-control" id="kabupaten_kota" name="kabupaten_kota" value="{{ $user->kabupaten_kota }}">
                                 </div>
-
-                    
 
                                 <div class="form-group col-md-6 col-12">
                                     <label for="kecamatan">Kecamatan</label>
@@ -105,12 +103,11 @@
                                     <label for="kelurahan">Kelurahan</label>
                                     <input type="text" class="form-control" id="kelurahan" name="kelurahan" value="{{ $user->kelurahan }}">
                                 </div>
-
-                    
-                            <div class="form-group col-md-6 col-12">
-                                <label for="pekerjaan">Pekerjaan</label>
-                                <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" value="{{ $user->pekerjaan }}">
-                            </div>
+                                <div class="form-group col-md-6 col-12">
+                                    <label for="provinsi">Provinsi</label>
+                                    <input type="text" class="form-control" id="provinsi" name="provinsi" value="{{ $user->provinsi }}">
+                                </div>
+                        
                         </div>
                                        <!-- Tambahkan input lainnya sesuai kebutuhan -->
                     <div class="row btn-update-profile">
