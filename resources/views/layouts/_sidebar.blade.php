@@ -208,7 +208,7 @@
                 <ul class="nav flex-column sub-menu">
                   @if (Auth::user()->role_id != 7)
                   <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal') || Request::is('survey/jadwal/*') ? 'active' : ''  }}" href="{{url('survey/jadwal')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
-                  <li class="nav-item"> <a class="nav-link {{Request::is('setting/modul/keuangan/setting/klasifikasi-akun') || Request::is('setting/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('setting/modul/keuangan/setting/klasifikasi-akun')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/laporan-survey') || Request::is('survey/laporan-survey/*') ? 'active' : ''  }}" href="{{url('survey/laporan-survey')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
                   @endif
                   @if (Auth::user()->role_id == 7)
                  

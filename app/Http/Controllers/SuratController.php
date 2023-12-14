@@ -618,37 +618,40 @@ class SuratController extends Controller
     public function getData(Request $req){
       try{
         if($req->input('user_id') ){
-            if ($req->keyword == "") {
+          if ($req->keyword == "") {
+
               $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
-            } else {
-              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')
-              ->where('user_id', $req->input('user_id'))
-              ->Where('surat.id','like', "%" . $req->keyword . "%")
-              ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
-              ->orderByDesc('id')->get();
-            } 
-          }else{
-            if($req->input('status')){
+         
+          }else {
+            $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
+          }
+          }else if($req->input('status')){
               if ($req->keyword == "") {
+            
                 $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
                 $query->where('status','not like', 'Ditolak')
                     ->orWhere('status','not like', 'Selesai');
-                })->get();
-              } else {
-                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
-                  $query->where('status','not like', 'Ditolak')
-                      ->Where('status','not like', 'Selesai')
-                      ->Where('surat.id','like', "%" . $req->keyword . "%");
-                  })->get();
+                })->orderByDesc('id')->get();
+              }  else {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )->where('status', $req->input('status'))->get();
               }
-            }else{
-              if ($req->keyword == "") {
-                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->get();
-              } else {
-                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id','like', "%" . $req->keyword . "%")->get();
-              }
+              //  else {
+              //   $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
+              //     $query->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
+              //         ->where('surat.id', $req->input('keyboard'));
+              //     })->get();
+              // }
+            // }else{
+            //   if ($req->keyword == "") {
+            //     $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->get();
+            //   } else {
+            //     $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id','like', "%" . $req->keyword . "%")->get();
+            //   }
+            // }
+        }   
+        else {
+              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id', $req->input('keyword') )->get();
             }
-        }
         return response()->json(['status' => 1, 'data' => $data]);
       }catch(\Exception $e){
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
@@ -983,5 +986,44 @@ class SuratController extends Controller
     }
 }
 
+    }
+
+    public function getListLaporanSurvey(){
+      return view('laporan-survey.index');
+    }
+  
+    public function datatableLaporanSurvey() {
+      // $data = DB::table('surat')->get();
+      $data = DB::table('surat')->where('status', 'Verifikasi Hasil Survey')->get();
+  
+        return Datatables::of($data)
+        ->addColumn("surat_jenis", function($data) {
+          $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+          return $surat_jenis->nama;
+        })
+        ->addColumn('jadwal_survey', function ($data) {
+          if($data->jadwal_survey !== null){
+            return Carbon::parse($data->jadwal_survey)->format('d F Y');
+  
+          }else{
+            return '<div><i>Belum Tersedia</i></div>';
+          }
+        })
+        ->addColumn('nama_surveyor', function ($data) {
+          $survey = DB::table('survey')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('user.nama_lengkap as nama_surveyor')->where('survey.surat_id', $data->id)->first();
+  
+          return $survey ? $survey->nama_surveyor : '';
+      })
+      
+          ->addColumn('aksi', function ($data) {
+            return  '<div class="btn-group">'.
+                     '<a  href="penugasan/laporan/'.$data->id.'" class="btn btn-success btn-lg pt-2" title="edit">'.
+                     '<label class="fa fa-eye w-100"></label></a>'.
+                  '</div>';
+          })
+          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_surveyor'])
+          ->addIndexColumn()
+          // ->setTotalRecords(2)
+          ->make(true);
     }
 }

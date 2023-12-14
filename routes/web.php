@@ -186,7 +186,13 @@ Route::get('simpanaudit', 'AuditController@simpan');
 Route::get('audit', 'AuditController@index');
 Route::get('audittable', 'AuditController@datatable');
 
+Route::get('survey/laporan-survey', 'SuratController@getListLaporanSurvey');
+Route::get('laporansurveytable', 'SuratController@datatableLaporanSurvey');
+Route::get('survey/penugasan/laporan/{id}',  [PenugasanSurveyController::class, 'laporan']);
 
+ // Verifikasi Hasil Survey
+ Route::post('surat/verifikasi-survey', 'SuratController@approveHasilSurvey');
+ Route::post('surat/tolak-survey', 'SuratController@tolakHasilSurvey');
 
 Route::get('/chat', 'ChatController@index');
 Route::get('/listroom', 'ChatController@listroom');
