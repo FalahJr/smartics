@@ -156,7 +156,7 @@
             </li>
             @endif
             
-            @if (Auth::user()->role_id == 8 )
+            @if (Auth::user()->role_id == 8 || Auth::user()->role_id == 3 )
             <li class="nav-item {{Request::is('audit') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/audit')}}">
                 <span class="menu-title">Laporan Audit</span>

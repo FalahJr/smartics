@@ -47,7 +47,11 @@ class SuratController extends Controller
   else if(Auth::user()->role_id == 6){
     $data = DB::table('surat')->where('status', 'Verifikasi Verifikator')->get();
   
-}else if(Auth::user()->role_id == 9){
+}else if(Auth::user()->role_id == 3){
+  $data = DB::table('surat')->where('status', 'Verifikasi Kepala Dinas')->get();
+
+}
+else if(Auth::user()->role_id == 9){
   if($status !== 'Semua'){
     $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
   }else{

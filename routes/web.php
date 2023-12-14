@@ -194,6 +194,9 @@ Route::get('survey/penugasan/laporan/{id}',  [PenugasanSurveyController::class, 
  Route::post('surat/verifikasi-survey', 'SuratController@approveHasilSurvey');
  Route::post('surat/tolak-survey', 'SuratController@tolakHasilSurvey');
 
+ Route::get('surat/terbitkan', 'SuratController@terbitkanSurat');
+
+
 Route::get('/chat', 'ChatController@index');
 Route::get('/listroom', 'ChatController@listroom');
 Route::get('/listchat', 'ChatController@listchat');

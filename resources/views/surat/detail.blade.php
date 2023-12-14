@@ -63,6 +63,16 @@
           </button>
         </div>
          @endif
+         
+         @if (Auth::user()->role_id === 3)
+         <div class="col-12">
+
+         <input type="hidden" class="form-control form-control-sm id" name="id" id="id">
+         <button class="btn btn-warning btn-md w-100 mb-3" id="terbitkan" type="button">          
+          Terbitkan Surat         
+         </button>
+        </div>
+         @endif
         
         </div>
       </div>

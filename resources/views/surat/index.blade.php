@@ -422,6 +422,45 @@ let lineBreak2;
   	});
   })
 
+  $('#terbitkan').click(function(){
+    iziToast.question({
+      close: false,
+  		overlay: true,
+  		displayMode: 'once',
+  		title: 'Terbitkan Surat',
+  		message: 'Apakah anda yakin ?',
+  		position: 'center',
+  		buttons: [
+  			['<button><b>Ya</b></button>', function (instance, toast) {
+          $.ajax({
+            url:baseUrl + '/surat/terbitkan',
+            data:$('.table_modal :input').serialize(),
+            dataType:'json',
+            success:function(data){
+              if (data.status == 1) {
+          iziToast.success({
+              icon: 'fa fa-save',
+              message: 'Surat Berhasil Diterbitkan!',
+          });
+          reloadall();
+        }else if(data.status == 2){
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal Divalidasi!',
+          });
+        }
+
+              reloadall();
+            }
+          });
+  			}, true],
+  			['<button>Tidak</button>', function (instance, toast) {
+  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+  			}],
+  		]
+  	});
+  })
+
   function hapus(id) {
     iziToast.question({
       close: false,
