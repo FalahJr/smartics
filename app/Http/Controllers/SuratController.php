@@ -637,8 +637,8 @@ class SuratController extends Controller
               } else {
                 $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
                   $query->where('status','not like', 'Ditolak')
-                      ->orWhere('status','not like', 'Selesai')
-                      ->orWhere('surat.id','like', "%" . $req->keyword . "%");
+                      ->Where('status','not like', 'Selesai')
+                      ->Where('surat.id','like', "%" . $req->keyword . "%");
                   })->get();
               }
             }else{
