@@ -4,7 +4,7 @@
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header bg-warning"  style="background-color: #499DB1 !important">
+      <div class="modal-header bg-warning">
         <h4 class="modal-title">Form Pemohon</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" id="dikembalikanProcess" type="button">Kirim</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-warning" data-dismiss="modal">Tutup</button>
         </div>
       </div>
       </div>

@@ -873,8 +873,8 @@ class SuratController extends Controller
             ]);
 
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
-        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  ditolak oleh verifikator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.' ditolak oleh verifikator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
 
         return response()->json(["status" => 1]);
       } catch (\Exception $e) {
@@ -906,8 +906,8 @@ class SuratController extends Controller
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
-        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  ditolak oleh verifikator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.' ditolak oleh verifikator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
 
         return response()->json(["status" => 1,  "message" => "Hasil Survey Permohonan Perizinan Ditolak"]);
       } catch (\Exception $e) {
