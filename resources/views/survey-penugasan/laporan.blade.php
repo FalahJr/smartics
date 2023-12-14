@@ -27,13 +27,19 @@ body {
         <div class="col-12 stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form id="form1" enctype="multipart/form-data">
                         @csrf
-                        @method('put')
+                        @method('post')
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="foto_survey">Foto Survey</label>
-                                <input type="file" class="form-control" id="foto_survey" name="foto_survey" value="{{ $data->foto_survey }}">
+                                <input type="hidden" class="form-control" id="id" name="id" value="{{ $data->id }}">
+                                <input type="hidden" class="form-control" id="jadwal_survey" name="jadwal_survey" value="@php
+                            use Carbon\Carbon;
+                                
+                                echo Carbon::now('Asia/Jakarta'); @endphp">
+
+                                <input type="file" class="form-control" id="foto_survey" name="foto_survey">
                             </div>
                             <div class="form-group col-6">
                                 <label for="alamat_survey">Alamat</label>
@@ -45,16 +51,16 @@ body {
                                 
                             </div>
                             <div class="form-group col-6">
-                                <label for="foto_survey">Foto Survey</label>
-                                <input type="text" class="form-control" id="longitude" name="longitude" value="{{ $data->longitude }}" disabled>
+                                <label for="longitude">longitude</label>
+                                <input type="text" class="form-control" id="longitude" name="longitude"  readonly>
                             </div>
                             <div class="form-group col-6">
-                                <label for="foto_survey">Foto Survey</label>
-                                <input type="text" class="form-control" id="latitude" name="latitude" value="{{ $data->latitude }}" disabled>
+                                <label for="latitude">latitude</label>
+                                <input type="text" class="form-control" id="latitude" name="latitude" readonly>
                             </div>
                         </div>
                         <div class="row btn-update-profile mt-4">
-                            <button type="submit" class="btn btn-main text-light">Kirim Laporan</button>
+                            <button type="button" class="btn btn-main text-light" id="simpan">Selanjutnya</button>
                         </div>
                     </form>
                 </div>
@@ -66,6 +72,7 @@ body {
 
 @section('extra_script')
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 
 <script>
 var latitude = -7.3360141; // Default latitude
@@ -97,15 +104,7 @@ function initializeMap() {
 
     var marker = L.marker([latitude, longitude]).addTo(map);
 
-    // map.on('click', function(event) {
-    //     var clickedLatLng = event.latlng;
-    //     latitude = clickedLatLng.lat;
-    //     longitude = clickedLatLng.lng;
-
-    //     marker.setLatLng(clickedLatLng);
-    //     document.getElementById("longitude").value = longitude;
-    //     document.getElementById("latitude").value = latitude;
-    // });
+    
 }
 
 function handleError(error) {
@@ -127,11 +126,46 @@ function handleError(error) {
 
 askForLocation();
 
-@if (session('success'))
-  iziToast.success({
-      icon: 'fa fa-save',
-      message: 'Perubahan Berhasil Disimpan!',
-  });
-  @endif
+$('#simpan').click(function(){
+    var formData = new FormData($('#form1')[0]);
+    console.log('form1',  JSON.stringify(formData));
+    
+    $.ajax({
+        url: baseUrl + '/kirim-laporan',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success:function(data){
+            if (data.status == 1) {
+                // iziToast.success({
+                //     icon: 'fa fa-save',
+                //     message: 'Data Berhasil Disimpan!',
+                // });
+                let id = data.id;
+                window.location.href = id+'/form-pertanyaan-survey';
+
+                // reloadall();
+            } else if(data.status == 2){
+                iziToast.warning({
+                    icon: 'fa fa-info',
+                    message: data.message,
+                });
+            } else if (data.status == 3){
+                iziToast.success({
+                    icon: 'fa fa-save',
+                    message: 'Data Berhasil Diubah!',
+                });
+                reloadall();
+            } else if (data.status == 4){
+                iziToast.warning({
+                    icon: 'fa fa-info',
+                    message: 'Data Gagal Diubah!',
+                });
+            }
+        }
+    });
+});
+
 </script>
 @endsection

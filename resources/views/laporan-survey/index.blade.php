@@ -3,14 +3,12 @@
 
 @include('surat.detail')
 @include('surat.tolak')
-@include('surat.acc-jadwal')
 @php
  $testing = DB::table("surat")->where("id", "2")->first();
 @endphp
 <style type="text/css">
 
 </style>
-<!-- partial -->
 <div class="content-wrapper">
   <div class="row">
     <div class="col-lg-12">
@@ -18,49 +16,28 @@
         <ol class="breadcrumb bg-warning">
           <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
           {{-- <li class="breadcrumb-item">Setup Master Tagihan</li> --}}
-          <li class="breadcrumb-item active" aria-current="page">Daftar Permohonan</li>
+          <li class="breadcrumb-item active" aria-current="page">Pemohon</li>
         </ol>
       </nav>
     </div>
   	<div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body row">
-                    <h4 class="card-title col-12 align-self-center col-md-8 px-0">Daftar Permohonan ( <span id="filter_status">Semua</span> )</h4>
-                    
-                    <div class="col-12 col-md-4 px-0" align="right" style="margin-bottom: 15px;">
+                  <div class="card-body">
+                    <h4 class="card-title">Pemohon</h4>
+                    <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 9)
-                      
-                    	<div class="btn-group">
-                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Filter Status
-                        </button>
-                        <div class="dropdown-menu">
-                             <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Hasil Survey')">Verifikasi Hasil Survey</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Kepala Dinas')">Verifikasi Kepala Dinas</a>
-                        </div>
+                    	
+                      {{-- @endif --}}
                     </div>
-                   
-                      @endif
-                    </div>
-                    <div class="table-responsive mt-3">
+                    <div class="table-responsive">
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
                                 <th>No. Surat</th>
                                 <th>Jenis Surat</th>
-                                @if (Auth::user()->role_id === 1)
-                                <th>Jadwal Survey</th>
-                                @else
-                                <th>Nama Pemohon</th>
-                                @endif
+                                <th>Nama Surveyor</th>
                                 <th>Status</th>
-                                <th>Tanggal Pengajuan</th>
+                                <th>Tanggal</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -80,15 +57,9 @@
 <!-- content-wrapper ends -->
 @endsection
 @section('extra_script')
-<script>
-var selectedStatus = 'Semua'; 
-function handleFilter(status) {
-    selectedStatus = status ;  // update selectedStatus
-    document.getElementById("filter_status").innerHTML = status
 
-    // Update DataTable's Ajax URL
-    table.ajax.url("{{ url('/surattable') }}/" + selectedStatus).load();
-};
+<script>
+
 var table = $('#table-data').DataTable({
         processing: true,
         serverSide: true,
@@ -102,7 +73,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-          url: "{{ url('/surattable') }}/" + selectedStatus ,
+          url: "{{ url('/laporansurveytable') }}"  ,
         },
         columnDefs: [
 
@@ -112,36 +83,33 @@ var table = $('#table-data').DataTable({
               },
               {
                  targets: 1,
-                 className: 'center'
+                 className: ' center'
               },
               {
                  targets: 2,
-                 className: 'type center'
+                 className: ' center'
               },
               {
                  targets: 3,
-                 className: 'w-25 center'
+                 className: ' center'
               },
               {
                  targets: 4,
-                 className: 'type center'
+                 className: ' center'
               },
               {
                  targets: 5,
                  className: 'type center'
               },
+              
              
             ],
         "columns": [
-          {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+          {data: 'id', name: 'id'},
           {data: 'surat_jenis', name: 'surat_jenis'},
-          @if (Auth::user()->role_id === 1)
-          {data:'jadwal_survey', name: 'jadwal_survey'},
-          @else
-          {data:'nama_pemohon', name: 'nama_pemohon'},
-          @endif
+          {data: 'nama_surveyor', name: 'nama_surveyor'},
           {data:'status', name: 'status'},
-          {data:'tanggal_pengajuan', name: 'tanggal_pengajuan'},
+          {data:'jadwal_survey', name: 'jadwal_survey'},
           {data: 'aksi', name: 'aksi'},
 
         ],
@@ -165,10 +133,7 @@ var table = $('#table-data').DataTable({
   });
 
 
-let para;
-let link;
-let lineBreak;
-let lineBreak2;
+
   function edit(id) {
     // body...
     $.ajax({
@@ -198,12 +163,12 @@ let lineBreak2;
           const container = document.getElementById("nama_surat_syarat");
 
     // Create paragraph element
-     para = document.createElement("p");
+    const para = document.createElement("p");
     const node = document.createTextNode((index + 1) + ".) " + item.nama);
     para.appendChild(node);
 
     // Create link element
-     link = document.createElement("a");
+    const link = document.createElement("a");
     link.setAttribute("href", item.dokumen_upload);  // Set the link's href attribute as needed
     link.setAttribute("target", '_blank');  // Set the link's href attribute as needed
     const text = document.createTextNode("Lihat Dokumen");
@@ -211,15 +176,15 @@ let lineBreak2;
 
     // Apply CSS styles to reduce the margin between para and link
     para.style.marginBottom = "1px";  // Adjust the value as needed
-    link.style.color = "#F3B137"
+    link.style.color = "#499DB1"
     // Append paragraph and link to the container
     container.appendChild(para);
     container.appendChild(link);
 
     // Add a line break for better separation
-     lineBreak = document.createElement("br");
+    const lineBreak = document.createElement("br");
     container.appendChild(lineBreak);
-     lineBreak2 = document.createElement("br");
+    const lineBreak2 = document.createElement("br");
     container.appendChild(lineBreak2);
 
 
@@ -285,6 +250,7 @@ let lineBreak2;
             data:$('.table_modal :input').serialize(),
             dataType:'json',
             success:function(data){
+              console.log({data})
               if (data.status == 3) {
           iziToast.success({
               icon: 'fa fa-save',
@@ -364,103 +330,6 @@ let lineBreak2;
   	});
   })
 
-  function accJadwal(id){
-    console.log({id})
-
-    $.ajax({
-      url:baseUrl + '/editsurat',
-      data:{id},
-      dataType:'json',
-      success:function(data){
-        console.log({data})
-        $('.id').val(data.surat.id);
-      
-        $('#showAccJadwal').modal('show');
-      }
-    });
-
-  }
-
-  $('#accJadwalSurvey').click(function(){
-    iziToast.question({
-      close: false,
-  		overlay: true,
-  		displayMode: 'once',
-  		title:
-      'Konfirmasi Ketersediaan Jadwal Survey',
-  		message: 'Apakah anda yakin ?',
-  		position: 'center',
-  		buttons: [
-  			['<button><b>Ya</b></button>', function (instance, toast) {
-          $.ajax({
-            url:baseUrl + '/pemohonaccjadwalsurat',
-            data:$('.table_modal :input').serialize(),
-            dataType:'json',
-            success:function(data){
-              if (data.status == 1) {
-          iziToast.success({
-              icon: 'fa fa-save',
-              message:
-              'Jadwal Survey Berhasil Dikonfirmasi',
-          });
-          reloadall();
-        }else if(data.status == 2){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Jadwal Survey Gagal Dikonfirmasi',
-          });
-        }
-
-              reloadall();
-            }
-          });
-  			}, true],
-  			['<button>Tidak</button>', function (instance, toast) {
-  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-  			}],
-  		]
-  	});
-  })
-
-  $('#terbitkan').click(function(){
-    iziToast.question({
-      close: false,
-  		overlay: true,
-  		displayMode: 'once',
-  		title: 'Terbitkan Surat',
-  		message: 'Apakah anda yakin ?',
-  		position: 'center',
-  		buttons: [
-  			['<button><b>Ya</b></button>', function (instance, toast) {
-          $.ajax({
-            url:baseUrl + '/surat/terbitkan',
-            data:$('.table_modal :input').serialize(),
-            dataType:'json',
-            success:function(data){
-              if (data.status == 1) {
-          iziToast.success({
-              icon: 'fa fa-save',
-              message: 'Surat Berhasil Diterbitkan!',
-          });
-          reloadall();
-        }else if(data.status == 2){
-          iziToast.warning({
-              icon: 'fa fa-info',
-              message: 'Data Gagal Divalidasi!',
-          });
-        }
-
-              reloadall();
-            }
-          });
-  			}, true],
-  			['<button>Tidak</button>', function (instance, toast) {
-  				instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-  			}],
-  		]
-  	});
-  })
-
   function hapus(id) {
     iziToast.question({
       close: false,
@@ -491,45 +360,12 @@ let lineBreak2;
   		]
   	});
   }
-  function clearNamaSuratSyarat() {
-    // Dapatkan referensi ke elemen div dengan ID "nama_surat_syarat"
-    var container = document.getElementById("nama_surat_syarat");
 
-    // Hapus semua elemen di dalam container
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
-}
-  function closeModal() {
-  // Menutup modal
-  // ...
-  // const container = document.getElementById("nama_surat_syarat");
-
-// Create paragraph element
-// const para = document.createElement("p");
-// para.remove()
-  // Menghapus elemen <p> jika sudah dibuat sebelumnya
-  // if (para) {
-
-    clearNamaSuratSyarat()
-    
-
-    // $('#detail').modal('hide');
-    // table.ajax.reload();
-    
-
-  // }
-}
   function reloadall() {
-   
     $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     $('#detail').modal('hide');
     $('#showTolak').modal('hide');
-    $('#showAccJadwal').modal('hide');
-    
-// Append paragraph and link to the container
-    
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");

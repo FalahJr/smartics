@@ -70,7 +70,8 @@ class HomeController extends Controller
         Session::flush();
         Account::where('id', Auth::user()->id)->update([
              'updated_at' => Carbon::now('Asia/Jakarta'),
-             'is_login' => "N"
+             'is_login' => "N",
+             "SubID" => null,
             //  "users_accesstoken" => md5(uniqid(Auth::user()->users_username, true)),
         ]);
 

@@ -26,7 +26,8 @@ Route::middleware('api')->group(function () {
     
     // pemohon
     Route::post('pemohon/register', 'PemohonController@simpan');
-    Route::post('login', 'loginController@loginApi');
+    Route::any('login', 'loginController@loginApi');
+    Route::get('logout', 'loginController@logout');
 
 
     // Surat
@@ -57,6 +58,8 @@ Route::middleware('api')->group(function () {
     Route::get('list-ulasan', 'UlasanController@getData');
     Route::get('detail-ulasan', 'UlasanController@getDetailData');
 
+    // arsip
+    Route::get('surat/arsip', 'SuratController@getDataArsip');
 
 
     // Surat Jenis
@@ -91,7 +94,7 @@ Route::middleware('api')->group(function () {
     // Route::get('/detail-audit', 'AuditController@geDetailData');
 
     // terbitkan surat 
-    Route::get('surat/terbitkan', 'SuratController@terbitkanSurat');
+    Route::post('surat/terbitkan', 'SuratController@terbitkanSurat');
 
     
 
@@ -108,5 +111,9 @@ Route::middleware('api')->group(function () {
     Route::any('loginpemohon', 'LoginPemohonController@loginApi');
     Route::any('registerpemohon', 'RegisterPemohonController@apiregister');
 
-    Route::any('simpanulasan', 'ArsipController@simpanulasan');
+    Route::post('simpanulasan', 'ArsipController@simpanulasan');
+
+    Route::get("apidoforgot", 'ForgotpasswordController@apidoforgot');
+
+    Route::get("sendnotif", 'PushNotifController@apinotif');
 });

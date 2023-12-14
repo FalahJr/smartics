@@ -289,8 +289,8 @@ class RiwayatSurveyController extends Controller
 
     public function getData(Request $req){
       try{
-        $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
-        ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id', 'surat_jenis.nama as jenis_perizinan', 'survey.status as verifikasi_verifikator')
+       ->where('survey.status', 'not like', 'Belum Disurvey')
         ->get();
   
         return response()->json(["status" => 1, "data" => $data]);
@@ -339,6 +339,7 @@ class RiwayatSurveyController extends Controller
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
       }
     }
+   
     public function submitFormLaporanPertama(Request $request)
     {
       // DB::beginTransaction();
@@ -389,6 +390,7 @@ class RiwayatSurveyController extends Controller
        }
        
     }
+    
     public function isiSurvey(Request $request)
     {
         // Validasi request

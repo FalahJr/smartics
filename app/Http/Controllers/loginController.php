@@ -23,6 +23,14 @@ class loginController extends Controller
         return view('auth.login');
     }
 
+    public function logout(Request $req) {
+        DB::table("user")
+        ->where("id", $req->id)
+        ->update([
+            "SubID" => null
+        ]);
+    }
+
     public function loginApi(Request $req) {
         $email = $req->email;
         $password = $req->password;
@@ -34,6 +42,13 @@ class loginController extends Controller
             if ($pemohon) {
                 if(Crypt::decryptString($pemohon->password) ===  $req->password){
                 $role = DB::table('role')->where('id', $pemohon->role_id)->first();
+
+                DB::table("user")
+                ->where("id", $pemohon->id)
+                ->update([
+                    "SubID" => $req->SubID
+                ]);
+
             return response()->json([
                         'status' => 1,
                         'message' => 'success login pemohon',
@@ -51,6 +66,12 @@ class loginController extends Controller
         } else if ($petugas) {
             if(Crypt::decryptString($petugas->password) ===  $req->password){
             $role = DB::table('role')->where('id', $petugas->role_id)->first();
+
+            DB::table("user")
+                ->where("id", $petugas->id)
+                ->update([
+                    "SubID" => $req->SubID
+                ]);
         return response()->json([
                     'status' => 1,
                     'message' => 'success login petugas',

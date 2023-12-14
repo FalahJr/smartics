@@ -27,12 +27,29 @@ class PenugasanSurveyController extends Controller
     }
 
     public function laporan($id) {
-      $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id')
+      $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->join('user', 'user.id', '=', "survey.user_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id', 'user.nama_lengkap as nama_surveyor', 'user.email as email_surveyor', 'surat.status as surat_status')
       ->where('surat_id', $id)
       ->first();
   
+      if(Auth::user()->role_id == 7){
         return view('survey-penugasan.laporan', compact('data'));
+      }else if(Auth::user()->role_id == 6){
+        return view('laporan-survey.detail', compact('data'));
+
       }
+      }
+
+      public function laporanPertanyaanSurvey($id){
+        $suratId = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('survey.*', 'surat_jenis.id as surat_jenis_id')
+        ->where('surat_id', $id)
+        ->first();
+
+        $dataSurveyPertanyaan = DB::table('survey_pertanyaan')
+        ->where('surat_jenis_id', $suratId->surat_jenis_id)
+        ->get();
+
+        return view('survey-penugasan.form-pertanyaan-survey', compact('suratId','dataSurveyPertanyaan'));
+    }
     public function datatable() {
       // if (Auth::user()->role_id == 7) {
          $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')

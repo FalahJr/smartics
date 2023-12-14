@@ -65,6 +65,12 @@ class AuditController extends Controller
                 }
             
               })
+              ->addColumn("dokumen_audit", function($data) {
+                return '<div class="btn-group">'.
+                 '<a href='.asset($data->file_upload).' class="btn btn-success btn-lg px-4 py-2" title="Lihat Video" target="_blank" style="color:white;">'.
+                 'Lihat Laporan</a>
+              </div>';
+               })
           ->addColumn('aksi', function ($data) {
             return  '<div class="btn-group">'.
                      '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
@@ -73,7 +79,7 @@ class AuditController extends Controller
                      '<label class="fa fa-trash"></label></button>'.
                   '</div>';
           })
-          ->rawColumns(['aksi'])
+          ->rawColumns(['aksi', 'dokumen_audit'])
           ->addIndexColumn()
           ->make(true);
     }
@@ -108,52 +114,52 @@ class AuditController extends Controller
     //   }
     // }
 
-    public function simpan(Request $req) {
-      $nominal = str_replace("Rp. ", "", $req->nominal);
-      $nominal = str_replace(".", "", $nominal);
-      if ($req->id == null) {
-        DB::beginTransaction();
-        try {
+    public function simpan(Request $request) {
+      try {
+        //code...
+        $imgPath = null;
+        $tgl = Carbon::now('Asia/Jakarta');
+        $folder = $tgl->year . $tgl->month;
+        $childPath ='file/uploads/audit/';
+        $path = $childPath;
 
-        DB::table("user")
-              ->insertGetId([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "password" => Crypt::encryptString($req->password),
-              "role_id" => $req->role,
-              "is_active" => "Y",
-              "created_at" => Carbon::now("Asia/Jakarta"),
-              "updated_at" => Carbon::now("Asia/Jakarta")
-            ]);
+        $file = $request->file('file_upload');
+        $name = null;
+        if ($file != null) {
+          $name = $folder . '.' . $file->getClientOriginalExtension();
+          $file->move($path, $name);
+          $imgPath = $childPath . $name;
+        } else {
+          return response()->json(["status" => 2, "message" => 'Dokumen Belum Di upload']);
 
-          DB::commit();
-          return response()->json(["status" => 1]);
-        } catch (\Exception $e) {
-          DB::rollback();
-          return response()->json(["status" => 2, "message" =>$e->getMessage()]);
         }
-      } else {
-        DB::beginTransaction();
-        try {
 
-          DB::table("user")
-            ->where("id", $req->id)
-            ->update([
-              "nama_lengkap" => $req->nama_lengkap,
-              "username" => $req->username,
-              "password" => Crypt::encryptString($req->password),
-              "role_id" => $req->role,
-              "updated_at" => Carbon::now("Asia/Jakarta")
-            ]);
+       
+          if($request->id){
+            DB::table('audit')->where('id', $request->id)->update([
+              'periode' => $request->periode,
+              "file_upload" => $imgPath,
+              "updated_at" => $tgl,
+             
+          ]);
+    }else{
+      DB::table('audit')->insertGetId([
+        'periode' => $request->periode,
+        "file_upload" => $imgPath,
+        "updated_at" => $tgl,
+        "created_at" => $tgl
+       
+    ]);
+    }
+    // }
 
-         
-          DB::commit();
-          return response()->json(["status" => 3]);
-        } catch (\Exception $e) {
-          DB::rollback();
-          return response()->json(["status" => 4, "message" =>$e->getMessage()]);
-        }
-      }
+      DB::commit();
+
+        return response()->json(["status" => 1,'message' => 'Sukses membuat file audit']);
+       } catch (\Exception $e) {
+        return response()->json(["status" => 2, "message" => $e]);
+
+       }
 
     }
 
@@ -161,33 +167,27 @@ class AuditController extends Controller
       DB::beginTransaction();
       try {
 
-        DB::table("user")
+        DB::table("audit")
             ->where("id", $req->id)
             ->delete();
 
         DB::commit();
-        return response()->json(["status" => 3]);
+        return response()->json(["status" => 1]);
       } catch (\Exception $e) {
         DB::rollback();
-        return response()->json(["status" => 4]);
+        return response()->json(["status" => 2]);
       }
 
     }
 
     public function edit(Request $req) {
-      $data = DB::table("user")
+      $data = DB::table("audit")
               ->where("id", $req->id)
               ->first();
 
-      $petugas = [
-        "id" => $data->id,
-        "nama_lengkap" => $data->nama_lengkap,
-        "username" => $data->username,
-        "password" => Crypt::decryptString($data->password),
-        "role_id" => $data->role_id,
-      ];
+    
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
-      return response()->json($petugas);
+      return response()->json($data);
     }
 }

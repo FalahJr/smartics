@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PenugasanSurveyController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    // return what you want
+});
 
 Route::get('/', 'PublicController@index')->name('homepage');
 
@@ -157,6 +162,11 @@ Route::get('surveypenugasantable', 'PenugasanSurveyController@datatable');
 Route::get('simpansurveypenugasan', 'PenugasanSurveyController@simpan');
 Route::get('editsurveypenugasan', 'PenugasanSurveyController@edit');
 Route::get('survey/penugasan/laporan/{id}',  [PenugasanSurveyController::class, 'laporan']);
+Route::post('kirim-laporan', 'SurveyController@submitFormLaporanPertama');
+
+Route::get('survey/penugasan/laporan/{id}/form-pertanyaan-survey', 'PenugasanSurveyController@laporanPertanyaanSurvey');
+Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
+
 Route::get('detail-form-laporan-survey/{id}', 'SurveyController@getDetailLaporanSurvey');
 
 
@@ -172,10 +182,21 @@ Route::get('ulasan', 'UlasanController@index');
 Route::get('ulasantable', 'UlasanController@datatable');
 
 //audit
-Route::get('simpanaudit', 'AuditController@simpan');
+Route::post('simpanaudit', 'AuditController@simpan');
 Route::get('audit', 'AuditController@index');
 Route::get('audittable', 'AuditController@datatable');
+Route::get('editaudit', 'AuditController@edit');
+Route::get('hapusaudit', 'AuditController@hapus');
 
+Route::get('survey/laporan-survey', 'SuratController@getListLaporanSurvey');
+Route::get('laporansurveytable', 'SuratController@datatableLaporanSurvey');
+Route::get('survey/penugasan/laporan/{id}',  [PenugasanSurveyController::class, 'laporan']);
+
+ // Verifikasi Hasil Survey
+ Route::post('surat/verifikasi-survey', 'SuratController@approveHasilSurvey');
+ Route::post('surat/tolak-survey', 'SuratController@tolakHasilSurvey');
+
+ Route::get('surat/terbitkan', 'SuratController@terbitkanSurat');
 
 
 Route::get('/chat', 'ChatController@index');

@@ -47,7 +47,11 @@ class SuratController extends Controller
   else if(Auth::user()->role_id == 6){
     $data = DB::table('surat')->where('status', 'Verifikasi Verifikator')->get();
   
-}else if(Auth::user()->role_id == 9){
+}else if(Auth::user()->role_id == 3){
+  $data = DB::table('surat')->where('status', 'Verifikasi Kepala Dinas')->get();
+
+}
+else if(Auth::user()->role_id == 9){
   if($status !== 'Semua'){
     $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
   }else{
@@ -618,31 +622,57 @@ class SuratController extends Controller
     public function getData(Request $req){
       try{
         if($req->input('user_id') ){
-          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
-        }else{
-          if($req->input('status')){
-          $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) {
-            $query->where('status','not like', 'Ditolak')
-                  ->orWhere('status','not like', 'Selesai');
-        })->get();
-      }else{
-        $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where(function ($query) {
-          $query->where('status','not like', 'Ditolak')
-                ->orWhere('status','not like', 'Selesai');
-      })->get();
-      }
-        }
+          if ($req->keyword == "") {
+
+              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
+         
+          }else {
+            $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
+          }
+          }else if($req->input('status')){
+              if ($req->keyword == "") {
+            
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
+                $query->where('status','not like', 'Ditolak')
+                    ->orWhere('status','not like', 'Selesai');
+                })->orderByDesc('id')->get();
+              }  else {
+                $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )->where('status', $req->input('status'))->get();
+              }
+              //  else {
+              //   $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('status', $req->input('status'))->where(function ($query) use ($req) {
+              //     $query->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
+              //         ->where('surat.id', $req->input('keyboard'));
+              //     })->get();
+              // }
+            // }else{
+            //   if ($req->keyword == "") {
+            //     $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->get();
+            //   } else {
+            //     $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id','like', "%" . $req->keyword . "%")->get();
+            //   }
+            // }
+        }   
+        else {
+              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->Where('surat.id', $req->input('keyword') )->get();
+            }
         return response()->json(['status' => 1, 'data' => $data]);
       }catch(\Exception $e){
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
       }
     }
 
-    public function listSemuaPerizinan() {
+    public function listSemuaPerizinan(Request $req) {
       try{
 
-      $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
-
+      if ($req->keyword) {
+        $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->Where('surat.id','like', "%" . $req->keyword . "%")
+        ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
+      } else {
+        $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->get();
+      }
+      
       $data = [];
 
       foreach ($surat as $item) {
@@ -698,6 +728,30 @@ class SuratController extends Controller
               'nomor_surat'      => $item->id_surat,
               'tanggal'          => $item->created_at,
               'perizinan'        => 'Terlambat',
+          ];
+      }
+
+      return response()->json(['status' => 1, 'data' => $data]);
+    }catch(\Exception $e){
+      return response()->json(["status" => 2, "message" => $e->getMessage()]);
+    }
+    }
+
+    public function getDataArsip() {
+      try{
+
+      $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereIn('surat.status', ['Selesai', 'Ditolak'])->get();
+
+      $data = [];
+
+      foreach ($surat as $item) {
+          $data[] = [
+              'id'               => $item->id_surat,
+              'jenis_perizinan' => $item->surat_jenis_nama,
+              'nomor_surat'      => $item->id_surat,
+              'tanggal'          => $item->created_at,
+              'status'        => $item->status,
+
           ];
       }
 
@@ -823,8 +877,8 @@ class SuratController extends Controller
             ]);
 
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
-        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  ditolak oleh verifikator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.' ditolak oleh verifikator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
 
         return response()->json(["status" => 1]);
       } catch (\Exception $e) {
@@ -856,8 +910,8 @@ class SuratController extends Controller
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
         DB::commit();
-        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  Anda ditolak oleh operator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
-        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.'  Anda ditolak oleh operator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  ditolak oleh verifikator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.' ditolak oleh verifikator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
 
         return response()->json(["status" => 1,  "message" => "Hasil Survey Permohonan Perizinan Ditolak"]);
       } catch (\Exception $e) {
@@ -936,5 +990,44 @@ class SuratController extends Controller
     }
 }
 
+    }
+
+    public function getListLaporanSurvey(){
+      return view('laporan-survey.index');
+    }
+  
+    public function datatableLaporanSurvey() {
+      // $data = DB::table('surat')->get();
+      $data = DB::table('surat')->where('status', 'Verifikasi Hasil Survey')->get();
+  
+        return Datatables::of($data)
+        ->addColumn("surat_jenis", function($data) {
+          $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+          return $surat_jenis->nama;
+        })
+        ->addColumn('jadwal_survey', function ($data) {
+          if($data->jadwal_survey !== null){
+            return Carbon::parse($data->jadwal_survey)->format('d F Y');
+  
+          }else{
+            return '<div><i>Belum Tersedia</i></div>';
+          }
+        })
+        ->addColumn('nama_surveyor', function ($data) {
+          $survey = DB::table('survey')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('user.nama_lengkap as nama_surveyor')->where('survey.surat_id', $data->id)->first();
+  
+          return $survey ? $survey->nama_surveyor : '';
+      })
+      
+          ->addColumn('aksi', function ($data) {
+            return  '<div class="btn-group">'.
+                     '<a  href="penugasan/laporan/'.$data->id.'" class="btn btn-success btn-lg pt-2" title="edit">'.
+                     '<label class="fa fa-eye w-100"></label></a>'.
+                  '</div>';
+          })
+          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_surveyor'])
+          ->addIndexColumn()
+          // ->setTotalRecords(2)
+          ->make(true);
     }
 }
