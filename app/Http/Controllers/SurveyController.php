@@ -28,13 +28,17 @@ class SurveyController extends Controller
 
     public function datatable() {
       // if (Auth::user()->role_id == 7) {
-      //    $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
-      //   ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
-      //   ->get();
+      // //    $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
+      // //   ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
+      // //   ->get();
 
       // } else {
-        $data = DB::table('surat')
-        ->where("status",'Penjadwalan Survey')
+        // $data = DB::table('surat')
+        // ->where("status",'Penjadwalan Survey')->where("is_acc_penjadwalan", "Y")
+        // ->get();
+
+        $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->join('user', 'user.id', '=', "surat.user_id")->select('surat.*', 'survey.id as survey_id','survey.status as survey_status', 'survey.user_id as surveyor_id', 'user.nama_lengkap as nama_surveyor', 'surat.alamat_lokasi as alamat_surat')
+        ->where("surat.status",'Penjadwalan Survey')
         ->get();
 
       // }
@@ -63,23 +67,26 @@ class SurveyController extends Controller
           //   return null;
           // }
           })
-        ->addColumn('status', function ($data) {
-          $color = '<div><strong class="text-success">Acc Jadwal Survey</strong></div>';
+      //   ->addColumn('status', function ($data) {
+      //     // $color = '<div><strong class="text-success">Acc Jadwal Survey</strong></div>';
+      //     $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
+
       
-          if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
-              // Tombol "Approve" hanya muncul jika is_active == 1
-              $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
-          }else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
-            // Tombol "Approve" hanya muncul jika is_active == 1
-            $color =  '<div><strong class="text-warning"> Menunggu Konfirmasi Pemohon</strong></div>';
-        }  
-          else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
-            $color = '<div><strong class="text-danger">Penjadwalan Ulang</strong></div>';
-          }else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL){
-            $color;
-          }
-          return $color;
-      })
+      //     if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
+      //         // Tombol "Approve" hanya muncul jika is_active == 1
+      //         $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
+      //     }else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+      //       // Tombol "Approve" hanya muncul jika is_active == 1
+      //       $color =  '<div><strong class="text-warning"> Menunggu Konfirmasi Pemohon</strong></div>';
+      //   }  
+      //     else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
+      //       $color = '<div><strong class="text-danger">Penjadwalan Ulang</strong></div>';
+      //     }
+      //     // else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL){
+      //     //   $color;
+      //     // }
+      //     return $color;
+      // })
       ->addColumn('tanggal_pengajuan', function ($data) {
         return Carbon::parse($data->created_at)->format('d F Y');
 
@@ -114,7 +121,104 @@ class SurveyController extends Controller
           ->make(true);
     }
 
+    public function indexPenugasan() {
+      $surveyors = DB::table("user")->where('role_id', '7')->get();
+  
+        return view('survey-jadwal-penugasan.index', compact('surveyors'));
+      }
+  
+      public function datatablePenugasan() {
+        // if (Auth::user()->role_id == 7) {
+        // //    $data = DB::table('survey')->join('surat', 'surat.id', '=', "survey.surat_id")->select('surat.*', 'survey.id as survey_id', 'survey.user_id as surveyor_id')
+        // //   ->where("surat.status",'Penjadwalan Survey')->where('survey.user_id', Auth::user()->id)
+        // //   ->get();
+  
+        // } else {
+          $data = DB::table('surat')
+          ->where("status",'Penjadwalan Survey')->where("is_acc_penjadwalan", "N")
+          ->get();
+  
+        // }
+      
+      
+  
+          // return $data;
+          // $xyzab = collect($data);
+          // return $xyzab;
+          // return $xyzab->i_price;
+          return Datatables::of($data)
+          ->addColumn("surat_jenis", function($data) {
+            $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+            return $surat_jenis->nama;
+          })
+          ->addColumn('jadwal_survey', function ($data) {
+            // if(Auth::user()->role_id === 1){
     
+              if($data->jadwal_survey !== null){
+                return Carbon::parse($data->jadwal_survey)->format('d F Y');
+    
+              }else{
+                return '<div><i>Belum Tersedia</i></div>';
+              }
+            // }else{
+            //   return null;
+            // }
+            })
+          ->addColumn('status', function ($data) {
+            // $color = '<div><strong class="text-success">Acc Jadwal Survey</strong></div>';
+            $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
+  
+        
+            if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
+                // Tombol "Approve" hanya muncul jika is_active == 1
+                $color =  '<div><strong class="text-warning"> Menunggu Jadwal</strong></div>';
+            }else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+              // Tombol "Approve" hanya muncul jika is_active == 1
+              $color =  '<div><strong class="text-warning"> Menunggu Konfirmasi Pemohon</strong></div>';
+          }  
+            else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
+              $color = '<div><strong class="text-danger">Penjadwalan Ulang</strong></div>';
+            }
+            // else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL){
+            //   $color;
+            // }
+            return $color;
+        })
+        ->addColumn('tanggal_pengajuan', function ($data) {
+          return Carbon::parse($data->created_at)->format('d F Y');
+  
+        })
+            ->addColumn('aksi', function ($data) {
+              $aksi = '<div class="btn-group">'.
+              '<button type="button" onclick="detail('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="penjadwalan survey">'.
+              '<label class="fa fa-calendar-check-o w-100" style="padding:0 2px"></label></button>'.
+           '</div>';
+           if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey == NULL) {
+            $aksi = '<div class="btn-group">'.
+            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="penjadwalan survey">'.
+            '<label class="fa fa-calendar-plus-o w-100" style="padding:0 2px"></label></button>'.
+         '</div>';
+                   } else if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL){
+  
+                    $aksi = '<div class="btn-group">'.
+            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="penjadwalan survey">'.
+            '<label class="fa fa-calendar-plus-o w-100" style="padding:0 2px"></label></button>'.
+         '</div>';
+                   } else if ($data->is_acc_penjadwalan == "Y" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL) {
+            $aksi = '<div class="btn-group">'.
+              '<button type="button" onclick="detail('.$data->id.')" class="btn btn-info btn-lg pt-2" title="lihat detail penugasan">'.
+              '<label class="fa fa-eye w-100" ></label></button>'.
+           '</div>';
+           }
+           
+              return $aksi;
+            })
+            ->rawColumns(['aksi','status','surat_jenis','jadwal_survey','tanggal_pengajuan'])
+            ->addIndexColumn()
+            ->make(true);
+      }
+  
+      
     public function simpan(Request $req) {
      
       if ($req->is_acc_penjadwalan == "N" && $req->is_reschedule == "N") {
@@ -290,13 +394,13 @@ class SurveyController extends Controller
     public function getData(Request $req){
       try{
         if ($req->keyword != "") {
-          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
-          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
+          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->join('surat_jenis', 'surat_jenis.id' ,'=' ,'surat.surat_jenis_id')->select('surat.*', 'survey.status as status_survey','surat_jenis.nama as jenis_perizinan', 'user.nama_lengkap as surveyor')
+          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'Belum Disurvey')
           ->where("surat.id", "like", "%" . $req->keyword . "%")
           ->get();
         } else {
-          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('surat.*', 'survey.status as status_survey', 'user.nama_lengkap as surveyor')
-          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'null')
+          $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->join('user', 'user.id' ,'=' ,'survey.user_id')->join('surat_jenis', 'surat_jenis.id' ,'=' ,'surat.surat_jenis_id')->select('surat.*', 'survey.status as status_survey','surat_jenis.nama as jenis_perizinan', 'user.nama_lengkap as surveyor')
+          ->where("surat.status",'Penjadwalan Survey')->where("survey.status", "not like", 'Belum Disurvey')
           ->get();
         }
   

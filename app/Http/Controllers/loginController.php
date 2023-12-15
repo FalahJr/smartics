@@ -100,6 +100,7 @@ class loginController extends Controller
     }
     
 
+
     public function authenticate(Request $req) {
 
         $rules = array(

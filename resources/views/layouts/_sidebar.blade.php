@@ -207,7 +207,8 @@
               <div class="collapse {{Request::is('survey') || Request::is('survey/*') ? 'show' : '' }}" id="survey">
                 <ul class="nav flex-column sub-menu">
                   @if (Auth::user()->role_id != 7)
-                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/laporan-survey') || Request::is('survey/laporan-survey/*') ? 'active' : ''  }}" href="{{url('survey/laporan-survey')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
+                  {{-- <li class="nav-item"> <a class="nav-link {{Request::is('survey/laporan-survey') || Request::is('survey/laporan-survey/*') ? 'active' : ''  }}" href="{{url('survey/laporan-survey')}}">Laporan Survey<span class="d-none">Setting</span></a></li> --}}
+                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal-penugasan') || Request::is('survey/jadwal-penugasan/*') ? 'active' : ''  }}" href="{{url('survey/jadwal-penugasan')}}">Penugasan Survey<span class="d-none">Setting</span></a></li>
                   <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal') || Request::is('survey/jadwal/*') ? 'active' : ''  }}" href="{{url('survey/jadwal')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
                   
                   @endif

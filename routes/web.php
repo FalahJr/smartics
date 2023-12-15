@@ -151,9 +151,13 @@ Route::get('pemohonaccjadwalsurat', 'SuratController@pemohonAccJadwalSurvey');
 // Route::get('simpansuratsyarat', 'SuratSyaratController@simpan');
 // Route::get('hapussuratsyarat', 'SuratSyaratController@hapus');
 
-// Survey
 Route::get('survey/jadwal', 'SurveyController@index');
 Route::get('surveyjadwaltable', 'SurveyController@datatable');
+
+
+// Survey
+Route::get('survey/jadwal-penugasan', 'SurveyController@indexPenugasan');
+Route::get('surveypenugasanjadwaltable', 'SurveyController@datatablePenugasan');
 Route::get('simpansurveyjadwal', 'SurveyController@simpan');
 Route::get('editsurveyjadwal', 'SurveyController@edit');
 

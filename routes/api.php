@@ -77,6 +77,7 @@ Route::middleware('api')->group(function () {
     Route::post('isi-survey', [SurveyController::class, 'isiSurvey']);
 
     // Riwayat Survey
+    Route::get('jadwal-survey/{id}', 'RiwayatSurveyController@getDataBySurveyorId');
     Route::get('riwayat-penugasan/{id}', 'RiwayatSurveyController@getDataBySurveyorId');
     Route::get('detail-riwayat-penugasan/{id}', 'RiwayatSurveyController@getDetailData');
     Route::get('list-jawaban-survey/{id}', [RiwayatSurveyController::class, 'getDataJawabanSurvey']);
