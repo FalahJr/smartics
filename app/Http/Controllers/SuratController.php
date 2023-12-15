@@ -622,11 +622,22 @@ else if(Auth::user()->role_id == 9){
     public function getData(Request $req){
       try{
         if($req->input('user_id') ){
-          if ($req->keyword == "") {
-
-              $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
-         
-          }else {
+          if ($req->keyword == "" && $req->status == "") {
+            $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
+          } else if ($req->keyword != "" && $req->status == "") {
+            $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+            ->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))
+            ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
+            ->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )
+            ->orderByDesc('id')->get();
+          } else if ($req->keyword != "" && $req->status != "") {
+            $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+            ->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('user_id', $req->input('user_id'))
+            ->whereNotIn('surat.status', ['Selesai', 'Ditolak'])
+            ->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )
+            ->where('status', $req->input('status'))
+            ->orderByDesc('id')->get();
+          } else {
             $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*', 'surat_jenis.nama as surat_jenis_nama')->where('surat.id', 'like', "%" .$req->input('keyword') . "%" )->where('user_id', $req->input('user_id'))->whereNotIn('surat.status', ['Selesai', 'Ditolak'])->orderByDesc('id')->get();
           }
           }else if($req->input('status')){
@@ -740,11 +751,11 @@ else if(Auth::user()->role_id == 9){
     public function getDataArsip(Request $req) {
       try{
 
-      if ($req->status != "") {
+      if ($req->jenis != "") {
         $surat = DB::table('surat')
         ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
         ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
-        ->where("surat.surat_jenis_id". $req->jenis)
+        ->where("surat.surat_jenis_id", $req->jenis)
         ->get();
       } else {
         $surat = DB::table('surat')
