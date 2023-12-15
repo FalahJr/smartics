@@ -86,7 +86,7 @@
               <img src="{{asset('assets/icon/avatar.png')}}" class="avatar mr-1 ml-3" alt="">
               {{Auth::user()->nama_lengkap}}
               <i class="fa-solid fa-chevron-down ml-1"></i>
-              <div class="dropdown-content">
+              <div class="dropdown-content w-100">
                 <a href="{{ url('profil-pengguna') }}">Profil</a>
                 <a href="{{ url('logout') }}">Logout</a>
               </div>
@@ -147,9 +147,9 @@
               </a>
               <div class="collapse {{Request::is('data-master') || Request::is('data-master/*') ? 'show' : '' }}" id="data-master">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('petugas/')}}">Petugas<span class="d-none">Setting</span></a></li>
-                  <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('pemohon/')}}">Pemohon<span class="d-none">Setting</span></a></li>
-                  <li class="nav-item"> <a class="nav-link {{Request::is('data-master/modul/keuangan/data-master/klasifikasi-akun') || Request::is('data-master/modul/keuangan/setting/klasifikasi-akun/*') ? 'active' : ''  }}" href="{{url('surat-jenis')}}">Jenis dan Syarat Surat<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('petugas') || Request::is('petugas/*') ? 'active' : ''  }}" href="{{url('petugas/')}}">Petugas<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('pemohon/') || Request::is('pemohon/*') ? 'active' : ''  }}" href="{{url('pemohon/')}}">Pemohon<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('surat-jenis') || Request::is('surat-jenis/*') ? 'active' : ''  }}" href="{{url('surat-jenis')}}">Jenis dan Syarat Surat<span class="d-none">Setting</span></a></li>
 
                 </ul>
                 </div>
@@ -196,19 +196,20 @@
             @endif
             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 6 || Auth::user()->role_id == 7)
 
-            <li class="nav-item {{Request::is('setting') || Request::is('setting/*') ? 'active' : ''  }}">
-              <a class="nav-link" data-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="ui-basic">
+            <li class="nav-item {{Request::is('survey') || Request::is('survey/*') ? 'active' : ''  }}">
+              <a class="nav-link" data-toggle="collapse" href="#survey" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Survey</span>
                 
                 <i class="menu-arrow"></i>
                 <i class="fa-solid fa-file"></i>
-                {{-- <i class="mdi mdi-settings menu-icon mdi-spin"></i> --}}
+                {{-- <i class="mdi mdi-surveys menu-icon mdi-spin"></i> --}}
               </a>
-              <div class="collapse {{Request::is('setting') || Request::is('setting/*') ? 'show' : '' }}" id="setting">
+              <div class="collapse {{Request::is('survey') || Request::is('survey/*') ? 'show' : '' }}" id="survey">
                 <ul class="nav flex-column sub-menu">
                   @if (Auth::user()->role_id != 7)
-                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal') || Request::is('survey/jadwal/*') ? 'active' : ''  }}" href="{{url('survey/jadwal')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
                   <li class="nav-item"> <a class="nav-link {{Request::is('survey/laporan-survey') || Request::is('survey/laporan-survey/*') ? 'active' : ''  }}" href="{{url('survey/laporan-survey')}}">Laporan Survey<span class="d-none">Setting</span></a></li>
+                  <li class="nav-item"> <a class="nav-link {{Request::is('survey/jadwal') || Request::is('survey/jadwal/*') ? 'active' : ''  }}" href="{{url('survey/jadwal')}}">Jadwal Survey<span class="d-none">Setting</span></a></li>
+                  
                   @endif
                   @if (Auth::user()->role_id == 7)
                  
@@ -228,7 +229,7 @@
                 {{-- <i class="fa fa-history"></i>
               </a>
             </li> --}}
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 4 || Auth::user()->role_id == 3)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 4 || Auth::user()->role_id == 3|| Auth::user()->role_id == 8)
             <li class="nav-item {{Request::is('ulasan') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/ulasan')}}">
                 <span class="menu-title">Ulasan</span>

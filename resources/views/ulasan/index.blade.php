@@ -33,6 +33,7 @@
                               <tr>
                                 <th>No. Surat</th>
                                 <th>Jenis Perizinan</th>
+                                <th>Nama</th>
                                 <th>Isi Ulasan</th>
                                 <th>Tanggal</th>
                               </tr>
@@ -82,7 +83,7 @@ var table = $('#table-data').DataTable({
 
               {
                  targets: 0 ,
-                 className: 'center id'
+                 className: 'center'
               },
               {
                  targets: 1,
@@ -96,13 +97,18 @@ var table = $('#table-data').DataTable({
                  targets: 3,
                  className: 'center'
               },
+              {
+                 targets: 4,
+                 className: 'center'
+              },
              
              
              
             ],
         "columns": [
-          {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+          {data: 'surat_id', name: 'surat_id'},
           {data: 'surat_jenis', name: 'surat_jenis'},
+          {data: 'nama_pengirim', name: 'nama_pengirim'},
           {data: 'isi', name: 'isi'},
           {data:'tanggal_kirim_ulasan', name: 'tanggal_kirim_ulasan'},
 

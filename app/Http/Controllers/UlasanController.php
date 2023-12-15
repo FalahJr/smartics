@@ -37,7 +37,7 @@ class UlasanController extends Controller
    
       $data = DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->select('ulasan.*','surat.surat_jenis_id as surat_jenis_id','surat.id as surat')->where('surat.user_id', Auth::user()->id)->get();
     }else{
-      $data = DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->select('ulasan.*','surat.surat_jenis_id as surat_jenis_id')->where('status', 'Selesai')->orWhere('status', 'Ditolak')->get();
+      $data = DB::table('ulasan')->join('surat', 'surat.id', '=', "ulasan.surat_id")->join('user', 'user.id', '=', "surat.user_id")->select('ulasan.*','surat.surat_jenis_id as surat_jenis_id','user.nama_lengkap as nama_pengirim')->where('status', 'Selesai')->orWhere('status', 'Ditolak')->get();
     }
 
 
@@ -50,14 +50,9 @@ class UlasanController extends Controller
           $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
           return $surat_jenis->nama;
         })
-        // ->addColumn('jadwal_survey', function ($data) {
-        //   if($data->jadwal_survey !== null){
-        //     return Carbon::parse($data->jadwal_survey)->format('d F Y');
 
-        //   }else{
-        //     return '<div><i>Belum Tersedia</i></div>';
-        //   }
-        // })
+      
+       
        
       ->addColumn('tanggal_kirim_ulasan', function ($data) {
         return Carbon::parse($data->created_at)->format('d F Y');
