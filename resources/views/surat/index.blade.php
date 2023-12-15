@@ -54,7 +54,7 @@
                               <tr>
                                 <th>No. Surat</th>
                                 <th>Jenis Surat</th>
-                                @if (Auth::user()->role_id === 1)
+                                @if (Auth::user()->role_id == 1)
                                 <th>Jadwal Survey</th>
                                 @else
                                 <th>Nama Pemohon</th>
@@ -135,7 +135,7 @@ var table = $('#table-data').DataTable({
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'surat_jenis', name: 'surat_jenis'},
-          @if (Auth::user()->role_id === 1)
+          @if (Auth::user()->role_id == 1)
           {data:'jadwal_survey', name: 'jadwal_survey'},
           @else
           {data:'nama_pemohon', name: 'nama_pemohon'},
@@ -181,7 +181,7 @@ let lineBreak2;
         document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
         document.getElementById("surat_id").innerHTML = data.surat.id;
         document.getElementById("status_surat").innerHTML = data.surat.status;
-        data.surat.status === "Selesai" ? document.getElementById("status_surat").style.color = "green" : data.surat.status === "Ditolak" ? document.getElementById("status_surat").style.color = "red" : document.getElementById("status_surat").style.color = "#F3B137";
+        data.surat.status == "Selesai" ? document.getElementById("status_surat").style.color = "green" : data.surat.status == "Ditolak" ? document.getElementById("status_surat").style.color = "red" : document.getElementById("status_surat").style.color = "#F3B137";
         document.getElementById("nama_pemohon").innerHTML = data.user.nama_lengkap;
         document.getElementById("email").innerHTML = data.user.email;
         document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
@@ -271,7 +271,7 @@ let lineBreak2;
       close: false,
   		overlay: true,
   		displayMode: 'once',
-  		title: @if (Auth::user()->role_id === 5)
+  		title: @if (Auth::user()->role_id == 5)
       'Validasi Surat',
       @else
       'Verifikasi Surat',
@@ -289,7 +289,7 @@ let lineBreak2;
           iziToast.success({
               icon: 'fa fa-save',
               message:
-              @if (Auth::user()->role_id === 5)
+              @if (Auth::user()->role_id == 5)
               'Data Berhasil Divalidasi!',
               @else
               'Data Berhasil Diverifikasi!',
