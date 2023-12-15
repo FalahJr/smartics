@@ -737,10 +737,23 @@ else if(Auth::user()->role_id == 9){
     }
     }
 
-    public function getDataArsip() {
+    public function getDataArsip(Request $req) {
       try{
 
-      $surat = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')->whereIn('surat.status', ['Selesai', 'Ditolak'])->get();
+      if ($req->status != "") {
+        $surat = DB::table('surat')
+        ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+        ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->where("surat.surat_jenis_id". $req->jenis)
+        ->get();
+      } else {
+        $surat = DB::table('surat')
+        ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+        ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->whereIn('surat.status', ['Selesai', 'Ditolak'])
+        ->get();
+      }
+
 
       $data = [];
 
