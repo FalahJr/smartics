@@ -94,10 +94,12 @@ body {
                            
                             
                         </div>
+                        @if(Auth::user()->role_id == 6)
                         <div class="row btn-update-profile mt-4 col-12">
                             <button type="button" class="btn btn-main text-light col-12" id="simpan">Setuju</button>
                             <button type="button" class="btn btn-light col-12 mt-4" id="showModalTolak" style="border-color: #FAB754 !important; color:#FAB754">Tolak</button>
                         </div>
+                        @endif
                     {{-- </form> --}}
                 </div>
             </div>

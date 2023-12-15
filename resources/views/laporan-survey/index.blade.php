@@ -33,12 +33,20 @@
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
-                                <th>No. Surat</th>
-                                <th>Jenis Surat</th>
-                                <th>Nama Surveyor</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                                <th>Action</th>
+                              @if (Auth::user()->role_id == 6)
+                              <th>No. Surat</th>
+                              <th>Jenis Surat</th>
+                              <th>Nama Surveyor</th>
+                              <th>Status</th>
+                              <th>Tanggal</th>
+                              <th>Action</th>
+                              @else
+                              <th>No. Surat</th>
+                              <th>Jenis Perizinan</th>
+                              <th>Jadwal Survey</th>
+                              <th>Verifikasi Verifikator</th>
+                              <th>Action</th>
+                              @endif
                               </tr>
                             </thead>
 
@@ -97,21 +105,31 @@ var table = $('#table-data').DataTable({
                  targets: 4,
                  className: ' center'
               },
+          @if (Auth::user()->role_id == 6)
+
               {
                  targets: 5,
                  className: 'type center'
               },
-              
+              @endif
              
             ],
         "columns": [
+          @if (Auth::user()->role_id == 6)
+
           {data: 'id', name: 'id'},
           {data: 'surat_jenis', name: 'surat_jenis'},
           {data: 'nama_surveyor', name: 'nama_surveyor'},
           {data:'status', name: 'status'},
           {data:'jadwal_survey', name: 'jadwal_survey'},
-          {data: 'aksi', name: 'aksi'},
-
+          {data: 'aksi', name: 'aksi'}, 
+          @else
+          {data: 'id', name: 'id'},
+          {data: 'surat_jenis', name: 'surat_jenis'},
+          {data:'jadwal_survey', name: 'jadwal_survey'},
+          {data:'status_survey', name: 'status_survey'},
+          {data: 'aksi', name: 'aksi'}, 
+          @endif
         ],
         "language": {
                     "sProcessing": "Sedang memproses...",
