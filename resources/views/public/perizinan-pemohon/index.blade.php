@@ -29,7 +29,7 @@ body {
 class="row col-12 justify-content-center mt-5 pt-5"
 id="buat-perizinan"
 >
-<div class="col-md-10 col-12">
+<div class="col-md-12 col-12">
   <div class="content">
     <div class="row justify-content-between">
       <h4 class="align-self-center">List Permohonan Perizinan ( <span id="filter_status">Semua</span> )</h4>
@@ -39,7 +39,7 @@ id="buat-perizinan"
         </button>
         <div class="dropdown-menu">
              <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
-            <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
+            {{-- <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a> --}}
             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
             <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
@@ -54,6 +54,7 @@ id="buat-perizinan"
         <table class="table table_status table-hover w-100" id="table-data" cellspacing="0">
             <thead class="bg-warning text-white">
               <tr>
+                <th>No.</th>
                 <th>No. Surat</th>
                 <th>Jenis Surat</th>
                 <th>Jadwal Survey</th>
@@ -106,7 +107,7 @@ id="buat-perizinan"
   
                 {
                    targets: 0 ,
-                   className: 'center id'
+                   className: 'center'
                 },
                 {
                    targets: 1,
@@ -118,7 +119,7 @@ id="buat-perizinan"
                 },
                 {
                    targets: 3,
-                   className: 'w-25 center'
+                   className: ' center'
                 },
                 {
                    targets: 4,
@@ -131,6 +132,7 @@ id="buat-perizinan"
                
               ],
           "columns": [
+          {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'id', name: 'id'},
             {data: 'surat_jenis', name: 'surat_jenis'},
             {data:'jadwal_survey', name: 'jadwal_survey'},

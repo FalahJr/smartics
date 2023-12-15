@@ -37,7 +37,7 @@
                         </button>
                         <div class="dropdown-menu">
                              <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
-                            <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
+                            {{-- <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a> --}}
                             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Verifikasi Verifikator')">Verifikasi Verifikator</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Penjadwalan Survey')">Penjadwalan Survey</a>
@@ -52,7 +52,7 @@
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
-                                <th>No. Surat</th>
+                                <th>No.</th>
                                 <th>Jenis Surat</th>
                                 @if (Auth::user()->role_id == 1)
                                 <th>Jadwal Survey</th>

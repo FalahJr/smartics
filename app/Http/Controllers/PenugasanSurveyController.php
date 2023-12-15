@@ -31,9 +31,9 @@ class PenugasanSurveyController extends Controller
       ->where('surat_id', $id)
       ->first();
   
-      if(Auth::user()->role_id == 7){
+      if(Auth::user()->role_id == 7 && $data->status == 'Belum Disurvey'){
         return view('survey-penugasan.laporan', compact('data'));
-      }else if(Auth::user()->role_id == 6){
+      }else if(Auth::user()->role_id == 6 || Auth::user()->role_id == 7 && $data->status != 'Belum Disurvey'){
         return view('laporan-survey.detail', compact('data'));
 
       }

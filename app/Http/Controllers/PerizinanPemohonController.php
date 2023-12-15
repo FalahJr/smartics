@@ -31,12 +31,12 @@ class PerizinanPemohonController extends Controller
           public function datatable($status) {
             if(Auth::user()->role_id == 9){
             if($status !== 'Semua'){
-                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
+                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
             }else{
                 if($status !== 'Semua'){
-                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
+                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
                 }else{
-                $data = DB::table('surat')->where('user_id', Auth::user()->id)->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
+                $data = DB::table('surat')->where('user_id', Auth::user()->id)->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->orderBy('id', 'desc')->get();
                 }
             }
             }else{

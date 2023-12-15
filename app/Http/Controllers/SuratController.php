@@ -34,10 +34,10 @@ class SuratController extends Controller
       // $data = DB::table('surat')->get();
       if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2){
       if($status !== 'Semua'){
-      $data = DB::table('surat')->where('status', $status)->get();
+      $data = DB::table('surat')->where('status', $status)->orderByDesc('created_at')->get();
     }else{
       // $data;
-      $data = DB::table('surat')->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
+      $data = DB::table('surat')->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->orderByDesc('created_at')->get();
 
     }
   }else if(Auth::user()->role_id == 5){
@@ -65,13 +65,13 @@ else if(Auth::user()->role_id == 9){
     $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->get();
   }else{
     // $data;
-    $data = DB::table('surat')->where('user_id', Auth::user()->id)->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
+    $data = DB::table('surat')->where('user_id', Auth::user()->id)->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->get();
 
   }
 
   }
 }else{
-  $data = DB::table('surat')->where('status' ,'not like', 'Selesai')->where('status' ,'not like', 'Ditolak')->get();
+  $data = DB::table('surat')->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->get();
 }
 
 
@@ -1024,8 +1024,12 @@ else if(Auth::user()->role_id == 9){
   
     public function datatableLaporanSurvey() {
       // $data = DB::table('surat')->get();
+      if(Auth::user()->role_id == 6){
       $data = DB::table('surat')->where('status', 'Verifikasi Hasil Survey')->get();
-  
+      }else if(Auth::user()->role_id == 7){
+      $data = DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->select('surat.*','survey.*', 'survey.status as status_survey', 'survey.user_id as survey_user_id')->whereNotIn('survey.status', ['Belum Disurvey'])->where('survey.user_id', Auth::user()->id)->get();
+
+      }
         return Datatables::of($data)
         ->addColumn("surat_jenis", function($data) {
           $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
@@ -1039,17 +1043,31 @@ else if(Auth::user()->role_id == 9){
             return '<div><i>Belum Tersedia</i></div>';
           }
         })
+        
         ->addColumn('nama_surveyor', function ($data) {
+      if(Auth::user()->role_id == 6){
+
           $survey = DB::table('survey')->join('user', 'user.id' ,'=' ,'survey.user_id')->select('user.nama_lengkap as nama_surveyor')->where('survey.surat_id', $data->id)->first();
   
           return $survey ? $survey->nama_surveyor : '';
+      }else{
+        return null;
+      }
       })
       
           ->addColumn('aksi', function ($data) {
+      if(Auth::user()->role_id == 6){
+
             return  '<div class="btn-group">'.
                      '<a  href="penugasan/laporan/'.$data->id.'" class="btn btn-success btn-lg pt-2" title="edit">'.
                      '<label class="fa fa-eye w-100"></label></a>'.
                   '</div>';
+      }else{
+        return  '<div class="btn-group">'.
+                     '<a  href="penugasan/laporan/'.$data->surat_id.'" class="btn btn-success btn-lg pt-2" title="edit">'.
+                     '<label class="fa fa-eye w-100"></label></a>'.
+                  '</div>';
+      }
           })
           ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_surveyor'])
           ->addIndexColumn()
