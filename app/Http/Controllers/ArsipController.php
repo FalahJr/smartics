@@ -34,16 +34,15 @@ class ArsipController extends Controller
       // $data = DB::table('surat')->get();
 
       if($surat_jenis !== 'Semua'){
-      $data = DB::table('surat')->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")->where('surat_jenis.nama', $surat_jenis)->where(function ($query) {
-        $query->where('status', 'Ditolak')
-              ->orWhere('status', 'Selesai');
+      $data = DB::table('surat')->where('surat.surat_jenis_id', $surat_jenis)->where(function ($query) {
+        $query->whereIn('status', ['Selesai', 'Ditolak']);
     })->get();
 
       // $surat_dokumen = DB::table("surat_dokumen")->join('surat_syarat', 'surat_syarat.id', '=', 'surat_dokumen.surat_syarat_id')
       // ->where('surat_dokumen.surat_id', $surat->id)->get();
     }else{
       // $data;
-      $data = DB::table('surat')->where('status', 'Selesai')->orWhere('status', 'Ditolak')->get();
+      $data = DB::table('surat')->whereIn('status', ['Selesai', 'Ditolak'])->get();
     }
 
 
@@ -90,6 +89,12 @@ class ArsipController extends Controller
 
             if($data->status == "Selesai"){
               if(Auth::user()->role_id == 9){
+                if ($data->status == "Selesai" && $data->is_ulasan == "N") {
+                  $aksi =  $aksi .'<div class="btn-group">'.
+                            '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
+                            '<label class="fa fa-commenting w-100"></label></button>'.
+                            '</div>';
+                }
               $aksi = $aksi . '<div class="btn-group">'.
                         '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
                         '<label class="fa fa-eye w-100"></label></button>'.
@@ -112,12 +117,7 @@ class ArsipController extends Controller
             '</div>';
             }
             
-            if ($data->status == "Selesai" && $data->is_ulasan == "N") {
-              $aksi =  $aksi .'<div class="btn-group">'.
-                        '<button type="button" onclick="ulasan('.$data->id.')" class="btn btn-warning btn-lg pt-2" title="ulasan">'.
-                        '<label class="fa fa-commenting w-100"></label></button>'.
-                        '</div>';
-            }
+           
 
             return $aksi;
           })

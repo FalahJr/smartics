@@ -77,7 +77,12 @@ id="buat-perizinan"
                 e.preventDefault();
 
                 var jenisPerizinanId = $(this).data('id');
+                @if (Auth::check())
                 $('.ajukanPerizinan').attr('href', 'ajukan-perizinan?jenis=' + jenisPerizinanId);
+                  @else
+                $('.ajukanPerizinan').attr('href', 'loginpemohon');
+
+                @endif
 
                 var namaPerizinan = $(this).data('nama');
                 $('#namaPerizinan').html(namaPerizinan)

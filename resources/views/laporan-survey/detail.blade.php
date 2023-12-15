@@ -91,6 +91,16 @@ body {
                                 <strong for="alamat_survey">Alamat</strong>
                                 <p class="" >{{ $data->alamat_survey }}</p>
                             </div>
+                            <div class="form-group col-12">
+                                <strong for="alamat_survey">Hasil Laporan Survey</strong>
+                            </div>
+                            @foreach ($dataJawabanSurvey as $key => $list_jawaban )
+                            <div class="form-group col-12">
+                                <strong for="">{{ $key+1 }}).  {{ $list_jawaban->pertanyaan_survey }}</strong>
+                               
+                                <p class="mt-2 text-capitalize">Jawaban : {{ $list_jawaban->jawaban }}</p>
+                            </div>
+                            @endforeach
                            
                             
                         </div>

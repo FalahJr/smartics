@@ -35,7 +35,7 @@
                         <div class="dropdown-menu">
                              <a class="dropdown-item" href="#" onclick="handleFilter('Semua')">Semua</a>
                              @foreach ($jenis as $list)
-                                <a class="dropdown-item" href="#" onclick="handleFilter('@php echo $list->nama; @endphp')">@php echo $list->nama; @endphp</a>
+                                <a class="dropdown-item" href="#" onclick="handleFilter('@php echo $list->id; @endphp')">@php echo $list->nama; @endphp</a>
                              @endforeach
                             {{-- <a class="dropdown-item" href="#" onclick="handleFilter('Pengisian Dokumen')">Pengisian Dokumen</a>
                             <a class="dropdown-item" href="#" onclick="handleFilter('Validasi Operator')">Validasi Operator</a>
@@ -166,7 +166,9 @@ var table = $('#table-data').DataTable({
 let link;
 let lineBreak;
 let lineBreak2;
+
   function edit(id) {
+    console.log({id})
     // body...
     $.ajax({
       url:baseUrl + '/editarsip',

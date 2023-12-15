@@ -46,7 +46,7 @@
           <i class="fa-solid fa-chevron-down ml-1"></i>
           <div class="dropdown-content">
             <a href="{{ url('profil-pengguna') }}">Profil Pengguna</a>
-            <a href="{{ url('profil-password-pengguna') }}">Ubah Password</a>
+            <a href="{{ url('ubah-password-pengguna') }}">Ubah Password</a>
             <a href="{{ url('arsip') }}">Arsip Perizinan</a>
             <a href="{{url('/ulasan')}}">Ulasan</a>
             <a href="{{ url('logout') }}">Logout</a>
