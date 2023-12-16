@@ -31,11 +31,18 @@
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                           <thead class="bg-warning text-white">
                               <tr>
-                                <th>No. Surat</th>
-                                <th>Jenis Perizinan</th>
-                                <th>Nama</th>
-                                <th>Isi Ulasan</th>
-                                <th>Tanggal</th>
+                               @if (Auth::user()->role_id == 9)
+                               <th>No. Surat</th>
+                               <th>Jenis Perizinan</th>
+                               <th>Isi Ulasan</th>
+                               <th>Tanggal</th>
+                                 @else
+                                 <th>No. Surat</th>
+                                 <th>Jenis Perizinan</th>
+                                 <th>Nama</th>
+                                 <th>Isi Ulasan</th>
+                                 <th>Tanggal</th>
+                               @endif
                               </tr>
                             </thead>
 
@@ -97,20 +104,32 @@ var table = $('#table-data').DataTable({
                  targets: 3,
                  className: 'center'
               },
+              @if (Auth::user()->role_id != 9)
+
               {
                  targets: 4,
                  className: 'center'
               },
+              @endif
              
              
              
             ],
         "columns": [
+          @if (Auth::user()->role_id == 9)
+
           {data: 'surat_id', name: 'surat_id'},
+          {data: 'surat_jenis', name: 'surat_jenis'},
+          {data: 'isi', name: 'isi'},
+          {data:'tanggal_kirim_ulasan', name: 'tanggal_kirim_ulasan'},
+            @else
+            {data: 'surat_id', name: 'surat_id'},
           {data: 'surat_jenis', name: 'surat_jenis'},
           {data: 'nama_pengirim', name: 'nama_pengirim'},
           {data: 'isi', name: 'isi'},
           {data:'tanggal_kirim_ulasan', name: 'tanggal_kirim_ulasan'},
+          @endif
+        
 
         ],
         "language": {
