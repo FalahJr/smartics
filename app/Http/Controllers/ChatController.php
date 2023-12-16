@@ -327,7 +327,7 @@ if ($created_at->diffInHours() >= 24) {
                     $now = Carbon::now('Asia/Jakarta');
                     $time = $now->format('H:i'); 
 
-                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                    if ($time >= $botchat->jam_active || $time <= $botchat->jam_selesai) {
                       DB::table("listchat")
                         ->insert([
                           'roomchat_id' => $cek->id,
@@ -359,7 +359,7 @@ if ($created_at->diffInHours() >= 24) {
                     $now = Carbon::now('Asia/Jakarta');
                     $time = $now->format('H:i');
   
-                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                    if ($time >= $botchat->jam_active || $time <= $botchat->jam_selesai) {
                       DB::table("listchat")
                         ->insert([
                           'roomchat_id' => $id,
@@ -425,7 +425,7 @@ if ($created_at->diffInHours() >= 24) {
                     $now = Carbon::now('Asia/Jakarta');
                     $time = $now->format('H:i'); 
 
-                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                    if ($time >= $botchat->jam_active || $time <= $botchat->jam_selesai) {
                       DB::table("listchat")
                         ->insert([
                           'roomchat_id' => $cek->id,
@@ -457,7 +457,7 @@ if ($created_at->diffInHours() >= 24) {
                     $now = Carbon::now('Asia/Jakarta');
                     $time = $now->format('H:i');
   
-                    if ($time >= $botchat->jam_active && $time <= $botchat->jam_selesai) {
+                    if ($time >= $botchat->jam_active || $time <= $botchat->jam_selesai) {
                       DB::table("listchat")
                         ->insert([
                           'roomchat_id' => $id,
