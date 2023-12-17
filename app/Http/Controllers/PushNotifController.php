@@ -51,8 +51,8 @@ class PushNotifController extends Controller
         );
     
         $fields = json_encode($fields);
-        // print("\nJSON sent:\n");
-        // print($fields);
+        print("\nJSON sent:\n");
+        print($fields);
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
@@ -64,7 +64,7 @@ class PushNotifController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);    
     
-        // $response = curl_exec($ch);
+        $response = curl_exec($ch);
         curl_close($ch);
 
         DB::table("notifikasi")
@@ -77,6 +77,6 @@ class PushNotifController extends Controller
             "updated_at" => Carbon::now('Asia/Jakarta'),
           ]);
     
-        // return $response;
+        return $response;
     }
 }
