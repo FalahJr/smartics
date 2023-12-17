@@ -24,11 +24,25 @@ class loginController extends Controller
     }
 
     public function logout(Request $req) {
-        DB::table("user")
-        ->where("id", $req->id)
-        ->update([
-            "SubID" => null
-        ]);
+        try {
+            //code...
+            DB::table("user")
+            ->where("id", $req->id)
+            ->update([
+                "SubID" => null,
+                "is_active" => "N"
+            ]);
+            return response()->json([
+                'status' => 1,
+    ]);
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage(),
+    ]);
+        }
+       
     }
 
     public function loginApi(Request $req) {
@@ -160,6 +174,35 @@ class loginController extends Controller
 
 
         }
+    }
+
+    public function getProfil(Request $req) {
+        try {
+            //code...
+          $pemohon =   DB::table("user")
+            ->where("id", $req->id)->first();
+
+            $role = DB::table('role')->where('id', $pemohon->role_id)->first();
+
+            return response()->json([
+                'status' => 1,
+                'data' => [
+                    'user' => $pemohon,
+                    'role' => $role
+                ]
+    ]);
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage(),
+    ]);
+        }
+      
+        // ->update([
+        //     "SubID" => null
+        // ]);
     }
 
 }
