@@ -32,7 +32,7 @@
                             <thead class="bg-warning text-white">
                               <tr>
                                 <th>No</th>
-                                <th>Username</th>
+                                <th>Email</th>
                                 <th>Password</th>
                                 <th>Nama Lengkap</th>
                                 <th>Action</th>
@@ -96,7 +96,7 @@ var table = $('#table-data').DataTable({
             ],
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-          {data: 'username', name: 'username'},
+          {data: 'email', name: 'email'},
           {data: 'password', name: 'password'},
           {data: 'nama_lengkap', name: 'Nama Lengkap'},
           {data: 'aksi', name: 'aksi'},
