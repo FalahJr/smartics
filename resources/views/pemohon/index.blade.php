@@ -130,11 +130,27 @@ var table = $('#table-data').DataTable({
       data:{id},
       dataType:'json',
       success:function(data){
-        // console.log
+        console.log({data})
         $('.id').val(data.id);
         $('.nama_lengkap').val(data.nama_lengkap);
         $('.username').val(data.username);
         $('.password').val(data.password);
+        $('.email').val(data.email);
+        $('.nama_lengkap').val(data.nama_lengkap);
+        $('.jenis_identitas').val(data.jenis_identitas);
+        $('.nomor_identitas').val(data.nomor_identitas);
+        $('.jenis_kelamin').val(data.jenis_kelamin);
+        $('.tempat_lahir').val(data.tempat_lahir);
+        $('.tanggal_lahir').val(data.tanggal_lahir);
+        $('.provinsi').val(data.provinsi);
+        $('.kabupaten_kota').val(data.kabupaten_kota);
+        $('.kecamatan').val(data.kecamatan);
+        $('.kelurahan').val(data.kelurahan);
+        $('.alamat').val(data.alamat);
+        $('.no_telp').val(data.no_telp);
+        $('.pekerjaan').val(data.pekerjaan);
+
+
       
 
         

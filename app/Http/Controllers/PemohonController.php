@@ -62,11 +62,11 @@ class PemohonController extends Controller
             if ($data->is_active == "N") {
                 // Tombol "Approve" hanya muncul jika is_active == 1
                 $buttons .=  '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
-                '<label class="fa fa-pencil-alt"></label>'.
+                '<label class="fa fa-eye"></label>'.
             '</button>';
             } else{
               $buttons = '<div class="btn-group"><button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
-              '<label class="fa fa-pencil-alt"></label>'.
+              '<label class="fa fa-eye"></label>'.
           '</button>
           <button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
               '<label class="fa fa-trash"></label>'.
@@ -256,12 +256,26 @@ class PemohonController extends Controller
               ->where("id", $req->id)
               ->first();
 
-      $petugas = [
-        "id" => $data->id,
-        "nama_lengkap" => $data->nama_lengkap,
-        "username" => $data->username,
-        "password" => Crypt::decryptString($data->password),
-      ];
+              $petugas = [
+                "id" => $data->id,
+                "nama_lengkap" => $data->nama_lengkap,
+                "username" => $data->username,
+                "password" => Crypt::decryptString($data->password),
+                // Lengkapi atribut lainnya sesuai kebutuhan Anda
+                "email" => $data->email,
+                "jenis_identitas" => $data->jenis_identitas,
+                "nomor_identitas" => $data->nomor_identitas,
+                "jenis_kelamin" => $data->jenis_kelamin,
+                "tempat_lahir" => $data->tempat_lahir,
+                "tanggal_lahir" => $data->tanggal_lahir,
+                "provinsi" => $data->provinsi,
+                "kabupaten_kota" => $data->kabupaten_kota,
+                "kecamatan" => $data->kecamatan,
+                "kelurahan" => $data->kelurahan,
+                "alamat" => $data->alamat,
+                "no_telp" => $data->no_telp,
+                "pekerjaan" => $data->pekerjaan,
+            ];
       // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
 
       return response()->json($petugas);
