@@ -82,32 +82,7 @@ Route::get('/pie-chart-data', 'HomeController@getPieChartData');
 
 Route::get('logout', 'HomeController@logout')->name('logout');
 
-Route::get('mastertagihan', 'MastertagihanController@index');
-Route::get('mastertagihantable', 'MastertagihanController@datatable');
-Route::get('simpanmastertagihan', 'MastertagihanController@simpan');
-Route::get('hapusmastertagihan', 'MastertagihanController@hapus');
-Route::get('editmastertagihan', 'MastertagihanController@edit');
 
-Route::get('tagihan', 'TagihanController@index');
-Route::get('tagihantable', 'TagihanController@datatable');
-Route::get('bayartagihan', 'TagihanController@bayar');
-
-Route::get('uangmasuk', 'UangmasukController@index');
-Route::get('uangmasuktable', 'UangmasukController@datatable');
-Route::get('simpanuangmasuk', 'UangmasukController@simpan');
-Route::get('hapusuangmasuk', 'UangmasukController@hapus');
-Route::get('edituangmasuk', 'UangmasukController@edit');
-
-Route::get('uangkeluar', 'UangkeluarController@index');
-Route::get('uangkeluartable', 'UangkeluarController@datatable');
-Route::get('simpanuangkeluar', 'UangkeluarController@simpan');
-Route::get('hapusuangkeluar', 'UangkeluarController@hapus');
-Route::get('edituangkeluar', 'UangkeluarController@edit');
-
-// Route::get("mutasi", "MutasiController@index");
-
-Route::get("statistik", "StatistikController@index");
-Route::get("getstatistik", "StatistikController@get");
 
 Route::get('petugas', 'PetugasController@index');
 Route::get('petugastable', 'PetugasController@datatable');

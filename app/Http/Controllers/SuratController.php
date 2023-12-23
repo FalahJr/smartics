@@ -345,7 +345,9 @@ else if(Auth::user()->role_id == 9){
         PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Divalidasi','Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
 
         PushNotifController::sendMessage($verifikator->id,'Hai Verifikator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera diverifikasi. Silakan akses tugas Anda sekarang dan lakukan verifikasi. Terima kasih!' );
-        return response()->json(["status" => 1, "message" => "Permohonan Perizinan Berhasil Divalidasi"]);
+        return response()->json(["status" => 1, "message" => "Perizinan Berhasil di Approve dan
+Akan Dilakukan Penjadwalan Survey
+Oleh Admin Dinas"]);
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
@@ -392,7 +394,7 @@ else if(Auth::user()->role_id == 9){
         PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Divalidasi','Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
 
         PushNotifController::sendMessage($verifikator->id,'Hai Verifikator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera diverifikasi. Silakan akses tugas Anda sekarang dan lakukan verifikasi. Terima kasih!' );
-        return response()->json(["status" => 1, "message" => "Permohonan Perizinan Berhasil Divalidasi"]);
+        return response()->json(["status" => 1, "message" => "Perizinan Berhasil di Approve dan Akan Dilakukan Penjadwalan Survey Oleh Admin Dinas"]);
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 2, "message" => $e->getMessage()]);
@@ -455,7 +457,7 @@ else if(Auth::user()->role_id == 9){
         PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
 
        
-        return response()->json(["status" => 3, 'message' => 'dikembalikan']);
+        return response()->json(["status" => 3, 'message' => 'Alasan dan Berkas Berhasil Dikembalikan ke Pemohon']);
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 4, "message" => $e->getMessage()]);
@@ -478,7 +480,7 @@ else if(Auth::user()->role_id == 9){
         PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh verifikator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
 
        
-        return response()->json(["status" => 3, 'message' => 'dikembalikan']);
+        return response()->json(["status" => 3, 'message' => 'Alasan dan Berkas Berhasil Dikembalikan ke Pemohon']);
       } catch (\Exception $e) {
         DB::rollback();
         return response()->json(["status" => 4, "message" => $e->getMessage()]);
@@ -751,11 +753,29 @@ else if(Auth::user()->role_id == 9){
 
     public function getDataArsip(Request $req) {
       try{
-
+      if($req->user_id != ""){
       if ($req->jenis != "") {
         $surat = DB::table('surat')
         ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
         ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->where('user_id',  $req->user_id)
+        ->where("surat.surat_jenis_id", $req->jenis)
+        ->whereIn('surat.status', ['Selesai', 'Ditolak'])
+        ->get();
+      } else {
+        $surat = DB::table('surat')
+        ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+        ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        ->where('user_id',  $req->user_id)
+        ->whereIn('surat.status', ['Selesai', 'Ditolak'])
+        ->get();
+      }
+    }else{
+      if ($req->jenis != "") {
+        $surat = DB::table('surat')
+        ->join('surat_jenis', 'surat_jenis.id', '=', "surat.surat_jenis_id")
+        ->select('surat.*','surat.id as id_surat', 'surat_jenis.nama as surat_jenis_nama')
+        // ->where('user_id',  $req->user_id)
         ->where("surat.surat_jenis_id", $req->jenis)
         ->whereIn('surat.status', ['Selesai', 'Ditolak'])
         ->get();
@@ -766,6 +786,7 @@ else if(Auth::user()->role_id == 9){
         ->whereIn('surat.status', ['Selesai', 'Ditolak'])
         ->get();
       }
+    }
 
 
       $data = [];
