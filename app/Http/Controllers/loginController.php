@@ -54,6 +54,8 @@ class loginController extends Controller
         $petugas = Account::where("username", $email)->first();
 
             if ($pemohon) {
+                 if($pemohon->is_active == 'Y' ) {
+                  
                 if(Crypt::decryptString($pemohon->password) ===  $req->password){
                 $role = DB::table('role')->where('id', $pemohon->role_id)->first();
 
@@ -77,7 +79,15 @@ class loginController extends Controller
                 'message' => 'password yang anda masukkan salah'
     ]);
         }
+    }else{
+        return response()->json([
+         'status' => 2,
+         'message' => 'akun belum aktif'
+]);
+    }
         } else if ($petugas) {
+            if($petugas->is_active == 'Y' ) {
+
             if(Crypt::decryptString($petugas->password) ===  $req->password){
             $role = DB::table('role')->where('id', $petugas->role_id)->first();
 
@@ -100,7 +110,13 @@ class loginController extends Controller
             'message' => 'password yang anda masukkan salah'
 ]);
     }
-    } 
+}else{
+    return response()->json([
+     'status' => 2,
+     'message' => 'akun belum aktif'
+]);
+}
+    }
         
         else {
             return response()->json([
