@@ -72,12 +72,19 @@ class AuditController extends Controller
               </div>';
                })
           ->addColumn('aksi', function ($data) {
+            if(Auth::user()->role_id == 8){
             return  '<div class="btn-group">'.
                      '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.
                      '<label class="fa fa-pencil-alt"></label></button>'.
                      '<button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
                      '<label class="fa fa-trash"></label></button>'.
                   '</div>';
+            }else{
+              return  '<div class="btn-group">'.
+              '<button type="button" onclick="hapus('.$data->id.')" class="btn btn-danger btn-lg" title="hapus">'.
+              '<label class="fa fa-trash"></label></button>'.
+           '</div>';
+            }
           })
           ->rawColumns(['aksi', 'dokumen_audit'])
           ->addIndexColumn()

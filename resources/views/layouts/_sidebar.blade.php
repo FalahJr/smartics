@@ -52,7 +52,9 @@
         </a>
         <a class="navbar-brand brand-logo-mini" href="{{url('/home')}}">
           {{-- <img src="{{asset('assets/atonergi-mini.png')}}" alt="logo"/> --}}
-          <h1 style="margin:auto; ">Smartics</h1>
+          {{-- <h1 style="margin:auto; ">Smartics</h1> --}}
+          <img src="{{asset('public/assets/img/smartics-logo.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
+
         </a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -165,7 +167,7 @@
             </li>
             @endif
 
-            @if (Auth::user()->role_id != 4 )
+            @if (Auth::user()->role_id != 4 && Auth::user()->role_id != 9 )
             <li class="nav-item {{Request::is('surat') ? 'active' : ''}}">
               <a class="nav-link" href="{{url('/surat')}}">
                 <span class="menu-title">Daftar Permohonan</span>

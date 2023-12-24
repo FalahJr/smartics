@@ -39,7 +39,9 @@
             <img src="{{asset('assets/icon/pengguna.png')}}" class="w-100" />
           </div>
           <div class="col-3 align-self-center p-0">
-            <h2>15k+</h2>
+            <h2>@php
+                   echo DB::table('user')->where('role_id', '9')->count();
+            @endphp</h2>
             <p class="m-0">Pengguna</p>
           </div>
         </div>
@@ -53,7 +55,9 @@
             <img src="{{asset('assets/icon/pengajuan.png')}}" class="w-100" />
           </div>
           <div class="col-3 align-self-center p-0">
-            <h2>15k+</h2>
+            <h2>@php
+               echo DB::table('surat')->where('status', 'not like', 'Pengisian Dokumen')->count();
+       @endphp</h2>
             <p class="m-0">Pengajuan</p>
           </div>
         </div>
@@ -67,7 +71,9 @@
             <img src="{{asset('assets/icon/petugas.png')}}" class="w-100" />
           </div>
           <div class="col-3 align-self-center p-0">
-            <h2>15k+</h2>
+            <h2>@php
+              echo DB::table('user')->where('role_id','not like', '9')->count();
+       @endphp</h2>
             <p class="m-0">Petugas</p>
           </div>
         </div>

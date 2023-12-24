@@ -502,24 +502,7 @@ class SurveyController extends Controller
     }
     public function isiSurvey(Request $request)
     {
-        // Validasi request
-        // $request->validate([
-        //     'survey_id' => 'required|exists:surveys,id',
-        //     'survey_pertanyaan_id.*' => 'required|exists:survey_pertanyaans,id',
-        //     'jawaban.*' => 'required',
-        // ]);
-
-        // Simpan jawaban ke dalam database
-        // foreach ($request->input('survey_pertanyaan_id') as $key => $surveyPertanyaanId) {
-        //     DB::table('survey_hasil')->insert([
-        //         'survey_id' => $request->input('survey_id'),
-        //         'survey_pertanyaan_id' => $surveyPertanyaanId,
-        //         'jawaban' => $request->input('jawaban')[$key],
-        //         "created_at" => Carbon::now("Asia/Jakarta"),
-        //         "updated_at" => Carbon::now("Asia/Jakarta")
-        //     ]);
-        // }
-        // return response()->json(['data' => $request->input('survey_pertanyaan_id')]);
+      
         DB::beginTransaction();
         // DB::table('survey')->where('surat_id', $request->surat_id)->update([
         //   'jadwal_survey' => $request->input('jadwal_survey'),

@@ -5,8 +5,8 @@
         <div class="col-12 col-md-3 mt-4 mt-md-0">
           <img src="assets/logo.png" width="120px" alt="" />
           <p>
-            Lorem Ipsun Dolorsit amet Lorem Ipsun Dolorsit amet Lorem Ipsun
-            Dolorsit amet Lorem Ipsun
+            Dengan Smartics Anda dapat mengajukan permohonan izin secara
+            mandiri dengan sistem daring (online).
           </p>
         </div>
         <div class="col-12 col-md-3 mt-4 mt-md-0">
