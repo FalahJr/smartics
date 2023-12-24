@@ -56,7 +56,7 @@
   <div class="limiter">
     <div class="container-login100" style="background-image: url('assets/login-v3/images/bg-01.jpg');">
       <div class="wrap-login100 bg-warning">
-        <form class="login100-form validate-form" autocomplete="off" method="GET" action="{{ url('loginpemohon/auth') }}">
+        <form class="login100-form validate-form" autocomplete="off" method="GET" action="{{ url('login/auth') }}">
           {{ csrf_field() }}
          <!--  <span class="login100-form-logo">
             <i class="zmdi zmdi-landscape"></i>
@@ -69,12 +69,16 @@
           <span class="login100-form-title p-b-34 p-t-27">
             Login Smartics
           </span>
-
+          @if (session('sukses-registrasi'))
+          <div class="alert alert-success" role="alert">
+            Berhasil Registrasi Tunggu Admin Mengaktivasi Akun Anda dan Mengirimkan Email
+          </div>
+          @endif
           <div class="wrap-input100 validate-input" data-validate = "Enter Email">
-            <input required="" class="input100" autocomplete="off" value="" type="text" name="email" id="email" placeholder="Email" autofocus="">
+            <input required="" class="input100" autocomplete="off" value="" type="text" name="username" id="username" placeholder="Email / Username" autofocus="">
             <span class="focus-input100" data-placeholder="&#xf207;"></span>
-            @if (session('email'))
-              <div class="red"  style="color: red"><b>Email Tidak Ada</b></div>
+            @if (session('username'))
+              <div class="red"  style="color: red"><b>Email / Username Tidak Ada</b></div>
             @endif
           </div>
           <div class="test wrap-input100 validate-input">

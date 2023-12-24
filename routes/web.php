@@ -50,7 +50,7 @@ Route::post('ubah-password-pengguna', 'PublicController@updatePassword');
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/admin', 'loginController@admin')->name('admin');
 
-    Route::get('login', 'loginController@authenticate')->name('login');
+    Route::get('login/auth', 'loginController@authenticate')->name('login');
     Route::get('register', 'RegisterController@index')->name('register');
     Route::get('doregister', 'RegisterController@doregister')->name('doregister');
     Route::get("verification/{id}", 'VerificationController@index');
@@ -67,7 +67,7 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get("tesemail", 'VerificationController@tesemail');
     // Route::post('login', 'loginController@authenticate')->name('login');
 
-    Route::get('loginpemohon', 'LoginPemohonController@index');
+    Route::get('login', 'LoginPemohonController@index');
     Route::get('loginpemohon/auth', 'LoginPemohonController@authenticate');
     Route::get('registerpemohon', 'RegisterPemohonController@index');
     Route::post('registerpemohon/register', 'RegisterPemohonController@register');

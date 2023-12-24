@@ -81,7 +81,7 @@
 
             @if (session('sukses'))
             <div class="alert alert-success" role="alert">
-              Success, Akun anda sudah terdaftar
+              Berhasil Registrasi Tunggu Admin Mengaktivasi Akun Anda dan Mengirimkan Email
             </div>
             @endif
 

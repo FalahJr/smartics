@@ -38,7 +38,7 @@ class loginController extends Controller
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
-                'status' => 1,
+                'status' => 2,
                 'message' => $e->getMessage(),
     ]);
         }
@@ -152,41 +152,84 @@ class loginController extends Controller
             // $pass_benar=$password;
             // $username = str_replace('\'', '', $username);
 
-            $user = Account::where("username", $username)->first();
+            // $user = Account::where("username", $username)->first();
+            $pemohon = Account::where("email", $username)->first();
+        $petugas = Account::where("username", $username)->first();
 
             $user_valid = [];
             // dd($req->all());
 
-           	if ($user != null) {
-           		$user_pass = Account::where('username',$username)
-	            			        //   ->where('password',$encrypt)
-	            			          ->first();
+           	if ($pemohon != null) {
+                if($pemohon->is_active == 'Y' ) {
+                if(Crypt::decryptString($pemohon->password) ===  $password){
+                  Auth::login($pemohon);
 
-            	// if (Crypt::decryptString($user_pass->password) === $password) {
-            	if (Crypt::decryptString($user_pass->password) === $password) {
+                    Account::where('email',$username)->update([
+                                 'updated_at'=>Carbon::now(),
+                                 'is_login' => "Y"
+                             	  ]);
+                    return Redirect('/');
 
-           			Account::where('username',$username)->update([
-                     'updated_at'=>Carbon::now(),
-                     'is_login' => "Y"
-                 	  ]);
+                }else{
+                    Session::flash('password','Password Yang Anda Masukan Salah!');
+                        return back();
+                }
+                }
+            }else if ($petugas) {
+                if($petugas->is_active == 'Y' ) {
+                    if(Crypt::decryptString($petugas->password) ===  $password){
+                  Auth::login($petugas);
+
+                        Account::where('username',$username)->update([
+                                     'updated_at'=>Carbon::now(),
+                                     'is_login' => "Y"
+                                       ]);
+                        return Redirect('/home');
+    
+                    }else{
+                        Session::flash('password','Password Yang Anda Masukan Salah!');
+                            return back()->with('password','username');
+                    }
+                    }
+            }else{
+                Session::flash('username','Username Tidak Ada');
+           		return back();
+            }
+
+           	// 	$user_pass = Account::where('username',$username)
+	        //     			        //   ->where('password',$encrypt)
+	        //     			          ->first();
+
+            // 	// if (Crypt::decryptString($user_pass->password) === $password) {
+            // 	if (Crypt::decryptString($user_pass->password) === $password) {
+
+           	// 		Account::where('username',$username)->update([
+            //          'updated_at'=>Carbon::now(),
+            //          'is_login' => "Y"
+            //      	  ]);
 
                    
-                if ($user_pass->is_active == "Y") {
-                  Auth::login($user);
-                  // logController::inputlog('Login', 'Login', $username);
-                  return Redirect('/home');
-                } else {
-                  $id = $user_pass->id;
-                  return redirect("/verification/".encrypt($id)."");
-                }
-            	}else{
-                Session::flash('password','Password Yang Anda Masukan Salah!');
-                return back()->with('password','username');
-            	}
-           	}else{
-           		Session::flash('username','Username Tidak Ada');
-           		return back()->with('password','username');
-           	}
+            //     if ($user_pass->is_active == "Y") {
+            //       Auth::login($user);
+            //       // logController::inputlog('Login', 'Login', $username);
+            //       if($user->role_id == "9"){
+            //         return Redirect('/');
+            //       }else{
+            //       return Redirect('/home');
+            //       }
+            //     } else {
+            //       $id = $user_pass->id;
+            //       return redirect("/verification/".encrypt($id)."");
+            //     }
+            // 	}else{
+            //     Session::flash('password','Password Yang Anda Masukan Salah!');
+            //     return back()->with('password','username');
+            // 	}
+           	// }else{
+           	// 	Session::flash('username','Username Tidak Ada');
+           	// 	return back()->with('password','username');
+           	// }
+            // }
 
 
         }
@@ -211,7 +254,7 @@ class loginController extends Controller
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
-                'status' => 1,
+                'status' => 2,
                 'message' => $e->getMessage(),
     ]);
         }

@@ -84,8 +84,8 @@ class RegisterPemohonController extends Controller
             ]);
             
           DB::commit();
-          Session::flash('sukses','Berhasil');
-          return back();
+          Session::flash('sukses-registrasi','Berhasil');
+          return Redirect('/login');
         }
 
       } catch (\Exception $e) {

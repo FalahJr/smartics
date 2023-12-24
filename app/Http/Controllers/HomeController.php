@@ -84,11 +84,11 @@ class HomeController extends Controller
 
         Session::forget('key');
         
-        if($role == "9") {
+        // if($role == "9") {
             return Redirect('/');
-        } else {
-            return Redirect('/admin');
-        }
+        // } else {
+        //     return Redirect('/admin');
+        // }
     }
 
 }
