@@ -52,7 +52,7 @@
         				        <table class="table table_status table-hover " id="table-data" cellspacing="0">
                             <thead class="bg-warning text-white">
                               <tr>
-                                <th>No.</th>
+                                <th>No. Surat</th>
                                 <th>Jenis Surat</th>
                                 @if (Auth::user()->role_id == 1)
                                 <th>Jadwal Survey</th>
@@ -133,7 +133,7 @@ var table = $('#table-data').DataTable({
              
             ],
         "columns": [
-          {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+          {data: 'id', name: 'id', searchable: true, render: $.fn.dataTable.render.number(',', '.', 0) },
           {data: 'surat_jenis', name: 'surat_jenis'},
           @if (Auth::user()->role_id == 1)
           {data:'jadwal_survey', name: 'jadwal_survey'},

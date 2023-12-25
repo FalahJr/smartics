@@ -512,7 +512,7 @@ $('.rp').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0});
 }
 </script>
 
-<script type="text/javascript">
+{{-- <script type="text/javascript">
   $(document).ajaxStart(function (e, jqxhr, settings) {
     if (!settings.url.indexOf('draw') > -1) {
       waitingDialog.show();
@@ -526,4 +526,4 @@ $('.rp').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0});
       }, 500);
     }
   })
-</script>
+</script> --}}

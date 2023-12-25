@@ -227,28 +227,32 @@
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
+
 <script>
    var columnchart = @json($columnchart);
-  Highcharts.chart('chart', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Jumlah Perizinan',
-        align: 'left'
-    },
-    xAxis: {
-        categories: columnchart.map(item => item.month),
-    },
-    series: [
-        {
-            name: 'Total Perizinan',
-            data: columnchart.map(item => item.total),
-            color: '#1CC88A'
-        },
-    ]
-});
+//   console.log({columnchart});
+ document.addEventListener('DOMContentLoaded', function () {
+        Highcharts.chart('chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Jumlah Perizinan',
+                align: 'left'
+            },
+            xAxis: {
+                categories: columnchart.map(item => item.month),
+            },
+            series: [
+                {
+                    name: 'Total Perizinan',
+                    data: columnchart.map(item => parseInt(item.total)), // Konversi total menjadi angka jika diperlukan
+                    color: '#1CC88A'
+                },
+            ]
+        });
+    });
 
 
 (function (H) {
