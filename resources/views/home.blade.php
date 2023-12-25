@@ -19,7 +19,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Diajukan</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -35,7 +35,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Perlu Penerbitan</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -51,7 +51,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Riwayat Audit</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -67,7 +67,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Divalidasi</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -83,7 +83,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Diverifikasi</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -99,7 +99,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Diproses</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -115,7 +115,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Disurvey</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -139,7 +139,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Ditolak</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -155,7 +155,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Perizinan Disetujui</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -171,7 +171,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Terlambat Diproses</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
@@ -187,7 +187,7 @@
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
             <p>Jumlah Ulasan</p>
-            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            {{-- <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a> --}}
           </div>
           <h1 class="row my-0 py-0">
             @php
