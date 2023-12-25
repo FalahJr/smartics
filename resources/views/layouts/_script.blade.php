@@ -513,13 +513,17 @@ $('.rp').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0});
 </script>
 
 <script type="text/javascript">
-  $(document).ajaxStart(function(){
-    waitingDialog.show();
+  $(document).ajaxStart(function (e, jqxhr, settings) {
+    if (!settings.url.indexOf('draw') > -1) {
+      waitingDialog.show();
+    }
   })
 
-  $(document).ajaxComplete(function(){
-    setTimeout(function () {
-      waitingDialog.hide();
-    }, 500);
+  $(document).ajaxComplete(function (e, jqxhr, settings) {
+    if (!settings.url.indexOf('draw') > -1) {
+      setTimeout(function () {
+        waitingDialog.hide();
+      }, 500);
+    }
   })
 </script>

@@ -24,7 +24,15 @@ class ForgotpasswordController extends Controller
       return view("auth.forgotpassword");
     }
 
-    public function doforgot(Request $req) {
+    public function changepassword(Request $req) {
+      $data = DB::table("user")
+                ->where("email", Crypt::decryptString($req->email))
+                ->first();
+
+      return view("auth.changepassword", compact("data"));
+    }
+
+    public function dochangepassword(Request $req) {
       if ($req->password != $req->confirmpassword) {
         Session::flash('confirmpassword','Berhasil');
         return back();
@@ -47,6 +55,17 @@ class ForgotpasswordController extends Controller
         Session::flash('email','Berhasil');
         return back();
       }
+    }
+
+    public function doforgot(Request $req) {
+      $cekemail = DB::table("user")
+                    ->where("email", $req->email)
+                    ->first();
+
+      SendemailController::Send($cekemail->nama_lengkap, "Silahkan klik link untuk mengganti password <br> <a href='".url('/')."/changepassword?email=".Crypt::encryptString(($cekemail->email))."'>Ganti Password</a> <br> ", "Link Lupa Kata Sandi", $cekemail->email);
+
+      Session::flash('sukses','Berhasil');
+      return back();
     }
 
     public function apidoforgot(Request $req) {

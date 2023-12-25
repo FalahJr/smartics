@@ -155,7 +155,7 @@
 
             <br>
             <div class="container-login100-form-btn mt-4">
-              Sudah punya akun? <a href="login" class="ml-2 text-light text-bold"> Login sekarang </a>
+              Sudah punya akun? <a href="{{url('/login')}}" class="ml-2 text-light text-bold"> Login sekarang </a>
             </div>
 
 

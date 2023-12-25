@@ -123,10 +123,11 @@
        }
 
        sidebar .list-wrap {
-      width: 100%;
-      overflow: auto;
-      height: 100%;
-      }
+        line-height: 1;
+        width: 100%;
+        overflow: auto;
+        height: 100%;
+        }
       sidebar .list-wrap .list {
       border-bottom: 1px solid #ccc;
       background: white;
@@ -294,7 +295,7 @@ var idselect = 0;
                       html += '<div class="list chatkuning" onclick="clicked()">'+
                         '<img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" />'+
                         '<div class="info">'+
-                          '<span class="user">'+res.account.nama_lengkap+'</span>'+
+                          '<span class="user">'+res.account.nama_lengkap.slice(0, 17) + (res.account.nama_lengkap.length > 17 ? "..." : "")+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
                         '<span class="count">'+res.counter_kedua+'</span>'+
@@ -305,7 +306,7 @@ var idselect = 0;
                       html += '<div class="list chatkuning" onclick="clicked()">'+
                         '<img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" />'+
                         '<div class="info">'+
-                          '<span class="user">'+res.account.nama_lengkap+'</span>'+
+                          '<span class="user">'+res.account.nama_lengkap.slice(0, 17) + (res.account.nama_lengkap.length > 17 ? "..." : "")+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
                         '<span class="count">'+res.counter_kedua+'</span>'+
@@ -318,7 +319,7 @@ var idselect = 0;
                       html += '<div class="list" onclick="clicked()">'+
                         '<img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" />'+
                         '<div class="info">'+
-                          '<span class="user">'+res.account.nama_lengkap+'</span>'+
+                          '<span class="user">'+res.account.nama_lengkap.slice(0, 17) + (res.account.nama_lengkap.length > 17 ? "..." : "")+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
                         '<span class="time">'+res.created_at+'</span>'+
@@ -328,7 +329,7 @@ var idselect = 0;
                       html += '<div class="list" onclick="clicked()">'+
                         '<img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" />'+
                         '<div class="info">'+
-                          '<span class="user">'+res.account.nama_lengkap+'</span>'+
+                          '<span class="user">'+res.account.nama_lengkap.slice(0, 17) + (res.account.nama_lengkap.length > 17 ? "..." : "")+'</span>'+
                           '<span class="text">'+res.last_message+'</span>'+
                         '</div>'+
                         '<span class="time">'+res.created_at+'</span>'+

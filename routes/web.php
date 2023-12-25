@@ -61,6 +61,8 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get("forgotlink/{id}/{accesstoken}", 'ForgotpasswordController@forgotlink');
     Route::get("doforgotlink", 'ForgotpasswordController@doforgotlink');
     Route::get("forgotlogin/{id}", 'ForgotpasswordController@forgotlogin');
+    Route::get("changepassword", 'ForgotpasswordController@changepassword');
+    Route::get("dochangepassword", 'ForgotpasswordController@dochangepassword');
 
     Route::get("generatetagihan", 'TagihanController@generatetagihan');
 

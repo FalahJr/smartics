@@ -56,7 +56,7 @@
   <div class="limiter">
     <div class="container-login100" style="background-image: url('assets/login-v3/images/bg-01.jpg');">
       <div class="wrap-login100 bg-warning">
-        <form class="login100-form validate-form" autocomplete="off" method="GET" action="{{ url('doforgot') }}">
+        <form class="login100-form validate-form" autocomplete="off" method="GET" action="{{ url('dochangepassword') }}">
           {{ csrf_field() }}
          <!--  <span class="login100-form-logo">
             <i class="zmdi zmdi-landscape"></i>
@@ -72,18 +72,46 @@
 
           @if (session('sukses'))
             <div class="alert alert-success" role="alert">
-              Success, Klik link forgot password yang sudah dikirim melalui email!
+              Success, Password sudah diperbarui!
             </div>
             <br>
-          @endif
+           @endif
 
-          <div class="wrap-input100 validate-input" data-validate = "Enter Email">
-            <input required="" class="input100" autocomplete="off" value="" type="text" name="email" id="email" placeholder="Email" autofocus="">
-            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-            @if (session('email'))
-              <div class="red"  style="color: red"><b>Email Tidak Ditemukan</b></div>
+           @if (isset($data))
+           <input type="hidden" name="email" value="{{$data->email}}">
+           @endif
+
+        <div class="test wrap-input100 validate-input">
+          <div class=" w-100" data-validate="Enter password">
+            <input required="" class="input100" autocomplete="off" value="" type="password" name="password" id="password" placeholder="Kata sandi baru">
+            <span class="focus-input100" data-placeholder="&#xf191;"></span>
+
+            @if (session('password'))
+            <div class="red"  style="color: red"><b>Password Yang Anda Masukan Salah</b></div>
             @endif
+            
           </div>
+          
+          <span class="eye-input">
+              <i class="fa fa-eye" id="togglePassword"></i>
+          </span>
+         </div>
+         
+         <div class="test wrap-input100 validate-input">
+          <div class=" w-100" data-validate="Enter password">
+            <input required="" class="input100" autocomplete="off" value="" type="password" name="confirmpassword" id="confirmpassword" placeholder="Konfirmasi kata sandi">
+            <span class="focus-input100" data-placeholder="&#xf191;"></span>
+
+            @if (session('confirmpassword'))
+            <div class="red"  style="color: red"><b>Password Tidak Sama!</b></div>
+            @endif
+            
+          </div>
+          
+          <span class="eye-input">
+              <i class="fa fa-eye" id="toggleConfirmPassword"></i>
+          </span>
+         </div>
 
           <div class="container-login100-form-btn">
             <button type="submit" class="login100-form-btn">
@@ -124,18 +152,23 @@
 </body>
 </html>
 <script type="text/javascript">
- $(document).ready(function() {
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
+//  $(document).ready(function() {
+      var togglePassword = document.getElementById('togglePassword');
+      var passwordInput = document.getElementById('password');
 
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            togglePassword.classList.toggle('fa-eye-slash');
-        });
-    });
-  window.onload = function(e){
-  $('#username').val(null);
-  $('#password').val(null);
-  }
+      togglePassword.addEventListener('click', function () {
+          var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          togglePassword.classList.toggle('fa-eye-slash');
+      });
+
+      var togglePassword1 = document.getElementById('toggleConfirmPassword');
+      var passwordInput1 = document.getElementById('confirmpassword');
+
+      togglePassword1.addEventListener('click', function () {
+          var type1 = passwordInput1.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput1.setAttribute('type', type1);
+          togglePassword1.classList.toggle('fa-eye-slash');
+      });
+  // });
 </script>
