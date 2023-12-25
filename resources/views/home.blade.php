@@ -13,7 +13,8 @@
         </ol>
       </nav>
     </div>
-    <div class="row col-12 justify-content-around mx-auto">
+    <div class="row col-12 justify-content-start mx-auto">
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 5 || Auth::user()->role_id == 6  || Auth::user()->role_id == 7 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 8)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -27,7 +28,41 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 3)
+      <div class="col-md-3 col-6">
+        <div class="card px-4 py-2 my-2">
+          <div class="row justify-content-between">
+            <p>Perizinan Perlu Penerbitan</p>
+            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+          </div>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('surat')->where('status', 'Verifikasi Kepala Dinas')->count();
+          @endphp
+          </h1>
+        </div>
+      </div>
+      @endif
+
+      @if (Auth::user()->role_id == 3)
+      <div class="col-md-3 col-6">
+        <div class="card px-4 py-2 my-2">
+          <div class="row justify-content-between">
+            <p>Riwayat Audit</p>
+            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+          </div>
+          <h1 class="row my-0 py-0">
+            @php
+            echo DB::table('audit')->count();
+          @endphp
+          </h1>
+        </div>
+      </div>
+      @endif
+     
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 5 || Auth::user()->role_id == 6) 
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -41,7 +76,9 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 6)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -55,7 +92,9 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 1)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -69,7 +108,33 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if ( Auth::user()->role_id == 6  || Auth::user()->role_id == 7 || Auth::user()->role_id == 2 || Auth::user()->role_id == 8)
+      <div class="col-md-3 col-6">
+        <div class="card px-4 py-2 my-2">
+          <div class="row justify-content-between">
+            <p>Perizinan Disurvey</p>
+            <a href="" class="text-dark"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+          </div>
+          <h1 class="row my-0 py-0">
+            @php
+            if(Auth::user()->role_id == 7){
+              echo DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->where('surat.status','Penjadwalan Survey')->where('surat.is_acc_penjadwalan' ,'Y')->where('survey.user_id',Auth::user()->user_id)->count();
+            }else if(Auth::user()->role_id == 8){
+              echo DB::table('survey')->join('surat', 'surat.id' ,'=' ,'survey.surat_id')->where('surat.status','Penjadwalan Survey')->where('surat.is_acc_penjadwalan' ,'Y')->where('survey.status', 'Sudah Disurvey')->count();
+            }
+            else{
+              echo DB::table('surat')->where('status','Penjadwalan Survey')->where('is_acc_penjadwalan' ,'Y')->count();
+
+            }
+          @endphp
+          </h1>
+        </div>
+      </div>
+      @endif
+
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 5 || Auth::user()->role_id == 6  || Auth::user()->role_id == 7 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -83,7 +148,9 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 5 || Auth::user()->role_id == 6  || Auth::user()->role_id == 7 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -97,7 +164,9 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 1)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -111,7 +180,9 @@
           </h1>
         </div>
       </div>
+      @endif
 
+      @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
       <div class="col-md-3 col-6">
         <div class="card px-4 py-2 my-2">
           <div class="row justify-content-between">
@@ -125,6 +196,7 @@
           </h1>
         </div>
       </div>
+      @endif
 
      
     </div>
