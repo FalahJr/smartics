@@ -30,7 +30,7 @@ class loginController extends Controller
             ->where("id", $req->id)
             ->update([
                 "SubID" => null,
-                "is_active" => "N"
+                "is_login" => "N"
             ]);
             return response()->json([
                 'status' => 1,
