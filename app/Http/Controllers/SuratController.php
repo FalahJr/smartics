@@ -133,10 +133,10 @@ else if(Auth::user()->role_id == 9){
             $aksi = '<div class="btn-group">'.
             '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
             '<label class="fa fa-eye w-100"></label></button>';
-            if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL && $data->status == "Penjadwalan Survey") {
-              $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
-              '<label class="fa fa-calendar w-100"></label></button>';
-            }
+            // if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL && $data->status == "Penjadwalan Survey") {
+            //   $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
+            //   '<label class="fa fa-calendar w-100"></label></button>';
+            // }
 
             $aksi .= '</div>';
             return $aksi;
@@ -182,15 +182,24 @@ else if(Auth::user()->role_id == 9){
             ->where("id", $req->id)
             ->update([
               "nama" => $req->nama,
+              "user_id" => $req->user_id,
+              "surat_jenis_id" => $req->surat_jenis_id,
+              "status" => 'Pengisian Dokumen',
+              "kategori" => $req->kategori,
+              "alamat_lokasi" => $req->alamat_lokasi,
+              "longitude" => $req->longitude,
+              "latitude" => $req->latitude,
               "updated_at" => Carbon::now("Asia/Jakarta")
             ]);
 
          
           DB::commit();
-          return response()->json(["status" => 3]);
+          $dataBaru = DB::table("surat")->orderBy("id", "DESC")->where('id',$req->id)->first();
+          return response()->json(["status" => 1,'message' => 'success', 'data' => $dataBaru]);
+          // return response()->json(["status" => 1]);
         } catch (\Exception $e) {
           DB::rollback();
-          return response()->json(["status" => 4, "message" =>$e->getMessage()]);
+          return response()->json(["status" => 2, "message" =>$e->getMessage()]);
         }
       }
 
@@ -293,6 +302,7 @@ else if(Auth::user()->role_id == 9){
               ->where("id", $req->surat_id)
               ->update([
                 "status" => 'Validasi Operator',
+                "is_dikembalikan" => 'N',
                 "updated_at" => Carbon::now("Asia/Jakarta")
               ]);
 
