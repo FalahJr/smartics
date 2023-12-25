@@ -69,26 +69,13 @@ class ForgotpasswordController extends Controller
     }
 
     public function apidoforgot(Request $req) {
-      if ($req->password != $req->confirmpassword) {
-        return response()->json(["status" => 2, "message" => "Password tidak sama"]);
-      }
-
       $cekemail = DB::table("user")
                     ->where("email", $req->email)
                     ->first();
 
-      if ($cekemail != null) {
-        DB::table("user")
-          ->where("id", $cekemail->id)
-          ->update([
-            "password" => Crypt::encryptString($req->password),
-          ]);
+      SendemailController::Send($cekemail->nama_lengkap, "Silahkan klik link untuk mengganti password <br> <a href='".url('/')."/changepassword?email=".Crypt::encryptString(($cekemail->email))."'>Ganti Password</a> <br> ", "Link Lupa Kata Sandi", $cekemail->email);
 
-          return response()->json(["status" => 1, "message" => "Berhasil update password"]);
-      } else {
-        return response()->json(["status" => 2, "message" => "Akun tidak ditemukan"]);
-        return back();
-      }
+      return response()->json(["status" => 1, "message" => "Berhasil update password"]);
     }
 
     public function forgotlink($id, $accesstoken) {
