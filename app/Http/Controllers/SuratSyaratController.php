@@ -45,10 +45,10 @@ class SuratSyaratController extends Controller
           //   return FormatRupiah($data->uangkeluar_nominal);
           // })
          
-          // ->addColumn("surat_jenis", function($data) {
-          //   $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
-          //   return $surat_jenis->nama;
-          // })
+          ->addColumn("surat_jenis", function($data) {
+            $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+            return $surat_jenis->nama;
+          })
           ->addColumn('aksi', function ($data) {
             return  '<div class="btn-group">'.
                      '<button type="button" onclick="edit('.$data->id.')" class="btn btn-info btn-lg" title="edit">'.

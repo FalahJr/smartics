@@ -55,6 +55,13 @@
 <script>
 
 const searchParams = new URLSearchParams(window.location.search);
+
+const idParam = searchParams.get('id');
+
+if (!idParam) {
+  // jika gada redirect ke halaman jenis perizinan
+  window.location.href = baseUrl+'/surat-jenis';
+}
 const surat_jenis_id = searchParams ? searchParams.get('id') : null;
 @php
 $getId = $_GET ? $_GET['id'] : null;
