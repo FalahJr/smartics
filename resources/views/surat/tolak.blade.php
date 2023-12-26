@@ -5,14 +5,14 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header bg-warning">
-        <h4 class="modal-title">Berkas Dikembalikan</h4>
+        <h4 class="modal-title">Tolak Berkas</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="row">
           <table class="table table_modal">
           <tr>
-            <td>Alasan Dikembalikan</td>
+            <td>Alasan Ditolak</td>
             <td>
               <textarea class="form-control form-control-sm inputtext alasan_dikembalikan px-auto" name="alasan_dikembalikan" rows=5 value="">
               </textarea>
