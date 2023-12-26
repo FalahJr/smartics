@@ -25,7 +25,7 @@
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
                       @if (Auth::user()->role_id == 8)
                         
-                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
                       @endif
                     </div>
                     <div class="table-responsive">
@@ -132,6 +132,7 @@ var table = $('#table-data').DataTable({
       dataType:'json',
       success:function(data){
         console.log({data})
+        $("#titleText").text("Edit Laporan");
         $('.id').val(data.id);
         $('.periode').val(data.periode);
         // $('.file_upload').val(data.file_upload);
@@ -144,6 +145,10 @@ var table = $('#table-data').DataTable({
       }
     });
 
+  }
+
+  function tambah() {
+    $("#titleText").text("Tambah Laporan");
   }
 
   $('#simpan').click(function(){

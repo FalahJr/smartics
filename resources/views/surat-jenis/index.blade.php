@@ -23,7 +23,7 @@
                     <h4 class="card-title">Kelola Jenis dan Syarat Perizinan</h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                    	<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#tambah" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
                       {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
@@ -124,6 +124,7 @@ var table = $('#table-data').DataTable({
       dataType:'json',
       success:function(data){
         // console.log
+        $("#titleText").text("Edit Jenis Perizinan");
         $('.id').val(data.id);
         $('.nama').val(data.nama);
       
@@ -198,6 +199,10 @@ var table = $('#table-data').DataTable({
   			}],
   		]
   	});
+  }
+
+  function tambah() {
+    $("#titleText").text("Tambah Jenis Perizinan");
   }
 
   function reloadall() {

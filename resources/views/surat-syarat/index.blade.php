@@ -23,7 +23,7 @@
                     <h4 class="card-title" id="filter_surat_jenis"></h4>
                     <div class="col-md-12 col-sm-12 col-xs-12" align="right" style="margin-bottom: 15px;">
                       {{-- @if(Auth::user()->akses('MASTER DATA STATUS','tambah')) --}}
-                      <button type="button" class="btn btn-warning shadow-none border-0" data-toggle="modal" data-target="#tambah"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
+                      <button type="button" class="btn btn-warning shadow-none border-0" data-toggle="modal" data-target="#tambah" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah Data</button>
                       {{-- @endif --}}
                     </div>
                     <div class="table-responsive">
@@ -135,6 +135,7 @@ var table = $('#table-data').DataTable({
       dataType:'json',
       success:function(data){
         // console.log
+        $("#titleText").text("Edit Syarat Perizinan");
         $('.id').val(data.id);
         $('.nama').val(data.nama);
         $('#surat_jenis_id').val(data.surat_jenis_id);
@@ -181,6 +182,9 @@ var table = $('#table-data').DataTable({
     });
   })
 
+  function tambah() {
+    $("#titleText").text("Tambah Syarat Perizinan");
+  }
 
   function hapus(id) {
     iziToast.question({
