@@ -667,6 +667,161 @@ Oleh Admin Dinas"]);
 
     }
 
+    public function ambilAlihTolak(Request $req) {
+      DB::beginTransaction();
+      // if(Auth::user()->role_id ===5){
+        $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->input('id'))->first();
+     $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+     $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+
+    //  if($cekDataUser){
+    //   // return $cekDataUser->nama_lengkap;
+    //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+    //  }
+    // if (Auth::check()) {
+    if($req->status == "Validasi Operator"){
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Pengisian Dokumen',
+              "is_dikembalikan" => 'Y',
+              "is_terlambat" => 'N',
+              "alasan_dikembalikan" => $req->alasan_dikembalikan,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa pesan alasan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali.<br><br> Alasan Dikembalikan :<br>".$req->alasan_dikembalikan."<br><br> Terima kasih atas pemahaman Anda.","Mohon Maaf, Surat No. ".$req->id." Dikembalikan !", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
+        return response()->json(["status" => 1, "message" => "Perizinan Berhasil di Approve dan
+Akan Dilakukan Penjadwalan Survey
+Oleh Admin Dinas"]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+   else if($req->status == "Verifikasi Verifikator"){
+
+    $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+    ->where('surat.id', $req->input('id'))->first();
+    $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+    $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+
+   //  if($cekDataUser){
+   //   // return $cekDataUser->nama_lengkap;
+   //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+   //  }
+   // if (Auth::check()) {
+     try {
+
+      DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Pengisian Dokumen',
+              "is_dikembalikan" => 'Y',
+              "is_terlambat" => 'N',
+              "alasan_dikembalikan" => $req->alasan_dikembalikan,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa pesan alasan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali.<br><br> Alasan Dikembalikan :<br>".$req->alasan_dikembalikan."<br><br> Terima kasih atas pemahaman Anda.","Mohon Maaf, Surat No. ".$req->id." Dikembalikan !", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,"Mohon Maaf, Surat No. ".$req->id." Dikembalikan !","Sayangnya, surat dengan nomor No. ".$req->id."  Anda ditolak oleh operator. Silakan periksa email anda untuk melihat alasan dikembalikan dan lakukan koreksi sesuai petunjuk yang diberikan untuk mengajukan kembali." );
+
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+  // }
+  
+  else if($req->status == "Verifikasi Hasil Survey"){
+
+    $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+    ->where('surat.id', $req->input('id'))->first();
+    $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+    $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+    $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
+
+   //  if($cekDataUser){
+   //   // return $cekDataUser->nama_lengkap;
+   //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+   //  }
+   // if (Auth::check()) {
+     try {
+
+      DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Ditolak',
+              "is_dikembalikan" => "N",
+              "is_terlambat" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+            DB::table("survey")
+            ->where("surat_id", $req->id)
+            ->update([
+              "status" => 'Survey Ditolak',
+              'alasan_ditolak' => $req->alasan_dikembalikan,
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. ".$req->id."  ditolak oleh verifikator.<br><br> Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda","Hasil Survey Permohonan Anda Ditolak", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Ditolak','Sayangnya, Hasil Survey dari surat pengajuan anda dengan nomor No. '.$req->id.' ditolak oleh verifikator. Dengan ini surat anda tidak dapat diproses lagi dan tersimpan di Arsip surat anda' );
+
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+    // else if($req->status == "Verifikasi Kepala Dinas"){
+
+    //   $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+    //   ->where('surat.id', $req->input('id'))->first();
+    //   $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+    //   $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+    //   $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
+    //   $generateSuratPenerbitan = DB::table("surat")->join('surat_jenis', 'surat_jenis.id', '=', 'surat.surat_jenis_id')
+    //   ->where('surat.id', $req->input('id'))->select('surat.*')->first();
+    //  //  if($cekDataUser){
+    //  //   // return $cekDataUser->nama_lengkap;
+    //  //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+    //  //  }
+    //  // if (Auth::check()) {
+    //    try {
+  
+    //      DB::table("surat")
+    //          ->where("id", $req->id)
+    //          ->update([
+    //            "status" => 'Selesai',
+    //           "nomor_penerbitan" => $generateSuratPenerbitan->id.'/0'.$generateSuratPenerbitan->surat_jenis_id.'/'.Carbon::parse($generateSuratPenerbitan->created_at)->format('Y'),
+    //            "is_dikembalikan" => "N",
+    //            "is_terlambat" => "N",
+    //            "alasan_dikembalikan" => null, 
+    //            "updated_at" => Carbon::now("Asia/Jakarta")
+    //          ]);
+    //       DB::commit();
+    //       SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diterbitkan. Selanjutnya silahkan cetak surat anda dan datang ke kantor dinas dengan membawa bukti registrasi dan surat pengajuan anda","Permohonan Perizinan Berhasil Diterbitkan", $cekDataUser->email);
+    //     PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diterbitkan','Selamat! Pengajuan surat Anda telah sukses diterbitkan. Selanjutnya silahkan cetak surat anda dan datang ke kantor dinas dengan membawa bukti registrasi dan surat pengajuan anda' );
+  
+    //       return response()->json(["status" => 1]);
+    //     } catch (\Exception $e) {
+    //       DB::rollback();
+    //       return response()->json(["status" => 2, "message" => $e->getMessage()]);
+    //     }
+    //   }
+
+    }
+
     public function kembalikan(Request $req) {
       DB::beginTransaction();
       // if(Auth::user()->role_id ===5){

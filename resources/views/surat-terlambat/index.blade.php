@@ -188,6 +188,23 @@ let lineBreak2;
         document.getElementById("tanggal_pengajuan").innerHTML = data.tanggal_pengajuan;
         document.getElementById("jadwal_survey").innerHTML = data.jadwal_survey;
         document.getElementById("alamat_lokasi").innerHTML = data.surat.alamat_lokasi;
+
+       if( data.surat.status == "Validasi Operator"){
+        var button = document.getElementById('validasi');
+        button.innerText = button.textContent = 'Validasi';
+       }else if( data.surat.status == "Verifikasi Verifikator"){
+        var button = document.getElementById('validasi');
+        button.innerText = button.textContent = 'Verifikasi';
+       }
+       else if( data.surat.status == "Verifikasi Hasil Survey"){
+        var button = document.getElementById('validasi');
+        button.innerText = button.textContent = 'Setuju';
+       }else if( data.surat.status == "Verifikasi Kepala Dinas"){
+        var button = document.getElementById('validasi');
+        button.innerText = button.textContent = 'Terbitkan';
+        var buttonTolak = document.getElementById('showModalTolak');
+        buttonTolak.style.visibility = 'hidden'
+       }
         // data.surat_dokumen.forEach(function(surat_syarat) {
         // document.getElementsByClassName("nama_surat_syarat").innerHTML = surat_syarat.nama;
         // });
@@ -310,8 +327,10 @@ let lineBreak2;
 
   $('#showModalTolak').click(function(){
    var tes = document.getElementById("id").value ;
-   $('.id').val('');
-   $('.status').val('');
+   var statusValue = document.getElementById("status").value ;
+   console.log({ statusValue,tes})
+   $('.id').val(tes);
+   $('.status').val(statusValue);
    $('.alasan_dikembalikan').val("");
    $('#detail').modal('hide'); 
    $('#showTolak').modal('show');
@@ -325,26 +344,26 @@ let lineBreak2;
       close: false,
   		overlay: true,
   		displayMode: 'once',
-  		title: 'Kembalikan Surat',
+  		title: 'Tolak Surat',
   		message: 'Apakah anda yakin ?',
   		position: 'center',
   		buttons: [
   			['<button><b>Ya</b></button>', function (instance, toast) {
           $.ajax({
-            url:baseUrl + '/kembalikansurat',
+            url:baseUrl + '/ambilAlihTolak',
             data:$('.table_modal :input').serialize(),
             dataType:'json',
             success:function(data){
-              if (data.status == 3) {
+              if (data.status == 1) {
           iziToast.success({
               icon: 'fa fa-save',
-              message: 'Surat Berhasil Dikembalikan!',
+              message: 'Surat Berhasil Ditolak!',
           });
           reloadall();
-        }else if(data.status == 4){
+        }else if(data.status == 2){
           iziToast.warning({
               icon: 'fa fa-info',
-              message: 'Surat Gagal Dikembalikan!',
+              message: 'Surat Gagal Ditolak!',
           });
         }
 

@@ -135,7 +135,7 @@ Route::get('surat-terlambat', 'SuratController@indexTerlambat');
 Route::get('suratterlambattable/{status}', 'SuratController@datatableTerlambat');
 Route::get('editsuratterlambat', 'SuratController@editTerlambat');
 Route::get('ambilAlihVerifikasi', 'SuratController@ambilAlihVerifikasi');
-Route::get('kembalikansurat', 'SuratController@kembalikan');
+Route::get('ambilAlihTolak', 'SuratController@ambilAlihTolak');
 Route::get('pemohonaccjadwalsurat', 'SuratController@pemohonAccJadwalSurvey');
 
 

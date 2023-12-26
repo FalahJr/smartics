@@ -20,6 +20,7 @@
 
 
               <input type="hidden" class="form-control form-control-sm id inputtext" name="id">
+              <input type="hidden" class="form-control form-control-sm status inputtext" name="status">
             </td>
           </tr>
           </table>
