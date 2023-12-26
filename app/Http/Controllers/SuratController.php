@@ -30,6 +30,16 @@ class SuratController extends Controller
       return view('surat.index');
     }
 
+    public function indexTerlambat() {
+      //     $tes =  "<select class='custom-select float-right bg-warning' id='statusFilter' onchange='handleFilter()'>
+      //     <option value='' selected disabled>Select Status</option>
+      //     <option value='approved'>Approved</option>
+      //     <option value='rejected'>Rejected</option>
+      // </select>";
+    
+          return view('surat-terlambat.index');
+        }
+
     public function datatable($status) {
       // $data = DB::table('surat')->get();
       if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2){
@@ -123,6 +133,76 @@ else if(Auth::user()->role_id == 9){
               $color;
             }
           }
+          return $color;
+      })
+      ->addColumn('tanggal_pengajuan', function ($data) {
+        return Carbon::parse($data->created_at)->format('d F Y');
+
+      })
+          ->addColumn('aksi', function ($data) {
+            $aksi = '<div class="btn-group">'.
+            '<button type="button" onclick="edit('.$data->id.')" class="btn btn-success btn-lg pt-2" title="edit">'.
+            '<label class="fa fa-eye w-100"></label></button>';
+            // if ($data->is_acc_penjadwalan == "N" && $data->is_reschedule == "N" && $data->jadwal_survey != NULL && $data->status == "Penjadwalan Survey") {
+            //   $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
+            //   '<label class="fa fa-calendar w-100"></label></button>';
+            // }
+
+            $aksi .= '</div>';
+            return $aksi;
+          })
+          ->rawColumns(['aksi','jadwal_survey','status', 'tanggal_pengajuan','nama_pemohon'])
+          ->addIndexColumn()
+          // ->setTotalRecords(2)
+          ->make(true);
+    }
+
+    public function datatableTerlambat($status) {
+      // $data = DB::table('surat')->get();
+      if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2){
+      if($status !== 'Semua'){
+      $data = DB::table('surat')->where('status', $status)->orderByDesc('created_at')->where('is_terlambat', 'Y')->get();
+    }else{
+      // $data;
+      $data = DB::table('surat')->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen','Penjadwalan Survey'])->where('is_terlambat', 'Y')->orderByDesc('created_at')->get();
+
+    }
+      }
+
+
+        // return $data;
+        // $xyzab = collect($data);
+        // return $xyzab;
+        // return $xyzab->i_price;
+        return Datatables::of($data)
+        ->addColumn("surat_jenis", function($data) {
+          $surat_jenis = DB::table('surat_jenis')->where('id', $data->surat_jenis_id)->first();
+          return $surat_jenis->nama;
+        })
+        ->addColumn('jadwal_survey', function ($data) {
+        // if(Auth::user()->role_id === 1){
+
+          if($data->jadwal_survey !== null){
+            return Carbon::parse($data->jadwal_survey)->format('d F Y');
+
+          }else{
+            return '<div><i>Belum Tersedia</i></div>';
+          }
+      
+        })
+        ->addColumn('nama_pemohon', function ($data) {
+          // if(Auth::user()->role_id === 1){
+  
+            $pemohon = DB::table('user')->where('id', $data->user_id)->first();
+            return $pemohon->nama_lengkap;
+          // }else{
+          //   return null;
+          // }
+          })
+        ->addColumn('status', function ($data) {
+          $color = '<div><strong class="text-warning">' . $data->status . '</strong></div>';
+      
+         
           return $color;
       })
       ->addColumn('tanggal_pengajuan', function ($data) {
@@ -437,6 +517,156 @@ Oleh Admin Dinas"]);
 
     }
 
+    public function ambilAlihVerifikasi(Request $req) {
+      DB::beginTransaction();
+      // if(Auth::user()->role_id ===5){
+        $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+     ->where('surat.id', $req->input('id'))->first();
+     $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+     $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+
+    //  if($cekDataUser){
+    //   // return $cekDataUser->nama_lengkap;
+    //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+    //  }
+    // if (Auth::check()) {
+    if($req->status == "Validasi Operator"){
+      try {
+
+        DB::table("surat")
+            ->where("id", $req->id)
+            ->update([
+              "status" => 'Verifikasi Verifikator',
+              "is_dikembalikan" => "N",
+              "is_terlambat" => "N",
+              "alasan_dikembalikan" => null, 
+              "updated_at" => Carbon::now("Asia/Jakarta")
+            ]);
+
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Divalidasi", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Divalidasi','Selamat! Pengajuan surat Anda telah sukses divalidasi. Kami akan melakukan Verifikasi Verifikator, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($verifikator->id,'Hai Verifikator, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera diverifikasi. Silakan akses tugas Anda sekarang dan lakukan verifikasi. Terima kasih!' );
+        return response()->json(["status" => 1, "message" => "Perizinan Berhasil di Approve dan
+Akan Dilakukan Penjadwalan Survey
+Oleh Admin Dinas"]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+   else if($req->status == "Verifikasi Verifikator"){
+
+    $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+    ->where('surat.id', $req->input('id'))->first();
+    $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+    $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+
+   //  if($cekDataUser){
+   //   // return $cekDataUser->nama_lengkap;
+   //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+   //  }
+   // if (Auth::check()) {
+     try {
+
+       DB::table("surat")
+           ->where("id", $req->id)
+           ->update([
+             "status" => 'Penjadwalan Survey',
+             "is_dikembalikan" => "N",
+             "is_terlambat" => "N",
+             "alasan_dikembalikan" => null, 
+             "updated_at" => Carbon::now("Asia/Jakarta")
+           ]);
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diverifikasi. Kami akan melakukan Penjadwalan Survey,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Permohonan Perizinan Berhasil Diverifikasi", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diverifikasi','Selamat! Pengajuan surat Anda telah sukses diverifikasi. Kami akan melakukan Penjadwalan Survey, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($admin_dinas->id,'Hai Admin Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Penjadwalan Survey. Silakan akses tugas Anda sekarang dan lakukan Penjadwalan Survey. Terima kasih!' );
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+  // }
+  
+  else if($req->status == "Verifikasi Hasil Survey"){
+
+    $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+    ->where('surat.id', $req->input('id'))->first();
+    $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+    $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+    $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
+
+   //  if($cekDataUser){
+   //   // return $cekDataUser->nama_lengkap;
+   //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+   //  }
+   // if (Auth::check()) {
+     try {
+
+       DB::table("surat")
+           ->where("id", $req->id)
+           ->update([
+             "status" => 'Verifikasi Kepala Dinas',
+             "is_dikembalikan" => "N",
+             "is_terlambat" => "N",
+             "alasan_dikembalikan" => null, 
+             "updated_at" => Carbon::now("Asia/Jakarta")
+           ]);
+        DB::commit();
+        SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Hasil Survey dari surat pengajuan anda sukses disetujui . Kami akan melakukan Verifikasi Kepala Dinas,<br><br> mohon tunggu pemberitahuan selanjutnya yaa","Hasil Survey Permohonan Anda Disetujui", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Hasil Survey Permohonan Anda Disetujui','Selamat! Hasil Survey Pengajuan surat Anda telah sukses disetujui. Kami akan melakukan Verifikasi Kepala Dinas, mohon tunggu pemberitahuan selanjutnya yaa' );
+
+        PushNotifController::sendMessage($kepala_dinas->id,'Hai Kepala Dinas, Anda memiliki tugas baru menanti dengan nomor surat #'.$req->id.' !','Ada surat dari pemohon yang perlu segera dilakukan Verifikasi. Silakan akses tugas Anda sekarang dan lakukan Verifikasi. Terima kasih!' );
+
+        return response()->json(["status" => 1]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(["status" => 2, "message" => $e->getMessage()]);
+      }
+    }
+    else if($req->status == "Verifikasi Kepala Dinas"){
+
+      $cekDataUser = DB::table("surat")->join('user', 'user.id', '=', 'surat.user_id')
+      ->where('surat.id', $req->input('id'))->first();
+      $verifikator = DB::table('user')->where('role_id', '6')->first(); 
+      $admin_dinas = DB::table('user')->where('role_id', '2')->first(); 
+      $kepala_dinas = DB::table('user')->where('role_id', '3')->first(); 
+      $generateSuratPenerbitan = DB::table("surat")->join('surat_jenis', 'surat_jenis.id', '=', 'surat.surat_jenis_id')
+      ->where('surat.id', $req->input('id'))->select('surat.*')->first();
+     //  if($cekDataUser){
+     //   // return $cekDataUser->nama_lengkap;
+     //   return response()->json(["data" => $cekDataUser->nama_lengkap]);
+     //  }
+     // if (Auth::check()) {
+       try {
+  
+         DB::table("surat")
+             ->where("id", $req->id)
+             ->update([
+               "status" => 'Selesai',
+              "nomor_penerbitan" => $generateSuratPenerbitan->id.'/0'.$generateSuratPenerbitan->surat_jenis_id.'/'.Carbon::parse($generateSuratPenerbitan->created_at)->format('Y'),
+               "is_dikembalikan" => "N",
+               "is_terlambat" => "N",
+               "alasan_dikembalikan" => null, 
+               "updated_at" => Carbon::now("Asia/Jakarta")
+             ]);
+          DB::commit();
+          SendemailController::Send($cekDataUser->nama_lengkap, "Selamat! Pengajuan surat Anda telah sukses diterbitkan. Selanjutnya silahkan cetak surat anda dan datang ke kantor dinas dengan membawa bukti registrasi dan surat pengajuan anda","Permohonan Perizinan Berhasil Diterbitkan", $cekDataUser->email);
+        PushNotifController::sendMessage($cekDataUser->user_id,'Permohonan Perizinan Berhasil Diterbitkan','Selamat! Pengajuan surat Anda telah sukses diterbitkan. Selanjutnya silahkan cetak surat anda dan datang ke kantor dinas dengan membawa bukti registrasi dan surat pengajuan anda' );
+  
+          return response()->json(["status" => 1]);
+        } catch (\Exception $e) {
+          DB::rollback();
+          return response()->json(["status" => 2, "message" => $e->getMessage()]);
+        }
+      }
+
+    }
+
     public function kembalikan(Request $req) {
       DB::beginTransaction();
       // if(Auth::user()->role_id ===5){
@@ -599,6 +829,36 @@ Oleh Admin Dinas"]);
         return response()->json(["status" => 4]);
       }
 
+    }
+
+    public function editterlambat(Request $req) {
+      $surat = DB::table("surat")
+              ->where("id", $req->id)
+              ->first();
+
+      $user = DB::table("user")
+              ->where("id", $surat->user_id)
+              ->first();
+      $surat_jenis = DB::table("surat_jenis")
+              ->where("id", $surat->surat_jenis_id)
+              ->first();
+
+      $surat_dokumen = DB::table("surat_dokumen")->join('surat_syarat', 'surat_syarat.id', '=', 'surat_dokumen.surat_syarat_id')
+      ->where('surat_dokumen.surat_id', $surat->id)->get();
+
+      
+
+      $data = [
+       'surat' => $surat,
+       'user' => $user,
+       'surat_jenis' => $surat_jenis,
+       'tanggal_pengajuan' => Carbon::parse($surat->created_at)->format('d F Y'),
+       'jadwal_survey' => $surat->jadwal_survey ? Carbon::parse($surat->jadwal_survey)->format('d F Y') : 'Belum Tersedia',
+       'surat_dokumen' => $surat_dokumen
+      ];
+      // $data->created_at = Carbon::parse($data->created_at)->format("d-m-Y");
+
+      return response()->json($data);
     }
 
     public function edit(Request $req) {

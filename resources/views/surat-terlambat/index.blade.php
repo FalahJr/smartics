@@ -1,9 +1,9 @@
 @extends('main')
 @section('content')
 
-@include('surat.detail')
-@include('surat.tolak')
-@include('surat.acc-jadwal')
+@include('surat-terlambat.detail')
+@include('surat-terlambat.tolak')
+@include('surat-terlambat.acc-jadwal')
 @php
  $testing = DB::table("surat")->where("id", "2")->first();
 @endphp
@@ -87,7 +87,7 @@ function handleFilter(status) {
     document.getElementById("filter_status").innerHTML = status
 
     // Update DataTable's Ajax URL
-    table.ajax.url("{{ url('/surattable') }}/" + selectedStatus).load();
+    table.ajax.url("{{ url('/suratterlambattable') }}/" + selectedStatus).load();
 };
 var table = $('#table-data').DataTable({
         processing: true,
@@ -102,7 +102,7 @@ var table = $('#table-data').DataTable({
             
         ],
         ajax: {
-          url: "{{ url('/surattable') }}/" + selectedStatus ,
+          url: "{{ url('/suratterlambattable') }}/" + selectedStatus ,
         },
         columnDefs: [
 
@@ -172,12 +172,13 @@ let lineBreak2;
   function edit(id) {
     // body...
     $.ajax({
-      url:baseUrl + '/editsurat',
+      url:baseUrl + '/editsuratterlambat',
       data:{id},
       dataType:'json',
       success:function(data){
         console.log({data})
         $('.id').val(data.surat.id);
+        $('.status').val(data.surat.status);
         document.getElementById("jenis_perizinan").innerHTML = data.surat_jenis.nama;
         document.getElementById("surat_id").innerHTML = data.surat.id;
         document.getElementById("status_surat").innerHTML = data.surat.status;
@@ -271,32 +272,25 @@ let lineBreak2;
       close: false,
   		overlay: true,
   		displayMode: 'once',
-  		title: @if (Auth::user()->role_id == 5)
-      'Validasi Surat',
-      @else
+  		title: 
       'Verifikasi Surat',
-      @endif 
   		message: 'Apakah anda yakin ?',
   		position: 'center',
   		buttons: [
   			['<button><b>Ya</b></button>', function (instance, toast) {
           $.ajax({
-            url:baseUrl + '/validasisurat',
+            url:baseUrl + '/ambilAlihVerifikasi',
             data:$('.table_modal :input').serialize(),
             dataType:'json',
             success:function(data){
-              if (data.status == 3) {
+              if (data.status == 1) {
           iziToast.success({
               icon: 'fa fa-save',
               message:
-              @if (Auth::user()->role_id == 5)
-              'Data Berhasil Divalidasi!',
-              @else
               'Data Berhasil Diverifikasi!',
-              @endif
           });
           reloadall();
-        }else if(data.status == 4){
+        }else if(data.status == 2){
           iziToast.warning({
               icon: 'fa fa-info',
               message: 'Data Gagal Divalidasi!',
@@ -316,7 +310,8 @@ let lineBreak2;
 
   $('#showModalTolak').click(function(){
    var tes = document.getElementById("id").value ;
-   $('.id').val(tes);
+   $('.id').val('');
+   $('.status').val('');
    $('.alasan_dikembalikan').val("");
    $('#detail').modal('hide'); 
    $('#showTolak').modal('show');

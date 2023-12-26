@@ -186,6 +186,23 @@
             </li>
             @endif
 
+            @if (Auth::user()->role_id == 1 )
+            <li class="nav-item {{Request::is('surat-terlambat') ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('/surat-terlambat')}}">
+                <span class="menu-title"> Permohonan Terlambat</span>
+                <span class="menu-sub-title">
+                  @php 
+                    $total = DB::table('surat')->where('is_terlambat', 'Y')->count();
+                  echo "(".$total.")";
+                
+                @endphp</span>
+                <i class="fa-solid fa-envelope-open-text"></i>
+              </a>
+            </li>
+            @endif
+
+            
+
             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 9 || Auth::user()->role_id == 8)
             
             <li class="nav-item {{Request::is('arsip') ? 'active' : ''}}">
