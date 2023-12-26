@@ -11,7 +11,7 @@
     <div class="col-lg-12">
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb bg-warning">
-          <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/home">Home</a></li>
+          <li class="breadcrumb-item"><i class="fa fa-home"></i>&nbsp;<a href="/surat-jenis">Home</a></li>
           {{-- <li class="breadcrumb-item">Setup Master Tagihan</li> --}}
           <li class="breadcrumb-item active" aria-current="page">Syarat Perizinan</li>
         </ol>
@@ -32,7 +32,7 @@
                               <tr>
                                 <th>No</th>
                                 <th>Syarat Perizinan</th>
-                                <th>Surat Jenis</th>
+                                {{-- <th>Surat Jenis</th> --}}
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -63,6 +63,9 @@ $getId = $_GET ? $_GET['id'] : null;
 var surat_jenis_nama = <?php echo json_encode($surat_jenis ? $surat_jenis->nama : '') ?>;
 document.getElementById("filter_surat_jenis").innerHTML = surat_jenis_id ? 'Syarat Perizinan ( ' + surat_jenis_nama + ' )' : 'Syarat Perizinan';
 
+
+$('#surat_jenis_id').val(surat_jenis_id);
+
 // console.log({surat_jenis_id});
 var table = $('#table-data').DataTable({
         processing: true,
@@ -92,16 +95,16 @@ var table = $('#table-data').DataTable({
                  targets: 1,
                  className: ' w-50'
               },
-              {
-                 targets: 2,
-                 className: 'type center'
-              },
+              // {
+              //    targets: 2,
+              //    className: 'type center'
+              // },
              
             ],
         "columns": [
           {data: 'DT_RowIndex', name: 'DT_RowIndex'},
           {data: 'nama', name: 'nama'},
-          {data: 'surat_jenis', name: 'surat_jenis'},
+          // {data: 'surat_jenis', name: 'surat_jenis'},
           {data: 'aksi', name: 'aksi'},
 
         ],
@@ -139,16 +142,42 @@ var table = $('#table-data').DataTable({
         $('.id').val(data.id);
         $('.nama').val(data.nama);
         $('#surat_jenis_id').val(data.surat_jenis_id);
-        $('#surat_jenis_id').select2();
       
         // $('.datepicker').val(data.created_at)
         $('#tambah').modal('show');
+
+         $('#tambah').on('hidden.bs.modal', function () {
+          $('#namaSyarat').val('');
+            });
+          
+ 
       }
     });
 
   }
 
   $('#simpan').click(function(){
+     var syarat = $('#namaSyarat').val();
+
+      // Reset pesan error sebelum melakukan validasi
+      $('#error_syarat').text('');
+
+      let isValid = true;
+
+      // Validasi Alamat
+      if (syarat == '') {
+          $('#error_syarat').text('Nama Syarat diperlukan.');
+          isValid = false;
+      }
+
+      if (!isValid) {
+          iziToast.warning({
+              icon: 'fa fa-info',
+              message: 'Data Gagal disimpan!',
+          });
+          return;
+      }
+
     $.ajax({
       url: baseUrl + '/simpansuratsyarat',
       data:$('.table_modal :input').serialize(),
@@ -183,6 +212,8 @@ var table = $('#table-data').DataTable({
   })
 
   function tambah() {
+    $('#surat_syarat_id').val('');
+    $('#surat_jenis_id').val(surat_jenis_id);
     $("#titleText").text("Tambah Syarat Perizinan");
   }
 
@@ -218,13 +249,12 @@ var table = $('#table-data').DataTable({
   }
 
   function reloadall() {
-    $('.table_modal :input').val("");
     $('#tambah').modal('hide');
     // $('#table_modal :input').val('');
    
     // $(".inputtext").val("");
-    $('#surat_jenis_id').val('');
-    $('#surat_jenis_id').select2();
+    
+    $('#namaSyarat').val('');
     // var table1 = $('#table_modal').DataTable();
     // table1.ajax.reload();
     table.ajax.reload();

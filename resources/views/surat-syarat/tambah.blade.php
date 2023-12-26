@@ -14,19 +14,10 @@
           <tr>
             <td>Nama Syarat</td>
             <td>
-              <input type="text" class="form-control form-control-sm inputtext nama" name="nama">
-              <input type="hidden" class="form-control form-control-sm id" name="id">
-            </td>
-          </tr>
-          <tr>
-            <td>Surat Jenis</td>
-            <td>
-              <select class="form-control form-control-sm surat_jenis_id inputtext" name="surat_jenis_id" id="surat_jenis_id" >
-                <option disabled selected value="">Pilih</option>
-                @foreach ($suratJenis as $key => $value)
-                <option value="{{$value->id}}">{{$value->nama}}</option>
-              @endforeach
-              </select>
+              <input type="text" class="form-control form-control-sm inputtext nama" id="namaSyarat" name="nama">
+              <div class="error-syarat text-danger" id="error_syarat"></div>
+              <input type="hidden" class="form-control form-control-sm id" name="id" id="surat_syarat_id">
+              <input type="hidden" class="form-control form-control-sm id" name="surat_jenis_id" id="surat_jenis_id">
             </td>
           </tr>
           </table>
