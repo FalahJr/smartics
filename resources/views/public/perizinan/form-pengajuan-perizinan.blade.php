@@ -40,29 +40,44 @@ id="ajukan-perizinan"
     name="nama_perizinan"
     value="{{$perizinan->nama}}"
   />
-      <div class="form-group">
-        <label for="kategori_perizinan">Kategori Perizinan</label>
-        <select class="form-control" name="kategori" id="kategori_perizinan">
-          <option disabled selected>Pilih Kategori</option>
-          <option value="TK">TK</option>
-          <option value="PAUD">PAUD</option>
-          <option value="SD">SD</option>
-          <option value="SMP">SMP</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="nama_perizinan">Nama</label>
-        <input
-          type="text"
-          class="form-control"
-          id="nama_perizinan"
-          name="nama"
-        />
-      </div>
-      <div class="form-group">
-        <label for="alamat">Alamat</label>
-        <textarea class="form-control" name="alamat_lokasi" id="alamat" rows="3"></textarea>
-      </div>
+  <input
+  type="hidden" id="noPerizinan"
+  class="form-control"
+  name="id"
+  value="{{ isset($updatePerizinan) ? $updatePerizinan->id : '' }}"
+/>
+
+<div class="form-group">
+  <label for="kategori_perizinan">Kategori Perizinan</label>
+  <select class="form-control" name="kategori" id="kategori_perizinan" required>
+    <option disabled selected>Pilih Kategori</option>
+    <option value="TK" @if (isset($updatePerizinan) && $updatePerizinan->kategori == 'TK') selected @endif>TK</option>
+    <option value="PAUD" @if (isset($updatePerizinan) && $updatePerizinan->kategori == 'PAUD') selected @endif>PAUD</option>
+    <option value="SD" @if (isset($updatePerizinan) && $updatePerizinan->kategori == 'SD') selected @endif>SD</option>
+    <option value="SMP" @if (isset($updatePerizinan) && $updatePerizinan->kategori == 'SMP') selected @endif>SMP</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="nama_perizinan">Nama</label>
+  <input
+    type="text"
+    class="form-control"
+    id="nama_perizinan"
+    name="nama"
+    required
+    value="{{ isset($updatePerizinan) ? $updatePerizinan->nama : '' }}"
+  />
+</div>
+
+<div class="form-group">
+  <label for="alamat">Alamat</label>
+  <textarea class="form-control" name="alamat_lokasi" id="alamat" required rows="3">
+    {{ isset($updatePerizinan) ? $updatePerizinan->alamat_lokasi : '' }}
+  </textarea>
+</div>
+
+
       <div class="form-group">
         <div id="map" class="" ></div>
 

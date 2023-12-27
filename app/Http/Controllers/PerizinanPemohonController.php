@@ -96,7 +96,7 @@ class PerizinanPemohonController extends Controller
                     '<label class="fa fa-calendar w-100"></label></button>';
                   }
                   if ($data->is_dikembalikan == "Y" && $data->alasan_dikembalikan !== NULL) {
-                    $aksi .= '<button type="button" onclick="alasanDikembalikan(\'' . $data->alasan_dikembalikan . '\', \'' . $data->surat_jenis_id . '\')" class="btn btn-danger btn-lg pt-2 ml-2" title="dikembalikan">'.
+                    $aksi .= '<button type="button" onclick="alasanDikembalikan(\'' . $data->alasan_dikembalikan . '\', \'' . $data->surat_jenis_id . '\', \'' . $data->id . '\')" class="btn btn-danger btn-lg pt-2 ml-2" title="dikembalikan">'.
                     '<label class="fa-solid fa-circle-info"></label></button>';
                   }
                   $aksi .= '</div>';
