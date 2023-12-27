@@ -1,7 +1,7 @@
 <html>
 
       <head>
-          <title>DompetQu | 404</title>
+          <title>Smartics | 404</title>
           <link rel="stylesheet" href="{{ asset('assets/css/404.css') }}"/>
       </head>
 

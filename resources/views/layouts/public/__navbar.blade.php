@@ -22,18 +22,25 @@
           <a class="nav-link" href="{{route('buat-perizinan')}}">Buat Permohonan</a>
         </li>
         @if (Auth::check())
+        @if (Auth::user()->role_id == 9)
         <li class="nav-item {{Request::is('permohonan-saya') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('list-perizinan')}}">Permohonan Saya</a>
         </li>
         @else
         <li class="nav-item">
-          <a class="nav-link" href="{{url('loginpemohon')}}">Permohonan Saya</a>
+          <a class="nav-link" href="{{url('home')}}">Permohonan Saya</a>
+        </li>
+        @endif
+        
+        @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('login')}}">Permohonan Saya</a>
         </li>
         @endif
         <li class="nav-item {{Request::is('lacak-perizinan') || Request::is('detail-perizinan') ? 'active' : ''}}">
           <a class="nav-link" href="{{route('lacak-perizinan')}}">Lacak Perizinan</a>
         </li>
-        @if (Auth::check())
+        @if (Auth::check() && Auth::user()->role_id == 9)
         <li class="nav-item {{Request::is('chat') ? 'active' : ''}}">
           <a class="nav-link" href="chat">Live Chat</a>
         </li>
@@ -45,10 +52,13 @@
           {{Auth::user()->nama_lengkap}}
           <i class="fa-solid fa-chevron-down ml-1"></i>
           <div class="dropdown-content">
-            <a href="{{ url('profil-pengguna') }}">Profil Pengguna</a>
+            <a href="{{ url('profil-pengguna') }}">Profil</a>
+            @if (Auth::user()->role_id == 9)
             <a href="{{ url('ubah-password-pengguna') }}">Ubah Password</a>
             <a href="{{ url('arsip') }}">Arsip Perizinan</a>
             <a href="{{url('/ulasan')}}">Ulasan</a>
+            @endif
+           
             <a href="{{ url('logout') }}">Logout</a>
           </div>
         </div>

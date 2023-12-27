@@ -80,7 +80,7 @@ id="buat-perizinan"
                 @if (Auth::check())
                 $('.ajukanPerizinan').attr('href', 'ajukan-perizinan?jenis=' + jenisPerizinanId);
                   @else
-                $('.ajukanPerizinan').attr('href', 'loginpemohon');
+                $('.ajukanPerizinan').attr('href', 'login');
 
                 @endif
 

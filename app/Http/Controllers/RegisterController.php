@@ -86,7 +86,7 @@ class RegisterController extends Controller
               "updated_at" => Carbon::now('Asia/Jakarta'),
             ]);
 
-          SendemailController::Send($fullname, "Your code verification : ".$codeverif."", 'Code Verification Register Account DompetQu', $email);
+          SendemailController::Send($fullname, "Your code verification : ".$codeverif."", 'Code Verification Register Account Smartics', $email);
 
           $users = DB::table("users")
                     ->where("users_username", $username)

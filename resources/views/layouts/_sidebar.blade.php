@@ -48,7 +48,7 @@
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center ">
         <a class="navbar-brand brand-logo" href="{{url('/home')}}">
           <img src="{{asset('public/assets/img/smartics.png')}}" alt="logo" style="margin: auto; width:45%; height:100%" >
-          {{-- <h1 style="margin:auto; ">DompetQu</h1> --}}
+          {{-- <h1 style="margin:auto; ">Smartics</h1> --}}
         </a>
         <a class="navbar-brand brand-logo-mini" href="{{url('/home')}}">
           {{-- <img src="{{asset('assets/atonergi-mini.png')}}" alt="logo"/> --}}

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--===============================================================================================-->
-    {{-- <link rel="shortcut icon" href="{{asset('assets/dompetqu.png')}}" /> --}}
+    {{-- <link rel="shortcut icon" href="{{asset('assets/Smartics.png')}}" /> --}}
     <link rel="shortcut icon" href="{{asset('assets/favicon.ico')}}" type="image/x-icon" />
   <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/login-v3/vendor/bootstrap/css/bootstrap.min.css')}}">
@@ -45,7 +45,7 @@
             </span> -->
             {{-- <div class="login100-form-title p-b-34 p-t-27"> --}}
               {{-- <img src="{{asset('assets/atonergi.png')}}" width="256px" height="64px"> --}}
-                {{-- <h2>DompetQu</h2>
+                {{-- <h2>Smartics</h2>
             </div> --}}
 
             <span class="login100-form-title p-b-34 p-t-27">

@@ -19,7 +19,7 @@ class VerificationController extends Controller
     }
 
     public function tesemail() {
-      SendemailController::Send("Email testing fer", "Your code verification : 101", 'Code Verification Register Account DompetQu', "ferdyp73@gmail.com");
+      SendemailController::Send("Email testing fer", "Your code verification : 101", 'Code Verification Register Account Smartics', "ferdyp73@gmail.com");
     }
 
     public function resend($id) {
@@ -41,7 +41,7 @@ class VerificationController extends Controller
                     "users_codeverif" => $codeverif
                   ]);
 
-        SendemailController::Send($users->users_name, "Your code verification : ".$codeverif."", 'Code Verification Register Account DompetQu', $users->users_email);
+        SendemailController::Send($users->users_name, "Your code verification : ".$codeverif."", 'Code Verification Register Account Smartics', $users->users_email);
 
         $id = $users->users_id;
 
