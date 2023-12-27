@@ -258,15 +258,15 @@ else if(Auth::user()->role_id == 9){
         DB::beginTransaction();
         try {
 
-          DB::table("surat_jenis")
-            ->where("id", $req->id)
-            ->update([
+          DB::table("surat")->where('id', $req->id)
+              ->update([
               "nama" => $req->nama,
               "user_id" => $req->user_id,
               "surat_jenis_id" => $req->surat_jenis_id,
               "status" => 'Pengisian Dokumen',
               "kategori" => $req->kategori,
               "alamat_lokasi" => $req->alamat_lokasi,
+              "is_dikembalikan"=> "N",
               "longitude" => $req->longitude,
               "latitude" => $req->latitude,
               "updated_at" => Carbon::now("Asia/Jakarta")
