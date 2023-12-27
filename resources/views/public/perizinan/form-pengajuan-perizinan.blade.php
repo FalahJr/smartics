@@ -72,9 +72,7 @@ id="ajukan-perizinan"
 
 <div class="form-group">
   <label for="alamat">Alamat</label>
-  <textarea class="form-control" name="alamat_lokasi" id="alamat" required rows="3">
-    {{ isset($updatePerizinan) ? $updatePerizinan->alamat_lokasi : '' }}
-  </textarea>
+  <textarea class="form-control" name="alamat_lokasi" id="alamat" required rows="3">{{ isset($updatePerizinan) ? $updatePerizinan->alamat_lokasi : '' }}</textarea>
 </div>
 
 
