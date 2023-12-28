@@ -31,12 +31,12 @@ class PerizinanPemohonController extends Controller
           public function datatable($status) {
             if(Auth::user()->role_id == 9){
             if($status !== 'Semua'){
-                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->orWhere('is_dikembalikan', 'Y')->get();
             }else{
                 if($status !== 'Semua'){
-                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+                $data = DB::table('surat')->where('status', $status)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->orWhere('is_dikembalikan', 'Y')->get();
                 }else{
-                $data = DB::table('surat')->where('user_id', Auth::user()->id)->whereNotIn('status' , ['Selesai', 'Ditolak', 'Pengisian Dokumen'])->orderBy('id', 'desc')->get();
+                $data = DB::table('surat')->where('user_id', Auth::user()->id)->whereNotIn('status' , ['Selesai', 'Ditolak'])->orWhere('is_dikembalikan', 'Y')->orderBy('id', 'desc')->get();
                 }
             }
             }else{
@@ -74,7 +74,7 @@ class PerizinanPemohonController extends Controller
                      }if ($data->status == "Penjadwalan Survey" && $data->is_acc_penjadwalan == "N" && $data->is_reschedule == "Y" && $data->jadwal_survey != NULL) {
                         $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-primary"> ( Menunggu Jadwal Terbaru ) </span>  </strong></div>';
                        }
-                       if ($data->is_dikembalikan == "Y" && $data->alasan_dikembalikan !== NULL) {
+                       if ($data->is_dikembalikan == "Y" || $data->alasan_dikembalikan !== NULL) {
                         $color = '<div><strong class="text-warning">' . $data->status . '<br><br> <span class="text-danger"> ( Berkas Dikembalikan ) </span>  </strong></div>';
                        }
                   }else{
@@ -95,8 +95,9 @@ class PerizinanPemohonController extends Controller
                     $aksi .= '<button type="button" onclick="accJadwal('.$data->id.')" class="btn btn-info btn-lg pt-2 ml-2" title="edit">'.
                     '<label class="fa fa-calendar w-100"></label></button>';
                   }
-                  if ($data->is_dikembalikan == "Y" && $data->alasan_dikembalikan !== NULL) {
+if ($data->is_dikembalikan == "Y" || $data->alasan_dikembalikan !== NULL) {
                     $aksi .= '<button type="button" onclick="alasanDikembalikan(\'' . $data->alasan_dikembalikan . '\', \'' . $data->surat_jenis_id . '\', \'' . $data->id . '\')" class="btn btn-danger btn-lg pt-2 ml-2" title="dikembalikan">'.
+
                     '<label class="fa-solid fa-circle-info"></label></button>';
                   }
                   $aksi .= '</div>';
