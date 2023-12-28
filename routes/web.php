@@ -191,7 +191,7 @@ Route::get('/listroom', 'ChatController@listroom');
 Route::get('/listchat', 'ChatController@listchat');
 Route::get('/sendchat', 'ChatController@sendchat');
 
-Route::get('schedule', 'SuratController@schedule');
-
 
 }); // End Route Groub middleware auth
+
+Route::get('schedule', 'SuratController@schedule');
